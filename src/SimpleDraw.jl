@@ -1,5 +1,7 @@
 module SimpleDraw
 
-# Write your package code here.
+abstract type AbstractShape end
+
+include("line.jl")
 
 end
