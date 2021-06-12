@@ -5,7 +5,11 @@ function visualize(io::IO, image::AbstractMatrix{Bool})
             if image[i, j]
                 print(io, "██")
             else
-                print(io, "░░")
+                if iseven(i + j)
+                    print(io, "░░")
+                else
+                    print(io, "▒▒")
+                end
             end
         end
         println(io)
