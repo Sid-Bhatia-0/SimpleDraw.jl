@@ -20,14 +20,14 @@ end
 end
 
 @inline function draw_octant_reflections!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
-    image[i_center + i, j_center + j] = color
-    image[i_center - i, j_center + j] = color
-    image[i_center + i, j_center - j] = color
     image[i_center - i, j_center - j] = color
-    image[i_center + j, j_center + i] = color
-    image[i_center - j, j_center + i] = color
-    image[i_center + j, j_center - i] = color
+    image[i_center + i, j_center - j] = color
     image[i_center - j, j_center - i] = color
+    image[i_center + j, j_center - i] = color
+    image[i_center - j, j_center + i] = color
+    image[i_center + j, j_center + i] = color
+    image[i_center - i, j_center + j] = color
+    image[i_center + i, j_center + j] = color
 
     return nothing
 end
