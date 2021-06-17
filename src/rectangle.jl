@@ -1,32 +1,38 @@
 struct Rectangle{I <: Integer} <: AbstractShape
-    i1::I
-    j1::I
-    i2::I
-    j2::I
+    i_top_left::I
+    j_top_left::I
+    height::I
+    width::I
 end
 
 struct FilledRectangle{I <: Integer} <: AbstractShape
-    i1::I
-    j1::I
-    i2::I
-    j2::I
+    i_top_left::I
+    j_top_left::I
+    height::I
+    width::I
 end
 
 function draw!(image::AbstractMatrix, shape::Rectangle, color)
-    i1 = shape.i1
-    j1 = shape.j1
-    i2 = shape.i2
-    j2 = shape.j2
+    i_top_left = shape.i_top_left
+    j_top_left = shape.j_top_left
+    i_bottom_right = i_top_left + shape.height - 1
+    j_bottom_right = j_top_left + shape.width - 1
 
-    image[i1:i2, j1] .= color
-    image[i1:i2, j2] .= color
-    image[i1, j1:j2] .= color
-    image[i2, j1:j2] .= color
+    image[i_top_left:i_bottom_right, j_top_left] .= color
+    image[i_top_left:i_bottom_right, j_bottom_right] .= color
+    image[i_top_left, j_top_left:j_bottom_right] .= color
+    image[i_bottom_right, j_top_left:j_bottom_right] .= color
 
     return nothing
 end
 
 function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
-    image[shape.i1:shape.i2, shape.j1:shape.j2] .= color
+    i_top_left = shape.i_top_left
+    j_top_left = shape.j_top_left
+    i_bottom_right = i_top_left + shape.height - 1
+    j_bottom_right = j_top_left + shape.width - 1
+
+    image[i_top_left:i_bottom_right, j_top_left:j_bottom_right] .= color
+
     return nothing
 end

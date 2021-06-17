@@ -85,7 +85,7 @@ Test.@testset "SimpleDraw.jl" begin
         height = 16
         width = 16
         image = falses(height, width)
-        shape = SD.Rectangle(2, 2, height - 1, width - 1)
+        shape = SD.Rectangle(2, 2, height - 2, width - 2)
         SD.draw!(image, shape, true)
         Test.@test image == BitArray([
                                       0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
@@ -111,7 +111,7 @@ Test.@testset "SimpleDraw.jl" begin
         height = 16
         width = 16
         image = falses(height, width)
-        shape = SD.FilledRectangle(2, 2, height - 1, width - 1)
+        shape = SD.FilledRectangle(2, 2, height - 2, width - 2)
         SD.draw!(image, shape, true)
         Test.@test image == BitArray([
                                       0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
