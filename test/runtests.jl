@@ -59,7 +59,7 @@ Test.@testset "SimpleDraw.jl" begin
         height = 16
         width = 16
         image = falses(height, width)
-        shape = SD.FilledCircle(SD.Circle(8, 8, 6))
+        shape = SD.FilledCircle(8, 8, 6)
         SD.draw!(image, shape, true)
         Test.@test image == BitArray([
                                       0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0

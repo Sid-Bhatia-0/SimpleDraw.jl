@@ -5,7 +5,9 @@ struct Circle{I <: Integer} <: AbstractShape
 end
 
 struct FilledCircle{I <: Integer} <: AbstractShape
-    circle::Circle{I}
+    i_center::I
+    j_center::I
+    radius::I
 end
 
 @inline function draw_vertical_strip_reflections!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
@@ -63,9 +65,9 @@ function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
 end
 
 function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
-    i_center = shape.circle.i_center
-    j_center = shape.circle.j_center
-    radius = shape.circle.radius
+    i_center = shape.i_center
+    j_center = shape.j_center
+    radius = shape.radius
 
     zero_value = zero(I)
 
