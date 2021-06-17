@@ -55,7 +55,7 @@ Test.@testset "SimpleDraw.jl" begin
                                      ])
     end
 
-    Test.@testset "Circle" begin
+    Test.@testset "Rectangle" begin
         height = 16
         width = 16
         image = falses(height, width)
