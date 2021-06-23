@@ -19,6 +19,8 @@ struct Line{I <: Integer} <: AbstractShape
 end
 ```
 
+<img src="https://user-images.githubusercontent.com/32610387/123078332-7d471680-d438-11eb-9216-0f0b41efdbd6.png">
+
 ### Circle
 
 ```
@@ -29,6 +31,8 @@ struct Circle{I <: Integer} <: AbstractShape
 end
 ```
 
+<img src="https://user-images.githubusercontent.com/32610387/123078423-95b73100-d438-11eb-8329-546982bbb00c.png">
+
 ### FilledCircle
 
 ```
@@ -38,6 +42,8 @@ struct FilledCircle{I <: Integer} <: AbstractShape
     radius::I
 end
 ```
+
+<img src="https://user-images.githubusercontent.com/32610387/123078474-a2d42000-d438-11eb-88cf-d0635380a21f.png">
 
 ### Rectangle
 
@@ -50,6 +56,8 @@ struct Rectangle{I <: Integer} <: AbstractShape
 end
 ```
 
+<img src="https://user-images.githubusercontent.com/32610387/123078509-ac5d8800-d438-11eb-814f-b7fa32857878.png">
+
 ### FilledRectangle
 
 ```
@@ -60,3 +68,5 @@ struct FilledRectangle{I <: Integer} <: AbstractShape
     width::I
 end
 ```
+
+<img src="https://user-images.githubusercontent.com/32610387/123078547-b67f8680-d438-11eb-94be-af77c473d0e9.png">
