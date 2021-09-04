@@ -1,11 +1,11 @@
-struct Rectangle{I <: Integer} <: AbstractShape
+mutable struct Rectangle{I <: Integer} <: AbstractShape
     i_top_left::I
     j_top_left::I
     height::I
     width::I
 end
 
-struct FilledRectangle{I <: Integer} <: AbstractShape
+mutable struct FilledRectangle{I <: Integer} <: AbstractShape
     i_top_left::I
     j_top_left::I
     height::I

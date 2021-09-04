@@ -1,10 +1,10 @@
-struct Circle{I <: Integer} <: AbstractShape
+mutable struct Circle{I <: Integer} <: AbstractShape
     i_center::I
     j_center::I
     radius::I
 end
 
-struct FilledCircle{I <: Integer} <: AbstractShape
+mutable struct FilledCircle{I <: Integer} <: AbstractShape
     i_center::I
     j_center::I
     radius::I
