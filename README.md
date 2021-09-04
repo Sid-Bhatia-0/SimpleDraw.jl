@@ -20,7 +20,7 @@ mutable struct Line{I <: Integer, C} <: AbstractDrawable
 end
 ```
 
-<img src="https://user-images.githubusercontent.com/32610387/123078332-7d471680-d438-11eb-9216-0f0b41efdbd6.png">
+<img src="https://user-images.githubusercontent.com/32610387/132089909-fd6313af-b9be-4f61-8e53-387c699a83e4.png">
 
 ### Circle
 
@@ -33,7 +33,7 @@ mutable struct Circle{I <: Integer, C} <: AbstractDrawable
 end
 ```
 
-<img src="https://user-images.githubusercontent.com/32610387/123078423-95b73100-d438-11eb-8329-546982bbb00c.png">
+<img src="https://user-images.githubusercontent.com/32610387/132089918-7b5e28b6-b934-40bf-80c1-95e5d531ba54.png">
 
 ### FilledCircle
 
@@ -46,7 +46,7 @@ mutable struct FilledCircle{I <: Integer, C} <: AbstractDrawable
 end
 ```
 
-<img src="https://user-images.githubusercontent.com/32610387/123078474-a2d42000-d438-11eb-88cf-d0635380a21f.png">
+<img src="https://user-images.githubusercontent.com/32610387/132089928-52124907-8fc6-42a2-84d4-530b2de66399.png">
 
 ### Rectangle
 
@@ -60,7 +60,7 @@ mutable struct Rectangle{I <: Integer, C} <: AbstractDrawable
 end
 ```
 
-<img src="https://user-images.githubusercontent.com/32610387/123078509-ac5d8800-d438-11eb-814f-b7fa32857878.png">
+<img src="https://user-images.githubusercontent.com/32610387/132089933-cc390f7c-9adc-4c82-b62f-4487f9c1ebef.png">
 
 ### FilledRectangle
 
@@ -74,4 +74,4 @@ mutable struct FilledRectangle{I <: Integer, C} <: AbstractDrawable
 end
 ```
 
-<img src="https://user-images.githubusercontent.com/32610387/123078547-b67f8680-d438-11eb-94be-af77c473d0e9.png">
+<img src="https://user-images.githubusercontent.com/32610387/132089939-4871bd2e-eb4f-41ea-8550-98a97b14a3aa.png">
