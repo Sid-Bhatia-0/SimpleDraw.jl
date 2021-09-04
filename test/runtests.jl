@@ -7,8 +7,8 @@ Test.@testset "SimpleDraw.jl" begin
         height = 16
         width = 16
         image = falses(height, width)
-        shape = SD.Line(2, 2, height - 1, width - 1)
-        SD.draw!(image, shape, true)
+        drawable = SD.Line(2, 2, height - 1, width - 1, true)
+        SD.draw!(image, drawable)
         Test.@test image == BitArray([
                                       0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                       0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0
@@ -33,8 +33,8 @@ Test.@testset "SimpleDraw.jl" begin
         height = 16
         width = 16
         image = falses(height, width)
-        shape = SD.Circle(8, 8, 6)
-        SD.draw!(image, shape, true)
+        drawable = SD.Circle(8, 8, 6, true)
+        SD.draw!(image, drawable)
         Test.@test image == BitArray([
                                       0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                       0 0 0 0 0 1 1 1 1 1 0 0 0 0 0 0
@@ -59,8 +59,8 @@ Test.@testset "SimpleDraw.jl" begin
         height = 16
         width = 16
         image = falses(height, width)
-        shape = SD.FilledCircle(8, 8, 6)
-        SD.draw!(image, shape, true)
+        drawable = SD.FilledCircle(8, 8, 6, true)
+        SD.draw!(image, drawable)
         Test.@test image == BitArray([
                                       0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                       0 0 0 0 0 1 1 1 1 1 0 0 0 0 0 0
@@ -85,8 +85,8 @@ Test.@testset "SimpleDraw.jl" begin
         height = 16
         width = 16
         image = falses(height, width)
-        shape = SD.Rectangle(2, 2, height - 2, width - 2)
-        SD.draw!(image, shape, true)
+        drawable = SD.Rectangle(2, 2, height - 2, width - 2, true)
+        SD.draw!(image, drawable)
         Test.@test image == BitArray([
                                       0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                       0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0
@@ -111,8 +111,8 @@ Test.@testset "SimpleDraw.jl" begin
         height = 16
         width = 16
         image = falses(height, width)
-        shape = SD.FilledRectangle(2, 2, height - 2, width - 2)
-        SD.draw!(image, shape, true)
+        drawable = SD.FilledRectangle(2, 2, height - 2, width - 2, true)
+        SD.draw!(image, drawable)
         Test.@test image == BitArray([
                                       0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                       0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0

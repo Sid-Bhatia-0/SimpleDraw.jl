@@ -1,6 +1,6 @@
 module SimpleDraw
 
-abstract type AbstractShape end
+abstract type AbstractDrawable end
 
 include("line.jl")
 include("circle.jl")

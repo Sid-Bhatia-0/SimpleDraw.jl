@@ -1,13 +1,15 @@
-mutable struct Circle{I <: Integer} <: AbstractShape
+mutable struct Circle{I <: Integer, C} <: AbstractDrawable
     i_center::I
     j_center::I
     radius::I
+    color::C
 end
 
-mutable struct FilledCircle{I <: Integer} <: AbstractShape
+mutable struct FilledCircle{I <: Integer, C} <: AbstractDrawable
     i_center::I
     j_center::I
     radius::I
+    color::C
 end
 
 @inline function draw_vertical_strip_reflections!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
@@ -35,10 +37,11 @@ end
 """
 Draw a circle. Ref: https://en.wikipedia.org/wiki/Midpoint_circle_algorithm variant with integer-based arithmetic
 """
-function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
-    i_center = shape.i_center
-    j_center = shape.j_center
-    radius = shape.radius
+function draw!(image::AbstractMatrix, drawable::Circle{I}) where {I}
+    i_center = drawable.i_center
+    j_center = drawable.j_center
+    radius = drawable.radius
+    color = drawable.color
 
     zero_value = zero(I)
 
@@ -64,10 +67,11 @@ function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
     return nothing
 end
 
-function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
-    i_center = shape.i_center
-    j_center = shape.j_center
-    radius = shape.radius
+function draw!(image::AbstractMatrix, drawable::FilledCircle{I}) where {I}
+    i_center = drawable.i_center
+    j_center = drawable.j_center
+    radius = drawable.radius
+    color = drawable.color
 
     zero_value = zero(I)
 
