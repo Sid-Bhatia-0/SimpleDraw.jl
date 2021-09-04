@@ -1,4 +1,4 @@
-struct Line{I <: Integer} <: AbstractShape
+mutable struct Line{I <: Integer} <: AbstractShape
     i1::I
     j1::I
     i2::I
