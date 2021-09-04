@@ -11,11 +11,12 @@ This package provides fast drawing methods for the following simple shapes:
 ### Line
 
 ```julia
-mutable struct Line{I <: Integer} <: AbstractShape
+mutable struct Line{I <: Integer, C} <: AbstractDrawable
     i1::I
     j1::I
     i2::I
     j2::I
+    color::C
 end
 ```
 
@@ -24,10 +25,11 @@ end
 ### Circle
 
 ```julia
-mutable struct Circle{I <: Integer} <: AbstractShape
+mutable struct Circle{I <: Integer, C} <: AbstractDrawable
     i_center::I
     j_center::I
     radius::I
+    color::C
 end
 ```
 
@@ -36,10 +38,11 @@ end
 ### FilledCircle
 
 ```julia
-mutable struct FilledCircle{I <: Integer} <: AbstractShape
+mutable struct FilledCircle{I <: Integer, C} <: AbstractDrawable
     i_center::I
     j_center::I
     radius::I
+    color::C
 end
 ```
 
@@ -48,11 +51,12 @@ end
 ### Rectangle
 
 ```julia
-mutable struct Rectangle{I <: Integer} <: AbstractShape
+mutable struct Rectangle{I <: Integer, C} <: AbstractDrawable
     i_top_left::I
     j_top_left::I
     height::I
     width::I
+    color::C
 end
 ```
 
@@ -61,11 +65,12 @@ end
 ### FilledRectangle
 
 ```julia
-mutable struct FilledRectangle{I <: Integer} <: AbstractShape
+mutable struct FilledRectangle{I <: Integer, C} <: AbstractDrawable
     i_top_left::I
     j_top_left::I
     height::I
     width::I
+    color::C
 end
 ```
 
