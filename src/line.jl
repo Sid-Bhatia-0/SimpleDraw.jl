@@ -1,18 +1,20 @@
-mutable struct Line{I <: Integer} <: AbstractShape
+mutable struct Line{I <: Integer, C} <: AbstractDrawable
     i1::I
     j1::I
     i2::I
     j2::I
+    color::C
 end
 
 """
 Draw a line. Ref: https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 """
-function draw!(image::AbstractMatrix, shape::Line, color)
-    i1 = shape.i1
-    j1 = shape.j1
-    i2 = shape.i2
-    j2 = shape.j2
+function draw!(image::AbstractMatrix, drawable::Line)
+    i1 = drawable.i1
+    j1 = drawable.j1
+    i2 = drawable.i2
+    j2 = drawable.j2
+    color = drawable.color
 
     di = abs(i2 - i1)
     dj = -abs(j2 - j1)
