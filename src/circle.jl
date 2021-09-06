@@ -13,23 +13,34 @@ mutable struct FilledCircle{I <: Integer, C} <: AbstractDrawable
 end
 
 @inline function draw_vertical_strip_reflections!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
-    image[i_center - i : i_center + i, j_center - j] .= color
-    image[i_center - j : i_center + j, j_center - i] .= color
-    image[i_center - j : i_center + j, j_center + i] .= color
-    image[i_center - i : i_center + i, j_center + j] .= color
+    for ii in i_center - i : i_center + i
+        put_pixel!(image, ii, j_center - j, color)
+    end
+
+    for ii in i_center - j : i_center + j
+        put_pixel!(image, ii, j_center - i, color)
+    end
+
+    for ii in i_center - j : i_center + j
+        put_pixel!(image, ii, j_center + i, color)
+    end
+
+    for ii in i_center - i : i_center + i
+        put_pixel!(image, ii, j_center + j, color)
+    end
 
     return nothing
 end
 
 @inline function draw_octant_reflections!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
-    image[i_center - i, j_center - j] = color
-    image[i_center + i, j_center - j] = color
-    image[i_center - j, j_center - i] = color
-    image[i_center + j, j_center - i] = color
-    image[i_center - j, j_center + i] = color
-    image[i_center + j, j_center + i] = color
-    image[i_center - i, j_center + j] = color
-    image[i_center + i, j_center + j] = color
+    put_pixel!(image, i_center - i, j_center - j, color)
+    put_pixel!(image, i_center + i, j_center - j, color)
+    put_pixel!(image, i_center - j, j_center - i, color)
+    put_pixel!(image, i_center + j, j_center - i, color)
+    put_pixel!(image, i_center - j, j_center + i, color)
+    put_pixel!(image, i_center + j, j_center + i, color)
+    put_pixel!(image, i_center - i, j_center + j, color)
+    put_pixel!(image, i_center + i, j_center + j, color)
 
     return nothing
 end
