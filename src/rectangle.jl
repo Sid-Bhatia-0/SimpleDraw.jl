@@ -21,10 +21,21 @@ function draw!(image::AbstractMatrix, drawable::Rectangle)
     j_bottom_right = j_top_left + drawable.width - 1
     color = drawable.color
 
-    image[i_top_left:i_bottom_right, j_top_left] .= color
-    image[i_top_left:i_bottom_right, j_bottom_right] .= color
-    image[i_top_left, j_top_left:j_bottom_right] .= color
-    image[i_bottom_right, j_top_left:j_bottom_right] .= color
+    for i in i_top_left:i_bottom_right
+        put_pixel!(image, i, j_top_left, color)
+    end
+
+    for i in i_top_left:i_bottom_right
+        put_pixel!(image, i, j_bottom_right, color)
+    end
+
+    for j in j_top_left:j_bottom_right
+        put_pixel!(image, i_top_left, j, color)
+    end
+
+    for j in j_top_left:j_bottom_right
+        put_pixel!(image, i_bottom_right, j, color)
+    end
 
     return nothing
 end
@@ -36,7 +47,11 @@ function draw!(image::AbstractMatrix, drawable::FilledRectangle)
     j_bottom_right = j_top_left + drawable.width - 1
     color = drawable.color
 
-    image[i_top_left:i_bottom_right, j_top_left:j_bottom_right] .= color
+    for j in j_top_left:j_bottom_right
+        for i in i_top_left:i_bottom_right
+            put_pixel!(image, i, j, color)
+        end
+    end
 
     return nothing
 end

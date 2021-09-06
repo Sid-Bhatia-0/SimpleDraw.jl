@@ -23,7 +23,7 @@ function draw!(image::AbstractMatrix, drawable::Line)
     err = di + dj
 
     while true
-        image[i1, j1] = color
+        put_pixel!(image, i1, j1, color)
 
         if (i1 == i2 && j1 == j2)
             break
