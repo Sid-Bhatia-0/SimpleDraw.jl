@@ -7,6 +7,32 @@ Test.@testset "SimpleDraw.jl" begin
         height = 16
         width = 16
         image = falses(height, width)
+        drawable = SD.Background(true)
+        SD.draw!(image, drawable)
+        Test.@test image == BitArray([
+                                      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                                      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                                      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                                      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                                      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                                      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                                      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                                      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                                      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                                      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                                      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                                      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                                      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                                      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                                      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                                      1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+                                     ])
+    end
+
+    Test.@testset "Line" begin
+        height = 16
+        width = 16
+        image = falses(height, width)
         drawable = SD.Line(2, 2, height - 1, width - 1, true)
         SD.draw!(image, drawable)
         Test.@test image == BitArray([

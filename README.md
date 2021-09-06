@@ -1,12 +1,23 @@
 # SimpleDraw
 
-This package provides fast drawing methods for the following simple shapes:
+This package provides fast drawing methods for the following simple things:
 
+1. Background
 1. Line
 1. Circle
 1. FilledCircle
 1. Rectangle
 1. FilledRectangle
+
+### Background
+
+```julia
+mutable struct Background{C} <: AbstractDrawable
+    color::C
+end
+```
+
+<img src="https://user-images.githubusercontent.com/32610387/132227984-1a2bda30-0eff-4d7a-b16e-8584e7e57483.png">
 
 ### Line
 
