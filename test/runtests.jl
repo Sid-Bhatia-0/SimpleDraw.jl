@@ -3,7 +3,7 @@ import Test
 
 Test.@testset "SimpleDraw.jl" begin
 
-    Test.@testset "Line" begin
+    Test.@testset "Background" begin
         height = 16
         width = 16
         image = falses(height, width)
@@ -155,6 +155,58 @@ Test.@testset "SimpleDraw.jl" begin
                                       0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0
                                       0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0
                                       0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                     ])
+    end
+
+    Test.@testset "Cross" begin
+        height = 16
+        width = 16
+        image = falses(height, width)
+        drawable = SD.Cross(8, 8, 4, true)
+        SD.draw!(image, drawable)
+        Test.@test image == BitArray([
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+                                      0 0 0 1 1 1 1 1 1 1 1 1 0 0 0 0
+                                      0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                     ])
+    end
+
+    Test.@testset "HollowCross" begin
+        height = 16
+        width = 16
+        image = falses(height, width)
+        drawable = SD.HollowCross(8, 8, 4, true)
+        SD.draw!(image, drawable)
+        Test.@test image == BitArray([
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+                                      0 0 0 1 1 1 1 0 1 1 1 1 0 0 0 0
+                                      0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                       0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
     end
