@@ -14,6 +14,7 @@ include("background.jl")
 include("line.jl")
 include("circle.jl")
 include("rectangle.jl")
+include("cross.jl")
 include("visualize.jl")
 
 end
