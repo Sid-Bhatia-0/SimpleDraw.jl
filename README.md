@@ -8,6 +8,8 @@ This package provides fast drawing methods for the following simple things:
 1. FilledCircle
 1. Rectangle
 1. FilledRectangle
+1. Cross
+1. HollowCross
 
 ### Background
 
@@ -86,3 +88,29 @@ end
 ```
 
 <img src="https://user-images.githubusercontent.com/32610387/132089939-4871bd2e-eb4f-41ea-8550-98a97b14a3aa.png">
+
+### Cross
+
+```julia
+mutable struct Cross{I <: Integer, C} <: AbstractDrawable
+    i_center::I
+    j_center::I
+    radius::I
+    color::C
+end
+```
+
+<img src="https://user-images.githubusercontent.com/32610387/132384576-9afeae67-0c21-4cd8-9897-296b561ca62e.png">
+
+### HollowCross
+
+```julia
+mutable struct HollowCross{I <: Integer, C} <: AbstractDrawable
+    i_center::I
+    j_center::I
+    radius::I
+    color::C
+end
+```
+
+<img src="https://user-images.githubusercontent.com/32610387/132384583-3ee67eb8-b698-43e5-8103-708672d668e3.png">
