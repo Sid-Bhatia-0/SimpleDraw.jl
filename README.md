@@ -1,5 +1,7 @@
 # SimpleDraw
 
+**Note: This README reflects the most up to date information about the master branch. The README for the last released version can be found [here](https://github.com/Sid-Bhatia-0/SimpleDraw.jl/tree/00cd11b5d5492beefa33827947aa201f743faa42).**
+
 This package provides fast drawing methods for the following simple things:
 
 1. Background
