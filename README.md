@@ -85,7 +85,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     struct Background <: AbstractShape end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/136918547-21c71eba-fcb8-4f8c-8261-9be0fa2410b4.png">
+    <img src="https://user-images.githubusercontent.com/32610387/136918547-21c71eba-fcb8-4f8c-8261-9be0fa2410b4.png" width = "400px">
 
 1. ### `Line`
 
@@ -160,7 +160,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/136918598-ba83ae87-a514-42cb-9d78-01b1aa7135aa.png">
+    <img src="https://user-images.githubusercontent.com/32610387/136918598-ba83ae87-a514-42cb-9d78-01b1aa7135aa.png" width = "400px">
 
 1. ### `HollowCross`
 
@@ -172,4 +172,4 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/136918626-e983bcb1-b722-4ba7-a449-fee5a198d40e.png">
+    <img src="https://user-images.githubusercontent.com/32610387/136918626-e983bcb1-b722-4ba7-a449-fee5a198d40e.png" width = "400px">
