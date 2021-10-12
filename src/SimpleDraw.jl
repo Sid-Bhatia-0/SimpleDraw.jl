@@ -10,6 +10,7 @@ abstract type AbstractShape end
     return nothing
 end
 
+include("point.jl")
 include("background.jl")
 include("line.jl")
 include("circle.jl")
