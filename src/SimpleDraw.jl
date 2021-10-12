@@ -1,6 +1,6 @@
 module SimpleDraw
 
-abstract type AbstractDrawable end
+abstract type AbstractShape end
 
 @inline function put_pixel!(image, i, j, color)
     if checkbounds(Bool, image, i, j)

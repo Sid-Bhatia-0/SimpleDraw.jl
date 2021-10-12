@@ -1,24 +1,21 @@
-mutable struct Cross{I <: Integer, C} <: AbstractDrawable
+mutable struct Cross{I <: Integer} <: AbstractShape
     i_center::I
     j_center::I
     radius::I
-    color::C
 end
 
-mutable struct HollowCross{I <: Integer, C} <: AbstractDrawable
+mutable struct HollowCross{I <: Integer} <: AbstractShape
     i_center::I
     j_center::I
     radius::I
-    color::C
 end
 
-function draw!(image::AbstractMatrix, drawable::Cross)
+function draw!(image::AbstractMatrix, shape::Cross, color)
     height, width = size(image)
 
-    i_center = drawable.i_center
-    j_center = drawable.j_center
-    radius = drawable.radius
-    color = drawable.color
+    i_center = shape.i_center
+    j_center = shape.j_center
+    radius = shape.radius
 
     for j in j_center - radius : j_center + radius
         put_pixel!(image, i_center, j, color)
@@ -31,13 +28,12 @@ function draw!(image::AbstractMatrix, drawable::Cross)
     return nothing
 end
 
-function draw!(image::AbstractMatrix, drawable::HollowCross)
+function draw!(image::AbstractMatrix, shape::HollowCross, color)
     height, width = size(image)
 
-    i_center = drawable.i_center
-    j_center = drawable.j_center
-    radius = drawable.radius
-    color = drawable.color
+    i_center = shape.i_center
+    j_center = shape.j_center
+    radius = shape.radius
 
     for j in j_center - radius : j_center + radius
         if j == j_center

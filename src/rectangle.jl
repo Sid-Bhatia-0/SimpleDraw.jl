@@ -1,25 +1,22 @@
-mutable struct Rectangle{I <: Integer, C} <: AbstractDrawable
+mutable struct Rectangle{I <: Integer} <: AbstractShape
     i_top_left::I
     j_top_left::I
     height::I
     width::I
-    color::C
 end
 
-mutable struct FilledRectangle{I <: Integer, C} <: AbstractDrawable
+mutable struct FilledRectangle{I <: Integer} <: AbstractShape
     i_top_left::I
     j_top_left::I
     height::I
     width::I
-    color::C
 end
 
-function draw!(image::AbstractMatrix, drawable::Rectangle)
-    i_top_left = drawable.i_top_left
-    j_top_left = drawable.j_top_left
-    i_bottom_right = i_top_left + drawable.height - 1
-    j_bottom_right = j_top_left + drawable.width - 1
-    color = drawable.color
+function draw!(image::AbstractMatrix, shape::Rectangle, color)
+    i_top_left = shape.i_top_left
+    j_top_left = shape.j_top_left
+    i_bottom_right = i_top_left + shape.height - 1
+    j_bottom_right = j_top_left + shape.width - 1
 
     for i in i_top_left:i_bottom_right
         put_pixel!(image, i, j_top_left, color)
@@ -40,12 +37,11 @@ function draw!(image::AbstractMatrix, drawable::Rectangle)
     return nothing
 end
 
-function draw!(image::AbstractMatrix, drawable::FilledRectangle)
-    i_top_left = drawable.i_top_left
-    j_top_left = drawable.j_top_left
-    i_bottom_right = i_top_left + drawable.height - 1
-    j_bottom_right = j_top_left + drawable.width - 1
-    color = drawable.color
+function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
+    i_top_left = shape.i_top_left
+    j_top_left = shape.j_top_left
+    i_bottom_right = i_top_left + shape.height - 1
+    j_bottom_right = j_top_left + shape.width - 1
 
     for j in j_top_left:j_bottom_right
         for i in i_top_left:i_bottom_right
