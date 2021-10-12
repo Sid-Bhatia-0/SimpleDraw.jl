@@ -1,8 +1,6 @@
-mutable struct Background{C} <: AbstractDrawable
-    color::C
-end
+struct Background <: AbstractShape end
 
-function draw!(image::AbstractMatrix, drawable::Background)
-    image[:, :] .= drawable.color
+function draw!(image::AbstractMatrix, shape::Background, color)
+    image[:, :] .= color
     return nothing
 end
