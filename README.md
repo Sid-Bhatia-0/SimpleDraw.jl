@@ -14,6 +14,7 @@ This is a lightweight package that provides fast drawing methods for some simple
 
 [List of shapes](#list-of-shapes):
 
+1. [`Point`](#point)
 1. [`Background`](#background)
 1. [`Line`](#line)
 1. [`Circle`](#circle)
@@ -78,6 +79,17 @@ By default, all the drawing algorithms (except the one for `Background`, which d
 The `visualize` function helps visualize a binary image inside the terminal using Unicode block characters to represent pixels. This is a quick tool to verify that your drawing algorithms are functioning as intended. This works well for low resolution images. You can maximize your terminal window and reduce the font size to visualize higher resolutions images.
 
 ## List of drawables
+
+1. ### `Point`
+
+    ```julia
+    mutable struct Point{I <: Integer} <: AbstractShape
+        i::I
+        j::I
+    end
+    ```
+
+    <img src="https://user-images.githubusercontent.com/32610387/136922414-8af316f3-d4bb-4a46-a3bc-434d50748d27.png" width = "400px">
 
 1. ### `Background`
 
