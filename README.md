@@ -30,10 +30,10 @@ This is a lightweight package that provides fast drawing methods for some simple
 import SimpleDraw as SD
 
 # create a canvas (could be any AbstractMatrix)
-image = falses(17, 17)
+image = falses(16, 16)
 
 # create the shape
-shape = SD.Line(5, 2, 13, 16)
+shape = SD.Line(SD.Point(5, 2), SD.Point(12, 15))
 
 # we will draw on the boolean image with the "color" true
 color = true
@@ -45,7 +45,7 @@ SD.draw!(image, shape, color)
 SD.visualize(image)
 ```
 
-<img src="https://user-images.githubusercontent.com/32610387/123078332-7d471680-d438-11eb-9216-0f0b41efdbd6.png" width = "400px">
+<img src="https://user-images.githubusercontent.com/32610387/137005406-6b9db65f-1a14-4008-85b8-92db93a02ad1.png" width = "400px">
 
 ## Notes
 
@@ -89,7 +89,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/136922414-8af316f3-d4bb-4a46-a3bc-434d50748d27.png" width = "400px">
+    <img src="https://user-images.githubusercontent.com/32610387/137005163-a5ef6a22-3888-4005-bf98-fbe93c6342de.png" width = "400px">
 
 1. ### `Background`
 
@@ -97,91 +97,83 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     struct Background <: AbstractShape end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/136918547-21c71eba-fcb8-4f8c-8261-9be0fa2410b4.png" width = "400px">
+    <img src="https://user-images.githubusercontent.com/32610387/137005363-9434627a-e3fb-4377-a955-1acebf337d09.png" width = "400px">
 
 1. ### `Line`
 
     ```julia
     mutable struct Line{I <: Integer} <: AbstractShape
-        i1::I
-        j1::I
-        i2::I
-        j2::I
+        point1::Point{I}
+        point2::Point{I}
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/123078332-7d471680-d438-11eb-9216-0f0b41efdbd6.png" width = "400px">
+    <img src="https://user-images.githubusercontent.com/32610387/137005406-6b9db65f-1a14-4008-85b8-92db93a02ad1.png" width = "400px">
 
 1. ### `Circle`
 
     ```julia
     mutable struct Circle{I <: Integer} <: AbstractShape
-        i_center::I
-        j_center::I
+        center::Point{I}
         radius::I
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/123078423-95b73100-d438-11eb-8329-546982bbb00c.png" width = "400px">
+    <img src="https://user-images.githubusercontent.com/32610387/137005414-1691f633-4ab5-441a-8308-c04b4791ff8a.png" width = "400px">
 
 1. ### `FilledCircle`
 
     ```julia
     mutable struct FilledCircle{I <: Integer} <: AbstractShape
-        i_center::I
-        j_center::I
+        center::Point{I}
         radius::I
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/123078474-a2d42000-d438-11eb-88cf-d0635380a21f.png" width = "400px">
+    <img src="https://user-images.githubusercontent.com/32610387/137005436-70d662f8-4182-4ba7-8c9b-d7eeec51ee3b.png" width = "400px">
 
 1. ### `Rectangle`
 
     ```julia
     mutable struct Rectangle{I <: Integer} <: AbstractShape
-        i_top_left::I
-        j_top_left::I
+        top_left::Point{I}
         height::I
         width::I
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/123078509-ac5d8800-d438-11eb-814f-b7fa32857878.png" width = "400px">
+    <img src="https://user-images.githubusercontent.com/32610387/137005464-c4efba73-9e30-4626-b05c-87fad58542cb.png" width = "400px">
 
 1. ### `FilledRectangle`
 
     ```julia
     mutable struct FilledRectangle{I <: Integer} <: AbstractShape
-        i_top_left::I
-        j_top_left::I
+        top_left::Point{I}
         height::I
         width::I
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/123078547-b67f8680-d438-11eb-94be-af77c473d0e9.png" width = "400px">
+    <img src="https://user-images.githubusercontent.com/32610387/137005489-481c84a8-bc92-49b8-9cbd-1f9266d4cbae.png" width = "400px">
 
 1. ### `Cross`
 
     ```julia
     mutable struct Cross{I <: Integer} <: AbstractShape
-        i_center::I
-        j_center::I
+        center::Point{I}
         radius::I
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/136918598-ba83ae87-a514-42cb-9d78-01b1aa7135aa.png" width = "400px">
+    <img src="https://user-images.githubusercontent.com/32610387/137005504-c7776d6d-d94c-4651-b2ac-e88d01f0ffea.png" width = "400px">
 
 1. ### `HollowCross`
 
     ```julia
     mutable struct HollowCross{I <: Integer} <: AbstractShape
-        i_center::I
-        j_center::I
+        center::Point{I}
         radius::I
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/136918626-e983bcb1-b722-4ba7-a449-fee5a198d40e.png" width = "400px">
+    <img src="https://user-images.githubusercontent.com/32610387/137005548-d5bdb2ab-1d7c-4a91-9ed4-a178dd9b6d10.png" width = "400px">
