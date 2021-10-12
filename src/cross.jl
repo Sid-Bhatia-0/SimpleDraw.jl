@@ -1,20 +1,18 @@
 mutable struct Cross{I <: Integer} <: AbstractShape
-    i_center::I
-    j_center::I
+    center::Point{I}
     radius::I
 end
 
 mutable struct HollowCross{I <: Integer} <: AbstractShape
-    i_center::I
-    j_center::I
+    center::Point{I}
     radius::I
 end
 
 function draw!(image::AbstractMatrix, shape::Cross, color)
     height, width = size(image)
 
-    i_center = shape.i_center
-    j_center = shape.j_center
+    i_center = shape.center.i
+    j_center = shape.center.j
     radius = shape.radius
 
     for j in j_center - radius : j_center + radius
@@ -31,8 +29,8 @@ end
 function draw!(image::AbstractMatrix, shape::HollowCross, color)
     height, width = size(image)
 
-    i_center = shape.i_center
-    j_center = shape.j_center
+    i_center = shape.center.i
+    j_center = shape.center.j
     radius = shape.radius
 
     for j in j_center - radius : j_center + radius
