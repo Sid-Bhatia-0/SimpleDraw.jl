@@ -61,7 +61,7 @@ Test.@testset "SimpleDraw.jl" begin
         height = 16
         width = 16
         image = falses(height, width)
-        shape = SD.Line(2, 2, height - 1, width - 1)
+        shape = SD.Line(SD.Point(2, 2), SD.Point(height - 1, width - 1))
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -88,7 +88,7 @@ Test.@testset "SimpleDraw.jl" begin
         height = 16
         width = 16
         image = falses(height, width)
-        shape = SD.Circle(8, 8, 6)
+        shape = SD.Circle(SD.Point(8, 8), 6)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -115,7 +115,7 @@ Test.@testset "SimpleDraw.jl" begin
         height = 16
         width = 16
         image = falses(height, width)
-        shape = SD.FilledCircle(8, 8, 6)
+        shape = SD.FilledCircle(SD.Point(8, 8), 6)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -142,7 +142,7 @@ Test.@testset "SimpleDraw.jl" begin
         height = 16
         width = 16
         image = falses(height, width)
-        shape = SD.Rectangle(2, 2, height - 2, width - 2)
+        shape = SD.Rectangle(SD.Point(2, 2), height - 2, width - 2)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -169,7 +169,7 @@ Test.@testset "SimpleDraw.jl" begin
         height = 16
         width = 16
         image = falses(height, width)
-        shape = SD.FilledRectangle(2, 2, height - 2, width - 2)
+        shape = SD.FilledRectangle(SD.Point(2, 2), height - 2, width - 2)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -196,7 +196,7 @@ Test.@testset "SimpleDraw.jl" begin
         height = 16
         width = 16
         image = falses(height, width)
-        shape = SD.Cross(8, 8, 4)
+        shape = SD.Cross(SD.Point(8, 8), 4)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -223,7 +223,7 @@ Test.@testset "SimpleDraw.jl" begin
         height = 16
         width = 16
         image = falses(height, width)
-        shape = SD.HollowCross(8, 8, 4)
+        shape = SD.HollowCross(SD.Point(8, 8), 4)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([

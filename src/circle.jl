@@ -1,12 +1,10 @@
 mutable struct Circle{I <: Integer} <: AbstractShape
-    i_center::I
-    j_center::I
+    center::Point{I}
     radius::I
 end
 
 mutable struct FilledCircle{I <: Integer} <: AbstractShape
-    i_center::I
-    j_center::I
+    center::Point{I}
     radius::I
 end
 
@@ -47,8 +45,8 @@ end
 Draw a circle. Ref: https://en.wikipedia.org/wiki/Midpoint_circle_algorithm variant with integer-based arithmetic
 """
 function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
-    i_center = shape.i_center
-    j_center = shape.j_center
+    i_center = shape.center.i
+    j_center = shape.center.j
     radius = shape.radius
 
     zero_value = zero(I)
@@ -76,8 +74,8 @@ function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
 end
 
 function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
-    i_center = shape.i_center
-    j_center = shape.j_center
+    i_center = shape.center.i
+    j_center = shape.center.j
     radius = shape.radius
 
     zero_value = zero(I)

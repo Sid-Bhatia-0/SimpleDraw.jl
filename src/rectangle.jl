@@ -1,20 +1,18 @@
 mutable struct Rectangle{I <: Integer} <: AbstractShape
-    i_top_left::I
-    j_top_left::I
+    top_left::Point{I}
     height::I
     width::I
 end
 
 mutable struct FilledRectangle{I <: Integer} <: AbstractShape
-    i_top_left::I
-    j_top_left::I
+    top_left::Point{I}
     height::I
     width::I
 end
 
 function draw!(image::AbstractMatrix, shape::Rectangle, color)
-    i_top_left = shape.i_top_left
-    j_top_left = shape.j_top_left
+    i_top_left = shape.top_left.i
+    j_top_left = shape.top_left.j
     i_bottom_right = i_top_left + shape.height - 1
     j_bottom_right = j_top_left + shape.width - 1
 
@@ -38,8 +36,8 @@ function draw!(image::AbstractMatrix, shape::Rectangle, color)
 end
 
 function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
-    i_top_left = shape.i_top_left
-    j_top_left = shape.j_top_left
+    i_top_left = shape.top_left.i
+    j_top_left = shape.top_left.j
     i_bottom_right = i_top_left + shape.height - 1
     j_bottom_right = j_top_left + shape.width - 1
 
