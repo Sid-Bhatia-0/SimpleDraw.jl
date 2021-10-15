@@ -23,6 +23,7 @@ This is a lightweight package that provides fast drawing methods for some simple
 1. [`FilledRectangle`](#filledrectangle)
 1. [`Cross`](#cross)
 1. [`HollowCross`](#hollowcross)
+1. [`PolyLine`](#polyline)
 
 ## Getting Started
 
@@ -177,3 +178,13 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     ```
 
     <img src="https://user-images.githubusercontent.com/32610387/137005548-d5bdb2ab-1d7c-4a91-9ed4-a178dd9b6d10.png" width = "400px">
+
+1. ### `PolyLine`
+
+    ```julia
+    mutable struct PolyLine{I <: Integer} <: AbstractShape
+        points::Vector{Point{I}}
+    end
+    ```
+
+    <img src="https://user-images.githubusercontent.com/32610387/137520922-0005f057-040f-4a9e-8fd7-93873dca6f73.png" width = "400px">
