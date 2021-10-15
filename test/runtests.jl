@@ -245,4 +245,31 @@ Test.@testset "SimpleDraw.jl" begin
                                       0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
     end
+
+    Test.@testset "PolyLine" begin
+        height = 16
+        width = 16
+        image = falses(height, width)
+        shape = SD.PolyLine([SD.Point(15, 2), SD.Point(12, 15), SD.Point(3, 12), SD.Point(6, 6)])
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == BitArray([
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0
+                                      0 0 0 0 0 0 0 0 0 1 1 1 0 0 0 0
+                                      0 0 0 0 0 0 0 1 1 0 0 0 1 0 0 0
+                                      0 0 0 0 0 1 1 0 0 0 0 0 1 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 0
+                                      0 0 0 0 0 0 0 0 1 1 1 1 0 0 0 0
+                                      0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0
+                                      0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                     ])
+    end
 end
