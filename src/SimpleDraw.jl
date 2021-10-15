@@ -16,6 +16,7 @@ include("line.jl")
 include("circle.jl")
 include("rectangle.jl")
 include("cross.jl")
+include("poly_line.jl")
 include("visualize.jl")
 
 end
