@@ -17,6 +17,7 @@ This is a lightweight package that provides fast drawing methods for some simple
 1. [`Point`](#point)
 1. [`Background`](#background)
 1. [`Line`](#line)
+1. [`ThickLine`](#thickline)
 1. [`Circle`](#circle)
 1. [`FilledCircle`](#filledcircle)
 1. [`Rectangle`](#rectangle)
@@ -114,6 +115,18 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     ```
 
     <img src="https://user-images.githubusercontent.com/32610387/137005406-6b9db65f-1a14-4008-85b8-92db93a02ad1.png" width = "400px">
+
+1. ### `ThickLine`
+
+    ```julia
+    mutable struct ThickLine{I <: Integer} <: AbstractShape
+        point1::Point{I}
+        point2::Point{I}
+        brush_radius::I
+    end
+    ```
+
+    <img src="https://user-images.githubusercontent.com/32610387/137580331-7883bdb1-8e6b-433c-81e5-c77c2910da4b.png" width = "400px">
 
 1. ### `Circle`
 
