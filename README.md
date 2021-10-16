@@ -73,7 +73,11 @@ SD.draw!(image, shape, color)
 
 ### Draw with bounds-checking
 
-By default, all the drawing algorithms (except the one for `Background`, which doesn't require bounds-checking) utilize the `put_pixel!` function in order to draw each pixel. It will only draw a pixel if it is within the bounds of the `image`, so you don't have to worry about your program breaking because it is trying to draw something outside the bounds of the `image`.
+By default, all the drawing algorithms only draw within the bounds of the given image. So you don't have to worry about your program breaking because it is trying to draw something outside the bounds of the `image`. This is achieved in different ways for different shapes:
+
+1. In case of `Background`, we simply fill the entire array and don't need any explicit bounds checking
+1. In case of `Line`, we first clip the endpoints of the line to lie within the image and then draw the line with no further bounds checking.
+1. In case of more complex shapes like `Circle`, we iterate through all the pixels of the `Circle` like we normally would, but draw only those pixels that lie within the bounds of the `image`.
 
 ### Visualization
 
