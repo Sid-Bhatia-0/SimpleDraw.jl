@@ -107,6 +107,33 @@ Test.@testset "SimpleDraw.jl" begin
                                      ])
     end
 
+    Test.@testset "ThickLine" begin
+        height = 16
+        width = 16
+        image = falses(height, width)
+        shape = SD.ThickLine(SD.Point(4, 4), SD.Point(12, 8), 2)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == BitArray([
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                      0 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0
+                                      0 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0
+                                      0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0
+                                      0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0
+                                      0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0
+                                      0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0
+                                      0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0
+                                      0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0
+                                      0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0
+                                      0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0
+                                      0 0 0 0 0 1 1 1 1 1 0 0 0 0 0 0
+                                      0 0 0 0 0 1 1 1 1 1 0 0 0 0 0 0
+                                      0 0 0 0 0 0 1 1 1 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                      0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+                                     ])
+    end
+
     Test.@testset "Circle" begin
         height = 16
         width = 16
