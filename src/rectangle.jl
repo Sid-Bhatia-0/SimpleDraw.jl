@@ -4,6 +4,13 @@ mutable struct Rectangle{I <: Integer} <: AbstractShape
     width::I
 end
 
+mutable struct ThickRectangle{I <: Integer} <: AbstractShape
+    top_left::Point{I}
+    height::I
+    width::I
+    brush_radius::I
+end
+
 mutable struct FilledRectangle{I <: Integer} <: AbstractShape
     top_left::Point{I}
     height::I
@@ -30,6 +37,32 @@ function draw!(image::AbstractMatrix, shape::Rectangle, color)
 
     for j in j_top_left:j_bottom_right
         put_pixel!(image, i_bottom_right, j, color)
+    end
+
+    return nothing
+end
+
+function draw!(image::AbstractMatrix, shape::ThickRectangle, color)
+    i_top_left = shape.top_left.i
+    j_top_left = shape.top_left.j
+    i_bottom_right = i_top_left + shape.height - 1
+    j_bottom_right = j_top_left + shape.width - 1
+    brush_radius = shape.brush_radius
+
+    for i in i_top_left:i_bottom_right
+        draw!(image, FilledCircle(Point(i, j_top_left), brush_radius), color)
+    end
+
+    for i in i_top_left:i_bottom_right
+        draw!(image, FilledCircle(Point(i, j_bottom_right), brush_radius), color)
+    end
+
+    for j in j_top_left:j_bottom_right
+        draw!(image, FilledCircle(Point(i_top_left, j), brush_radius), color)
+    end
+
+    for j in j_top_left:j_bottom_right
+        draw!(image, FilledCircle(Point(i_bottom_right, j), brush_radius), color)
     end
 
     return nothing

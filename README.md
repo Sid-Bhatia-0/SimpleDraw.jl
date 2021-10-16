@@ -23,6 +23,7 @@ This is a lightweight package that provides exact and efficient (for the most pa
 1. [`ThickCircle`](#thickcircle)
 1. [`FilledCircle`](#filledcircle)
 1. [`Rectangle`](#rectangle)
+1. [`ThickRectangle`](#thickrectangle)
 1. [`FilledRectangle`](#filledrectangle)
 1. [`Cross`](#cross)
 1. [`HollowCross`](#hollowcross)
@@ -183,6 +184,19 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     ```
 
     <img src="https://user-images.githubusercontent.com/32610387/137005464-c4efba73-9e30-4626-b05c-87fad58542cb.png" width = "400px">
+
+1. ### `ThickRectangle`
+
+    ```julia
+    mutable struct ThickRectangle{I <: Integer} <: AbstractShape
+        top_left::Point{I}
+        height::I
+        width::I
+        brush_radius::I
+    end
+    ```
+
+    <img src="https://user-images.githubusercontent.com/32610387/137594091-e3ef252b-9f1f-4f50-9be0-20aa0a8d1801.png">
 
 1. ### `FilledRectangle`
 
