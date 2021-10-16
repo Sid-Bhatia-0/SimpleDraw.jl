@@ -7,10 +7,15 @@ end
 Draw a line. Ref: https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 """
 function draw!(image::AbstractMatrix, shape::Line, color)
-    i1 = shape.point1.i
-    j1 = shape.point1.j
-    i2 = shape.point2.i
-    j2 = shape.point2.j
+    low_i = firstindex(image, 1)
+    high_i = lastindex(image, 1)
+    low_j = firstindex(image, 2)
+    high_j = lastindex(image, 2)
+
+    i1 = clamp(shape.point1.i, low_i, high_i)
+    j1 = clamp(shape.point1.j, low_j, high_j)
+    i2 = clamp(shape.point2.i, low_i, high_i)
+    j2 = clamp(shape.point2.j, low_j, high_j)
 
     di = abs(i2 - i1)
     dj = -abs(j2 - j1)
@@ -19,7 +24,7 @@ function draw!(image::AbstractMatrix, shape::Line, color)
     err = di + dj
 
     while true
-        put_pixel!(image, i1, j1, color)
+        @inbounds image[i1, j1] = color
 
         if (i1 == i2 && j1 == j2)
             break
