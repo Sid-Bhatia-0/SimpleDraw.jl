@@ -8,6 +8,12 @@ mutable struct FilledCircle{I <: Integer} <: AbstractShape
     radius::I
 end
 
+mutable struct ThickCircle{I <: Integer} <: AbstractShape
+    center::Point{I}
+    radius::I
+    brush_radius::I
+end
+
 @inline function draw_vertical_strip_reflections!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
     for ii in i_center - i : i_center + i
         put_pixel!(image, ii, j_center - j, color)
@@ -38,6 +44,18 @@ end
     put_pixel!(image, i_center - i, j_center + j, color)
     put_pixel!(image, i_center + i, j_center + j, color)
 
+    return nothing
+end
+
+@inline function draw_octant_reflections_thick!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color, brush_radius)
+    draw!(image, FilledCircle(Point(i_center - i, j_center - j), brush_radius), color)
+    draw!(image, FilledCircle(Point(i_center + i, j_center - j), brush_radius), color)
+    draw!(image, FilledCircle(Point(i_center - j, j_center - i), brush_radius), color)
+    draw!(image, FilledCircle(Point(i_center + j, j_center - i), brush_radius), color)
+    draw!(image, FilledCircle(Point(i_center - j, j_center + i), brush_radius), color)
+    draw!(image, FilledCircle(Point(i_center + j, j_center + i), brush_radius), color)
+    draw!(image, FilledCircle(Point(i_center - i, j_center + j), brush_radius), color)
+    draw!(image, FilledCircle(Point(i_center + i, j_center + j), brush_radius), color)
     return nothing
 end
 
@@ -97,6 +115,36 @@ function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
         end
 
         draw_vertical_strip_reflections!(image, i_center, j_center, i, j, color)
+    end
+
+    return nothing
+end
+
+function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
+    i_center = shape.center.i
+    j_center = shape.center.j
+    radius = shape.radius
+    brush_radius = shape.brush_radius
+
+    zero_value = zero(I)
+
+    i = zero_value
+    j = radius
+
+    draw_octant_reflections_thick!(image, i_center, j_center, i, j, color, brush_radius)
+
+    constant = 3 - 2 * radius * radius
+
+    while j >= i
+        d = 2 * j * j + 2 * i * i + 4 * i - 2 * j + constant
+
+        i += 1
+
+        if d > zero_value
+            j -= 1
+        end
+
+        draw_octant_reflections_thick!(image, i_center, j_center, i, j, color, brush_radius)
     end
 
     return nothing
