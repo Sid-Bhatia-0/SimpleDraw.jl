@@ -10,7 +10,6 @@ This is a lightweight package that provides exact and efficient (for the most pa
 * [Notes](#notes)
   - [API](#api)
   - [Draw with bounds checking](#draw-with-bounds-checking)
-  - [Thick curves](#thick-curves)
   - [Visualization](#visualization)
 
 [List of shapes](#list-of-shapes):
@@ -82,14 +81,6 @@ By default, all the drawing algorithms only draw within the bounds of the given 
 1. In case of `Background`, we simply fill the entire array and don't need any explicit bounds checking
 1. In case of `Line`, we first clip the endpoints of the line to lie within the image and then draw the line with no further bounds checking.
 1. In case of more complex shapes like `Circle`, we iterate through all the pixels of the `Circle` like we normally would, but draw only those pixels that lie within the bounds of the `image`.
-
-### Thick curves
-
-One possible way to draw a thick curve is to draw normal lines that are perpendicular to the tangent of the curve at each pixel encountered along the path of the curve. This seems like a reasonable way to draw a thick line. But for curves like circles, this method might leave gaps between successive normal lines, especially for large thicknesses. A more suitable approach to draw thick circles would be to define an outer and inner circle and then completely fill the gap between these two circles. For other shapes like Bezier curves, we might need yet another approach to thicken them.
-
-Consider a more general approach. Drawing a curve can be interpreted as moving a brush along the path of the curve and setting all the pixels that are touched by the brush. Instead of using a brush whose tip is a `Point`, if we use a brush whose tip is a `FilledCircle` (say), then we can get a thick curve without any unusual gaps in between. In this case, the thickness of the curve would be varied by changing the radius of the brush (called `brush_radius`).
-
-We choose the second method because it gives a consistent interpretation for the thickness of a curve and can be used to thicken any shape. However, the present algorithm for this naively draws a `FilledCircle` for every position encountered along the path of the curve and thus draws several pixels multiple times. This can be made more efficient (future work).
 
 ### Visualization
 
@@ -192,11 +183,11 @@ The `visualize` function helps visualize a binary image inside the terminal usin
         top_left::Point{I}
         height::I
         width::I
-        brush_radius::I
+        thickness::I
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/137594091-e3ef252b-9f1f-4f50-9be0-20aa0a8d1801.png">
+    <img src="https://user-images.githubusercontent.com/32610387/137974579-fad34a2f-9e7e-4045-b1b0-255244b90e23.png">
 
 1. ### `FilledRectangle`
 
