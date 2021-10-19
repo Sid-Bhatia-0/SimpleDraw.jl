@@ -8,7 +8,7 @@ mutable struct ThickRectangle{I <: Integer} <: AbstractShape
     top_left::Point{I}
     height::I
     width::I
-    brush_radius::I
+    thickness::I
 end
 
 mutable struct FilledRectangle{I <: Integer} <: AbstractShape
@@ -43,27 +43,19 @@ function draw!(image::AbstractMatrix, shape::Rectangle, color)
 end
 
 function draw!(image::AbstractMatrix, shape::ThickRectangle, color)
-    i_top_left = shape.top_left.i
-    j_top_left = shape.top_left.j
-    i_bottom_right = i_top_left + shape.height - 1
-    j_bottom_right = j_top_left + shape.width - 1
-    brush_radius = shape.brush_radius
+    top_left = shape.top_left
+    height = shape.height
+    width = shape.width
+    thickness = shape.thickness
+    i_top_left = top_left.i
+    j_top_left = top_left.j
+    i_bottom_right = i_top_left + height - 1
+    j_bottom_right = j_top_left + width - 1
 
-    for i in i_top_left:i_bottom_right
-        draw!(image, FilledCircle(Point(i, j_top_left), brush_radius), color)
-    end
-
-    for i in i_top_left:i_bottom_right
-        draw!(image, FilledCircle(Point(i, j_bottom_right), brush_radius), color)
-    end
-
-    for j in j_top_left:j_bottom_right
-        draw!(image, FilledCircle(Point(i_top_left, j), brush_radius), color)
-    end
-
-    for j in j_top_left:j_bottom_right
-        draw!(image, FilledCircle(Point(i_bottom_right, j), brush_radius), color)
-    end
+    draw!(image, FilledRectangle(top_left, height, thickness), color)
+    draw!(image, FilledRectangle(Point(i_top_left, j_top_left + thickness), thickness, width - 2 * thickness), color)
+    draw!(image, FilledRectangle(Point(i_top_left + height - thickness, j_top_left + thickness), thickness, width - 2 * thickness), color)
+    draw!(image, FilledRectangle(Point(i_top_left, j_top_left + width - thickness), height, thickness), color)
 
     return nothing
 end
