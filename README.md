@@ -147,11 +147,11 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     mutable struct ThickCircle{I <: Integer} <: AbstractShape
         center::Point{I}
         radius::I
-        brush_radius::I
+        thickness::I
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/137591759-4b4bf434-e475-4e7f-b030-9926d48e3251.png">
+    <img src="https://user-images.githubusercontent.com/32610387/138155225-c16356c4-8255-45b8-9b63-f7d43d5d73e9.png">
 
 1. ### `FilledCircle`
 

@@ -11,7 +11,7 @@ end
 mutable struct ThickCircle{I <: Integer} <: AbstractShape
     center::Point{I}
     radius::I
-    brush_radius::I
+    thickness::I
 end
 
 @inline function draw_vertical_strip_reflections!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
@@ -47,15 +47,16 @@ end
     return nothing
 end
 
-@inline function draw_octant_reflections_thick!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color, brush_radius)
-    draw!(image, FilledCircle(Point(i_center - i, j_center - j), brush_radius), color)
-    draw!(image, FilledCircle(Point(i_center + i, j_center - j), brush_radius), color)
-    draw!(image, FilledCircle(Point(i_center - j, j_center - i), brush_radius), color)
-    draw!(image, FilledCircle(Point(i_center + j, j_center - i), brush_radius), color)
-    draw!(image, FilledCircle(Point(i_center - j, j_center + i), brush_radius), color)
-    draw!(image, FilledCircle(Point(i_center + j, j_center + i), brush_radius), color)
-    draw!(image, FilledCircle(Point(i_center - i, j_center + j), brush_radius), color)
-    draw!(image, FilledCircle(Point(i_center + i, j_center + j), brush_radius), color)
+@inline function draw_octant_reflections_lines!(image::AbstractMatrix, i_center, j_center, i_inner, j_inner, i_outer, j_outer, color)
+    draw!(image, Line(Point(i_center - i_outer, j_center - j_outer), Point(i_center - i_inner, j_center - j_inner)), color)
+    draw!(image, Line(Point(i_center + i_outer, j_center - j_outer), Point(i_center + i_inner, j_center - j_inner)), color)
+    draw!(image, Line(Point(i_center - j_outer, j_center - i_outer), Point(i_center - j_inner, j_center - i_inner)), color)
+    draw!(image, Line(Point(i_center + j_outer, j_center - i_outer), Point(i_center + j_inner, j_center - i_inner)), color)
+    draw!(image, Line(Point(i_center - j_outer, j_center + i_outer), Point(i_center - j_inner, j_center + i_inner)), color)
+    draw!(image, Line(Point(i_center + j_outer, j_center + i_outer), Point(i_center + j_inner, j_center + i_inner)), color)
+    draw!(image, Line(Point(i_center - i_outer, j_center + j_outer), Point(i_center - i_inner, j_center + j_inner)), color)
+    draw!(image, Line(Point(i_center + i_outer, j_center + j_outer), Point(i_center + i_inner, j_center + j_inner)), color)
+
     return nothing
 end
 
@@ -121,30 +122,56 @@ function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
 end
 
 function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
-    i_center = shape.center.i
-    j_center = shape.center.j
-    radius = shape.radius
-    brush_radius = shape.brush_radius
+    center = shape.center
+    i_center = center.i
+    j_center = center.j
+    radius_outer = shape.radius
+    thickness = shape.thickness
+    radius_inner = radius_outer - thickness + 1
 
     zero_value = zero(I)
 
-    i = zero_value
-    j = radius
+    i_inner = zero_value
+    j_inner = radius_inner
 
-    draw_octant_reflections_thick!(image, i_center, j_center, i, j, color, brush_radius)
+    i_outer = zero_value
+    j_outer = radius_outer
 
-    constant = 3 - 2 * radius * radius
+    draw_octant_reflections_lines!(image, i_center, j_center, i_inner, j_inner, i_outer, j_outer, color)
 
-    while j >= i
-        d = 2 * j * j + 2 * i * i + 4 * i - 2 * j + constant
+    constant_inner = 3 - 2 * radius_inner * radius_inner
+    constant_outer = 3 - 2 * radius_outer * radius_outer
 
-        i += 1
+    while j_inner >= i_inner
+        d_inner = 2 * j_inner * j_inner + 2 * i_inner * i_inner + 4 * i_inner - 2 * j_inner + constant_inner
+        d_outer = 2 * j_outer * j_outer + 2 * i_outer * i_outer + 4 * i_outer - 2 * j_outer + constant_outer
 
-        if d > zero_value
-            j -= 1
+        i_inner += 1
+        i_outer += 1
+
+        if d_inner > zero_value
+            j_inner -= 1
         end
 
-        draw_octant_reflections_thick!(image, i_center, j_center, i, j, color, brush_radius)
+        if d_outer > zero_value
+            j_outer -= 1
+        end
+
+        draw_octant_reflections_lines!(image, i_center, j_center, i_inner, j_inner, i_outer, j_outer, color)
+    end
+
+    while j_outer >= i_outer
+        d_outer = 2 * j_outer * j_outer + 2 * i_outer * i_outer + 4 * i_outer - 2 * j_outer + constant_outer
+
+        i_outer += 1
+
+        if d_outer > zero_value
+            j_outer -= 1
+        end
+
+        t = min(i_outer, j_outer)
+
+        draw_octant_reflections_lines!(image, i_center, j_center, t, t, i_outer, j_outer, color)
     end
 
     return nothing
