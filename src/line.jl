@@ -1,3 +1,9 @@
+mutable struct VerticalLine{I <: Integer} <: AbstractShape
+    i_start::I
+    i_end::I
+    j::I
+end
+
 mutable struct Line{I <: Integer} <: AbstractShape
     point1::Point{I}
     point2::Point{I}
@@ -7,6 +13,34 @@ mutable struct ThickLine{I <: Integer} <: AbstractShape
     point1::Point{I}
     point2::Point{I}
     brush_radius::I
+end
+
+function draw!(image::AbstractMatrix, shape::VerticalLine, color)
+    i_start = shape.i_start
+    i_end = shape.i_end
+    j = shape.j
+
+    i_low = firstindex(image, 1)
+    i_high = lastindex(image, 1)
+
+    j_low = firstindex(image, 2)
+    j_high = lastindex(image, 2)
+
+    if i_end < i_low || i_start > i_high || j < j_low || j > j_high
+        return nothing
+    else
+        if i_start < i_low
+            i_start = i_low
+        end
+
+        if i_end > i_high
+            i_end = i_high
+        end
+
+        image[i_start:i_end, j] .= color
+
+        return nothing
+    end
 end
 
 """
