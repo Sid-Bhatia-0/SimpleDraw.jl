@@ -16,6 +16,8 @@ This is a lightweight package that provides exact and efficient (for the most pa
 
 1. [`Point`](#point)
 1. [`Background`](#background)
+1. [`VerticalLine`](#verticalline)
+1. [`HorizontalLine`](#horizontalline)
 1. [`Line`](#line)
 1. [`ThickLine`](#thickline)
 1. [`Circle`](#circle)
@@ -106,6 +108,30 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     ```
 
     <img src="https://user-images.githubusercontent.com/32610387/137005363-9434627a-e3fb-4377-a955-1acebf337d09.png" width = "400px">
+
+1. ### `VerticalLine`
+
+    ```julia
+    mutable struct VerticalLine{I <: Integer} <: AbstractShape
+        i_start::I
+        i_end::I
+        j::I
+    end
+    ```
+
+    <img src="https://user-images.githubusercontent.com/32610387/138334944-85f8b4de-5358-4105-9757-ba19c3feb78a.png">
+
+1. ### `HorizontalLine`
+
+    ```julia
+    mutable struct HorizontalLine{I <: Integer} <: AbstractShape
+        i::I
+        j_start::I
+        j_end::I
+    end
+    ```
+
+    <img src="https://user-images.githubusercontent.com/32610387/138334953-781246cd-2039-4ccb-9913-74beb608a559.png">
 
 1. ### `Line`
 
