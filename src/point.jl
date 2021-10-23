@@ -3,7 +3,12 @@ mutable struct Point{I <: Integer} <: AbstractShape
     j::I
 end
 
-function draw!(image::AbstractMatrix, shape::Point, color)
+@inline function draw!(image::AbstractMatrix, shape::Point, color)
     put_pixel!(image, shape.i, shape.j, color)
+    return nothing
+end
+
+@inline function draw_inbounds!(image::AbstractMatrix, shape::Point, color)
+    put_pixel_inbounds!(image, shape.i, shape.j, color)
     return nothing
 end
