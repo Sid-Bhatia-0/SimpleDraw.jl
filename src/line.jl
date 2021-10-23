@@ -96,6 +96,16 @@ function draw!(image::AbstractMatrix, shape::Line, color)
     i2 = shape.point2.i
     j2 = shape.point2.j
 
+    if i1 == i2
+        j1, j2 = minmax(j1, j2)
+        draw!(image, HorizontalLine(i1, j1, j2), color)
+        return nothing
+    elseif j1 == j2
+        i1, i2 = minmax(i1, i2)
+        draw!(image, VerticalLine(i1, i2, j1), color)
+        return nothing
+    end
+
     if checkbounds(Bool, image, i1, j1) && checkbounds(Bool, image, i2, j2)
         draw_inbounds!(image, shape, color)
         return nothing
