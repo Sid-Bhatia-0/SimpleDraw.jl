@@ -4,9 +4,14 @@ abstract type AbstractShape end
 
 @inline function put_pixel!(image, i, j, color)
     if checkbounds(Bool, image, i, j)
-        @inbounds image[i, j] = color
+        put_pixel_inbounds!(image, i, j, color)
     end
 
+    return nothing
+end
+
+@inline function put_pixel_inbounds!(image, i, j, color)
+    @inbounds image[i, j] = color
     return nothing
 end
 
