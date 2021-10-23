@@ -78,10 +78,10 @@ SD.draw!(image, shape, color)
 
 ### Draw with bounds-checking
 
-By default, all the drawing algorithms only draw within the bounds of the given image. So you don't have to worry about your program breaking because it is trying to draw something outside the bounds of the `image`. This is achieved in different ways for different shapes:
+By default, the `draw!` function draws the clipped shape, that is, it draws only those pixes that fall within the bounds of the image. So you don't have to worry about your program breaking because it is trying to draw something outside the bounds of the `image`. This is achieved in different ways for different shapes. For example:
 
-1. In case of `Background`, we simply fill the entire array and don't need any explicit bounds checking
-1. In case of `Line`, we first clip the endpoints of the line to lie within the image and then draw the line with no further bounds checking.
+1. In case of `Background`, we simply fill the entire array and don't need any explicit bounds checking.
+1. In case of `VerticalLine` or `HorizontalLine`, we first clip the endpoints of the line to lie within the image and then draw the line with no further bounds checking.
 1. In case of more complex shapes like `Circle`, we iterate through all the pixels of the `Circle` like we normally would, but draw only those pixels that lie within the bounds of the `image`.
 
 ### Visualization
