@@ -43,10 +43,15 @@ function draw!(image::AbstractMatrix, shape::VerticalLine, color)
             i_end = i_high
         end
 
-        image[i_start:i_end, j] .= color
+        draw_inbounds!(image, VerticalLine(i_start, i_end, j), color)
 
         return nothing
     end
+end
+
+@inline function draw_inbounds!(image::AbstractMatrix, shape::VerticalLine, color)
+    @inbounds image[shape.i_start:shape.i_end, shape.j] .= color
+    return nothing
 end
 
 function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
@@ -71,10 +76,15 @@ function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
             j_end = j_high
         end
 
-        image[i, j_start:j_end] .= color
+        draw_inbounds!(image, HorizontalLine(i, j_start, j_end), color)
 
         return nothing
     end
+end
+
+@inline function draw_inbounds!(image::AbstractMatrix, shape::HorizontalLine, color)
+    @inbounds image[shape.i, shape.j_start:shape.j_end] .= color
+    return nothing
 end
 
 """
