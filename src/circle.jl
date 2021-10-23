@@ -47,6 +47,19 @@ end
     return nothing
 end
 
+@inline function draw_octant_reflections_inbounds!(image::AbstractMatrix, i_center, j_center, i, j, color)
+    put_pixel_inbounds!(image, i_center - i, j_center - j, color)
+    put_pixel_inbounds!(image, i_center + i, j_center - j, color)
+    put_pixel_inbounds!(image, i_center - j, j_center - i, color)
+    put_pixel_inbounds!(image, i_center + j, j_center - i, color)
+    put_pixel_inbounds!(image, i_center - j, j_center + i, color)
+    put_pixel_inbounds!(image, i_center + j, j_center + i, color)
+    put_pixel_inbounds!(image, i_center - i, j_center + j, color)
+    put_pixel_inbounds!(image, i_center + i, j_center + j, color)
+
+    return nothing
+end
+
 @inline function draw_octant_reflections_lines!(image::AbstractMatrix, i_center, j_center, i_inner, j_inner, i_outer, j_outer, color)
     draw!(image, Line(Point(i_center - i_outer, j_center - j_outer), Point(i_center - i_inner, j_center - j_inner)), color)
     draw!(image, Line(Point(i_center + i_outer, j_center - j_outer), Point(i_center + i_inner, j_center - j_inner)), color)
@@ -68,6 +81,11 @@ function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
     j_center = shape.center.j
     radius = shape.radius
 
+    if checkbounds(Bool, image, i_center - radius, j_center - radius) && checkbounds(Bool, image, i_center + radius, j_center + radius)
+        draw_inbounds!(image, shape, color)
+        return nothing
+    end
+
     zero_value = zero(I)
 
     i = zero_value
@@ -87,6 +105,35 @@ function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
         end
 
         draw_octant_reflections!(image, i_center, j_center, i, j, color)
+    end
+
+    return nothing
+end
+
+function draw_inbounds!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
+    i_center = shape.center.i
+    j_center = shape.center.j
+    radius = shape.radius
+
+    zero_value = zero(I)
+
+    i = zero_value
+    j = radius
+
+    draw_octant_reflections_inbounds!(image, i_center, j_center, i, j, color)
+
+    constant = 3 - 2 * radius * radius
+
+    while j >= i
+        d = 2 * j * j + 2 * i * i + 4 * i - 2 * j + constant
+
+        i += 1
+
+        if d > zero_value
+            j -= 1
+        end
+
+        draw_octant_reflections_inbounds!(image, i_center, j_center, i, j, color)
     end
 
     return nothing
