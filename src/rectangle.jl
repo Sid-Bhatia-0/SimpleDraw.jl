@@ -74,11 +74,48 @@ function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
     i_bottom_right = i_top_left + shape.height - 1
     j_bottom_right = j_top_left + shape.width - 1
 
-    for j in j_top_left:j_bottom_right
-        for i in i_top_left:i_bottom_right
-            put_pixel!(image, i, j, color)
-        end
+    i_low = firstindex(image, 1)
+    i_high = lastindex(image, 1)
+
+    j_low = firstindex(image, 2)
+    j_high = lastindex(image, 2)
+
+    if i_top_left > i_high
+        return nothing
+    elseif i_top_left < i_low
+        i_top_left = i_low
     end
+
+    if i_bottom_right < i_low
+        return nothing
+    elseif i_bottom_right > i_high
+        i_bottom_right = i_high
+    end
+
+    if j_top_left > j_high
+        return nothing
+    elseif j_top_left < j_low
+        j_top_left = j_low
+    end
+
+    if j_bottom_right < j_low
+        return nothing
+    elseif j_bottom_right > j_high
+        j_bottom_right = j_high
+    end
+
+    @inbounds image[i_top_left:i_bottom_right, j_top_left:j_bottom_right] .= color
+
+    return nothing
+end
+
+function draw_inbounds!(image::AbstractMatrix, shape::FilledRectangle, color)
+    i_top_left = shape.top_left.i
+    j_top_left = shape.top_left.j
+    i_bottom_right = i_top_left + shape.height - 1
+    j_bottom_right = j_top_left + shape.width - 1
+
+    @inbounds image[i_top_left:i_bottom_right, j_top_left:j_bottom_right] .= color
 
     return nothing
 end
