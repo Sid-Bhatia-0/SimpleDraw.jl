@@ -23,21 +23,10 @@ function draw!(image::AbstractMatrix, shape::Rectangle, color)
     i_bottom_right = i_top_left + shape.height - 1
     j_bottom_right = j_top_left + shape.width - 1
 
-    for i in i_top_left:i_bottom_right
-        put_pixel!(image, i, j_top_left, color)
-    end
-
-    for i in i_top_left:i_bottom_right
-        put_pixel!(image, i, j_bottom_right, color)
-    end
-
-    for j in j_top_left:j_bottom_right
-        put_pixel!(image, i_top_left, j, color)
-    end
-
-    for j in j_top_left:j_bottom_right
-        put_pixel!(image, i_bottom_right, j, color)
-    end
+    draw!(image, VerticalLine(i_top_left, i_bottom_right, j_top_left), color)
+    draw!(image, HorizontalLine(i_top_left, j_top_left, j_bottom_right), color)
+    draw!(image, HorizontalLine(i_bottom_right, j_top_left, j_bottom_right), color)
+    draw!(image, VerticalLine(i_top_left, i_bottom_right, j_bottom_right), color)
 
     return nothing
 end
