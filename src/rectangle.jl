@@ -55,15 +55,39 @@ function draw!(image::AbstractMatrix, shape::ThickRectangle, color)
     height = shape.height
     width = shape.width
     thickness = shape.thickness
+
     i_top_left = top_left.i
     j_top_left = top_left.j
     i_bottom_right = i_top_left + height - 1
     j_bottom_right = j_top_left + width - 1
 
+    if checkbounds(Bool, image, i_top_left, j_top_left) && checkbounds(Bool, image, i_bottom_right, j_bottom_right)
+        draw_inbounds!(image, shape, color)
+        return nothing
+    end
+
     draw!(image, FilledRectangle(top_left, height, thickness), color)
     draw!(image, FilledRectangle(Point(i_top_left, j_top_left + thickness), thickness, width - 2 * thickness), color)
     draw!(image, FilledRectangle(Point(i_top_left + height - thickness, j_top_left + thickness), thickness, width - 2 * thickness), color)
     draw!(image, FilledRectangle(Point(i_top_left, j_top_left + width - thickness), height, thickness), color)
+
+    return nothing
+end
+
+function draw_inbounds!(image::AbstractMatrix, shape::ThickRectangle, color)
+    top_left = shape.top_left
+    height = shape.height
+    width = shape.width
+    thickness = shape.thickness
+    i_top_left = top_left.i
+    j_top_left = top_left.j
+    i_bottom_right = i_top_left + height - 1
+    j_bottom_right = j_top_left + width - 1
+
+    draw_inbounds!(image, FilledRectangle(top_left, height, thickness), color)
+    draw_inbounds!(image, FilledRectangle(Point(i_top_left, j_top_left + thickness), thickness, width - 2 * thickness), color)
+    draw_inbounds!(image, FilledRectangle(Point(i_top_left + height - thickness, j_top_left + thickness), thickness, width - 2 * thickness), color)
+    draw_inbounds!(image, FilledRectangle(Point(i_top_left, j_top_left + width - thickness), height, thickness), color)
 
     return nothing
 end
