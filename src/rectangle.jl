@@ -55,16 +55,11 @@ function draw!(image::AbstractMatrix, shape::ThickRectangle, color)
     height = shape.height
     width = shape.width
     thickness = shape.thickness
+
     i_top_left = top_left.i
     j_top_left = top_left.j
     i_bottom_right = i_top_left + height - 1
     j_bottom_right = j_top_left + width - 1
-
-    i_low = firstindex(image, 1)
-    i_high = lastindex(image, 1)
-
-    j_low = firstindex(image, 2)
-    j_high = lastindex(image, 2)
 
     if checkbounds(Bool, image, i_top_left, j_top_left) && checkbounds(Bool, image, i_bottom_right, j_bottom_right)
         draw_inbounds!(image, shape, color)
