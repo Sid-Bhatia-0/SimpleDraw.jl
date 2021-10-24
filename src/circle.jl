@@ -58,15 +58,15 @@ end
     return nothing
 end
 
-@inline function draw_octant_reflections_lines!(image::AbstractMatrix, i_center, j_center, i_inner, j_inner, i_outer, j_outer, color)
-    draw!(image, Line(Point(i_center - i_outer, j_center - j_outer), Point(i_center - i_inner, j_center - j_inner)), color)
-    draw!(image, Line(Point(i_center + i_outer, j_center - j_outer), Point(i_center + i_inner, j_center - j_inner)), color)
-    draw!(image, Line(Point(i_center - j_outer, j_center - i_outer), Point(i_center - j_inner, j_center - i_inner)), color)
-    draw!(image, Line(Point(i_center + j_outer, j_center - i_outer), Point(i_center + j_inner, j_center - i_inner)), color)
-    draw!(image, Line(Point(i_center - j_outer, j_center + i_outer), Point(i_center - j_inner, j_center + i_inner)), color)
-    draw!(image, Line(Point(i_center + j_outer, j_center + i_outer), Point(i_center + j_inner, j_center + i_inner)), color)
-    draw!(image, Line(Point(i_center - i_outer, j_center + j_outer), Point(i_center - i_inner, j_center + j_inner)), color)
-    draw!(image, Line(Point(i_center + i_outer, j_center + j_outer), Point(i_center + i_inner, j_center + j_inner)), color)
+@inline function draw_octant_reflections_lines!(image::AbstractMatrix, i_center, j_center, i, j_inner, j_outer, color)
+    draw!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
+    draw!(image, HorizontalLine(i_center + i, j_center - j_outer, j_center - j_inner), color)
+    draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
+    draw!(image, VerticalLine(i_center + j_inner, i_center + j_outer, j_center - i), color)
+    draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center + i), color)
+    draw!(image, VerticalLine(i_center + j_inner, i_center + j_outer, j_center + i), color)
+    draw!(image, HorizontalLine(i_center - i, j_center + j_inner, j_center + j_outer), color)
+    draw!(image, HorizontalLine(i_center + i, j_center + j_inner, j_center + j_outer), color)
 
     return nothing
 end
@@ -216,7 +216,7 @@ function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
     i_outer = zero_value
     j_outer = radius_outer
 
-    draw_octant_reflections_lines!(image, i_center, j_center, i_inner, j_inner, i_outer, j_outer, color)
+    draw_octant_reflections_lines!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
 
     constant_inner = 3 - 2 * radius_inner * radius_inner
     constant_outer = 3 - 2 * radius_outer * radius_outer
@@ -236,7 +236,7 @@ function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
             j_outer -= 1
         end
 
-        draw_octant_reflections_lines!(image, i_center, j_center, i_inner, j_inner, i_outer, j_outer, color)
+        draw_octant_reflections_lines!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
     end
 
     while j_outer >= i_outer
@@ -248,9 +248,9 @@ function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
             j_outer -= 1
         end
 
-        t = min(i_outer, j_outer)
+        i = min(i_outer, j_outer)
 
-        draw_octant_reflections_lines!(image, i_center, j_center, t, t, i_outer, j_outer, color)
+        draw_octant_reflections_lines!(image, i_center, j_center, i, i_outer, j_outer, color)
     end
 
     return nothing
