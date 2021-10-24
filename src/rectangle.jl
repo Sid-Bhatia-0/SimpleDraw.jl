@@ -108,3 +108,14 @@ function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
 
     return nothing
 end
+
+function draw_inbounds!(image::AbstractMatrix, shape::FilledRectangle, color)
+    i_top_left = shape.top_left.i
+    j_top_left = shape.top_left.j
+    i_bottom_right = i_top_left + shape.height - 1
+    j_bottom_right = j_top_left + shape.width - 1
+
+    @inbounds image[i_top_left:i_bottom_right, j_top_left:j_bottom_right] .= color
+
+    return nothing
+end
