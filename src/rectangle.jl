@@ -23,10 +23,29 @@ function draw!(image::AbstractMatrix, shape::Rectangle, color)
     i_bottom_right = i_top_left + shape.height - 1
     j_bottom_right = j_top_left + shape.width - 1
 
+    if checkbounds(Bool, image, i_top_left, j_top_left) && checkbounds(Bool, image, i_bottom_right, j_bottom_right)
+        draw_inbounds!(image, shape, color)
+        return nothing
+    end
+
     draw!(image, VerticalLine(i_top_left, i_bottom_right, j_top_left), color)
     draw!(image, HorizontalLine(i_top_left, j_top_left, j_bottom_right), color)
     draw!(image, HorizontalLine(i_bottom_right, j_top_left, j_bottom_right), color)
     draw!(image, VerticalLine(i_top_left, i_bottom_right, j_bottom_right), color)
+
+    return nothing
+end
+
+function draw_inbounds!(image::AbstractMatrix, shape::Rectangle, color)
+    i_top_left = shape.top_left.i
+    j_top_left = shape.top_left.j
+    i_bottom_right = i_top_left + shape.height - 1
+    j_bottom_right = j_top_left + shape.width - 1
+
+    draw_inbounds!(image, VerticalLine(i_top_left, i_bottom_right, j_top_left), color)
+    draw_inbounds!(image, HorizontalLine(i_top_left, j_top_left, j_bottom_right), color)
+    draw_inbounds!(image, HorizontalLine(i_bottom_right, j_top_left, j_bottom_right), color)
+    draw_inbounds!(image, VerticalLine(i_top_left, i_bottom_right, j_bottom_right), color)
 
     return nothing
 end
