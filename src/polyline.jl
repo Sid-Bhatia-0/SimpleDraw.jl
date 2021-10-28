@@ -1,8 +1,8 @@
-mutable struct PolyLine{I <: Integer} <: AbstractShape
+mutable struct Polyline{I <: Integer} <: AbstractShape
     points::Vector{Point{I}}
 end
 
-function draw!(image::AbstractMatrix, shape::PolyLine, color)
+function draw!(image::AbstractMatrix, shape::Polyline, color)
     points = shape.points
     num_points = length(points)
 
@@ -20,7 +20,7 @@ function draw!(image::AbstractMatrix, shape::PolyLine, color)
     end
 end
 
-function draw_inbounds!(image::AbstractMatrix, shape::PolyLine, color)
+function draw_inbounds!(image::AbstractMatrix, shape::Polyline, color)
     points = shape.points
     num_points = length(points)
 
