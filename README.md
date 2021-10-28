@@ -28,7 +28,7 @@ This is a lightweight package that provides exact and efficient (for the most pa
 1. [`FilledRectangle`](#filledrectangle)
 1. [`Cross`](#cross)
 1. [`HollowCross`](#hollowcross)
-1. [`PolyLine`](#polyline)
+1. [`Polyline`](#polyline)
 
 ## Getting Started
 
@@ -249,12 +249,12 @@ The `visualize` function helps visualize a binary image inside the terminal usin
 
     <img src="https://user-images.githubusercontent.com/32610387/137005548-d5bdb2ab-1d7c-4a91-9ed4-a178dd9b6d10.png" width = "400px">
 
-1. ### `PolyLine`
+1. ### `Polyline`
 
     ```julia
-    mutable struct PolyLine{I <: Integer} <: AbstractShape
+    mutable struct Polyline{I <: Integer} <: AbstractShape
         points::Vector{Point{I}}
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/137520922-0005f057-040f-4a9e-8fd7-93873dca6f73.png" width = "400px">
+    <img src="https://user-images.githubusercontent.com/32610387/139177281-8d5f6699-0d83-4e59-abe9-bd41c6f8ed84.png">
