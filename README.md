@@ -150,7 +150,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     mutable struct ThickLine{I <: Integer} <: AbstractShape
         point1::Point{I}
         point2::Point{I}
-        brush_radius::I
+        radius::I
     end
     ```
 

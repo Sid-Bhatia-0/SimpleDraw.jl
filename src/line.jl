@@ -18,7 +18,7 @@ end
 mutable struct ThickLine{I <: Integer} <: AbstractShape
     point1::Point{I}
     point2::Point{I}
-    brush_radius::I
+    radius::I
 end
 
 function draw!(image::AbstractMatrix, shape::VerticalLine, color)
@@ -180,9 +180,9 @@ function draw!(image::AbstractMatrix, shape::ThickLine, color)
     j1 = shape.point1.j
     i2 = shape.point2.i
     j2 = shape.point2.j
-    brush_radius = shape.brush_radius
+    radius = shape.radius
 
-    if checkbounds(Bool, image, i1 - brush_radius, j1 - brush_radius) && checkbounds(Bool, image, i1 + brush_radius, j1 + brush_radius) && checkbounds(Bool, image, i2 - brush_radius, j2 - brush_radius) && checkbounds(Bool, image, i2 + brush_radius, j2 + brush_radius)
+    if checkbounds(Bool, image, i1 - radius, j1 - radius) && checkbounds(Bool, image, i1 + radius, j1 + radius) && checkbounds(Bool, image, i2 - radius, j2 - radius) && checkbounds(Bool, image, i2 + radius, j2 + radius)
         draw_inbounds!(image, shape, color)
         return nothing
     end
@@ -194,7 +194,7 @@ function draw!(image::AbstractMatrix, shape::ThickLine, color)
     err = di + dj
 
     while true
-        draw!(image, FilledCircle(Point(i1, j1), brush_radius), color)
+        draw!(image, FilledCircle(Point(i1, j1), radius), color)
 
         if (i1 == i2 && j1 == j2)
             break
@@ -221,7 +221,7 @@ function draw_inbounds!(image::AbstractMatrix, shape::ThickLine, color)
     j1 = shape.point1.j
     i2 = shape.point2.i
     j2 = shape.point2.j
-    brush_radius = shape.brush_radius
+    radius = shape.radius
 
     di = abs(i2 - i1)
     dj = -abs(j2 - j1)
@@ -230,7 +230,7 @@ function draw_inbounds!(image::AbstractMatrix, shape::ThickLine, color)
     err = di + dj
 
     while true
-        draw_inbounds!(image, FilledCircle(Point(i1, j1), brush_radius), color)
+        draw_inbounds!(image, FilledCircle(Point(i1, j1), radius), color)
 
         if (i1 == i2 && j1 == j2)
             break
