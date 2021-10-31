@@ -225,7 +225,7 @@ function draw_inbounds!(image::AbstractMatrix, shape::ThickLine, color)
     err = di + dj
 
     while true
-        draw!(image, FilledCircle(Point(i1, j1), brush_radius), color)
+        draw_inbounds!(image, FilledCircle(Point(i1, j1), brush_radius), color)
 
         if (i1 == i2 && j1 == j2)
             break
