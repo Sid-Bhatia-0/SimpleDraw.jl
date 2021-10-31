@@ -182,6 +182,11 @@ function draw!(image::AbstractMatrix, shape::ThickLine, color)
     j2 = shape.point2.j
     brush_radius = shape.brush_radius
 
+    if checkbounds(Bool, image, i1 - brush_radius, j1 - brush_radius) && checkbounds(Bool, image, i1 + brush_radius, j1 + brush_radius) && checkbounds(Bool, image, i2 - brush_radius, j2 - brush_radius) && checkbounds(Bool, image, i2 + brush_radius, j2 + brush_radius)
+        draw_inbounds!(image, shape, color)
+        return nothing
+    end
+
     di = abs(i2 - i1)
     dj = -abs(j2 - j1)
     si = i1 < i2 ? 1 : -1
