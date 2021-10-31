@@ -176,15 +176,10 @@ function draw_inbounds!(image::AbstractMatrix, shape::Line, color)
 end
 
 function draw!(image::AbstractMatrix, shape::ThickLine, color)
-    low_i = firstindex(image, 1)
-    high_i = lastindex(image, 1)
-    low_j = firstindex(image, 2)
-    high_j = lastindex(image, 2)
-
-    i1 = clamp(shape.point1.i, low_i, high_i)
-    j1 = clamp(shape.point1.j, low_j, high_j)
-    i2 = clamp(shape.point2.i, low_i, high_i)
-    j2 = clamp(shape.point2.j, low_j, high_j)
+    i1 = shape.point1.i
+    j1 = shape.point1.j
+    i2 = shape.point2.i
+    j2 = shape.point2.j
     brush_radius = shape.brush_radius
 
     di = abs(i2 - i1)
@@ -195,7 +190,6 @@ function draw!(image::AbstractMatrix, shape::ThickLine, color)
 
     while true
         draw!(image, FilledCircle(Point(i1, j1), brush_radius), color)
-        # image[i1, j1] = color
 
         if (i1 == i2 && j1 == j2)
             break
