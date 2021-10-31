@@ -216,3 +216,39 @@ function draw!(image::AbstractMatrix, shape::ThickLine, color)
 
     return nothing
 end
+
+function draw_inbounds!(image::AbstractMatrix, shape::ThickLine, color)
+    i1 = shape.point1.i
+    j1 = shape.point1.j
+    i2 = shape.point2.i
+    j2 = shape.point2.j
+    brush_radius = shape.brush_radius
+
+    di = abs(i2 - i1)
+    dj = -abs(j2 - j1)
+    si = i1 < i2 ? 1 : -1
+    sj = j1 < j2 ? 1 : -1
+    err = di + dj
+
+    while true
+        draw!(image, FilledCircle(Point(i1, j1), brush_radius), color)
+
+        if (i1 == i2 && j1 == j2)
+            break
+        end
+
+        e2 = 2 * err
+
+        if (e2 >= dj)
+            err += dj
+            i1 += si
+        end
+
+        if (e2 <= di)
+            err += di
+            j1 += sj
+        end
+    end
+
+    return nothing
+end
