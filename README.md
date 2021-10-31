@@ -51,7 +51,7 @@ SD.draw!(image, shape, color)
 SD.visualize(image)
 ```
 
-<img src="">
+<img src="https://user-images.githubusercontent.com/32610387/139564759-50d524b8-bd70-4a19-a143-1a75644ad929.png">
 
 ## Notes
 
@@ -99,7 +99,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     end
     ```
 
-    <img src="">
+    <img src="https://user-images.githubusercontent.com/32610387/139564735-8f9d7b27-e254-430c-90d9-81b7eef65cdd.png">
 
 1. ### `Background`
 
@@ -107,7 +107,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     struct Background <: AbstractShape end
     ```
 
-    <img src="">
+    <img src="https://user-images.githubusercontent.com/32610387/139564738-1269502a-9fa2-448d-88af-e2a02ec9baf8.png">
 
 1. ### `VerticalLine`
 
@@ -119,7 +119,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     end
     ```
 
-    <img src="">
+    <img src="https://user-images.githubusercontent.com/32610387/139564744-cf7ecb09-cb1c-4820-a74b-e81536d489c6.png">
 
 1. ### `HorizontalLine`
 
@@ -131,7 +131,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     end
     ```
 
-    <img src="">
+    <img src="https://user-images.githubusercontent.com/32610387/139564748-8b8092ae-bb2f-4ae7-a76d-82f13aaaeb7a.png">
 
 1. ### `Line`
 
@@ -142,7 +142,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     end
     ```
 
-    <img src="">
+    <img src="https://user-images.githubusercontent.com/32610387/139564759-50d524b8-bd70-4a19-a143-1a75644ad929.png">
 
 1. ### `ThickLine`
 
@@ -154,7 +154,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     end
     ```
 
-    <img src="">
+    <img src="https://user-images.githubusercontent.com/32610387/139564767-7be5f1a7-112e-4077-902e-29ad58a871f2.png">
 
 1. ### `Circle`
 
@@ -165,7 +165,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     end
     ```
 
-    <img src="">
+    <img src="https://user-images.githubusercontent.com/32610387/139564772-f1d6eb10-0f52-4b65-9a08-f26447b53223.png">
 
 1. ### `ThickCircle`
 
@@ -177,7 +177,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     end
     ```
 
-    <img src="">
+    <img src="https://user-images.githubusercontent.com/32610387/139564796-48abbce7-6378-4ceb-9859-300921c18c98.png">
 
 1. ### `FilledCircle`
 
@@ -188,7 +188,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     end
     ```
 
-    <img src="">
+    <img src="https://user-images.githubusercontent.com/32610387/139564810-757ee422-1d83-47a4-8894-b54f6d4bcf48.png">
 
 1. ### `Rectangle`
 
@@ -200,7 +200,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     end
     ```
 
-    <img src="">
+    <img src="https://user-images.githubusercontent.com/32610387/139564833-cc6e8445-01da-4f6e-83a2-512e69d402dc.png">
 
 1. ### `ThickRectangle`
 
@@ -213,7 +213,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     end
     ```
 
-    <img src="">
+    <img src="https://user-images.githubusercontent.com/32610387/139564844-fb07ea5d-1ed5-422c-a2a5-067f1fb5c216.png">
 
 1. ### `FilledRectangle`
 
@@ -225,7 +225,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     end
     ```
 
-    <img src="">
+    <img src="https://user-images.githubusercontent.com/32610387/139564859-bd027f70-857d-47eb-a42d-30e402aaf6d6.png">
 
 1. ### `Cross`
 
@@ -236,7 +236,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     end
     ```
 
-    <img src="">
+    <img src="https://user-images.githubusercontent.com/32610387/139564870-27070ecc-e5b2-4c4e-a52e-a7b56bcd80d4.png">
 
 1. ### `HollowCross`
 
@@ -247,7 +247,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     end
     ```
 
-    <img src="">
+    <img src="https://user-images.githubusercontent.com/32610387/139565013-ec55945c-eacd-441b-933d-91a6782ded1b.png">
 
 1. ### `Polyline`
 
@@ -257,4 +257,4 @@ The `visualize` function helps visualize a binary image inside the terminal usin
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/139177281-8d5f6699-0d83-4e59-abe9-bd41c6f8ed84.png">
+    <img src="https://user-images.githubusercontent.com/32610387/139564892-28b1874f-62eb-43d4-81a9-6fd893bd1fa7.png">
