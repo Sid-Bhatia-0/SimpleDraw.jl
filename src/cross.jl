@@ -1,9 +1,9 @@
-mutable struct Cross{I <: Integer} <: AbstractShape
+struct Cross{I <: Integer} <: AbstractShape
     center::Point{I}
     radius::I
 end
 
-mutable struct HollowCross{I <: Integer} <: AbstractShape
+struct HollowCross{I <: Integer} <: AbstractShape
     center::Point{I}
     radius::I
 end
