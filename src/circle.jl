@@ -1,14 +1,14 @@
-mutable struct Circle{I <: Integer} <: AbstractShape
+struct Circle{I <: Integer} <: AbstractShape
     center::Point{I}
     radius::I
 end
 
-mutable struct FilledCircle{I <: Integer} <: AbstractShape
+struct FilledCircle{I <: Integer} <: AbstractShape
     center::Point{I}
     radius::I
 end
 
-mutable struct ThickCircle{I <: Integer} <: AbstractShape
+struct ThickCircle{I <: Integer} <: AbstractShape
     center::Point{I}
     radius::I
     thickness::I

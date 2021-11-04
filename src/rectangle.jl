@@ -1,17 +1,17 @@
-mutable struct Rectangle{I <: Integer} <: AbstractShape
+struct Rectangle{I <: Integer} <: AbstractShape
     top_left::Point{I}
     height::I
     width::I
 end
 
-mutable struct ThickRectangle{I <: Integer} <: AbstractShape
+struct ThickRectangle{I <: Integer} <: AbstractShape
     top_left::Point{I}
     height::I
     width::I
     thickness::I
 end
 
-mutable struct FilledRectangle{I <: Integer} <: AbstractShape
+struct FilledRectangle{I <: Integer} <: AbstractShape
     top_left::Point{I}
     height::I
     width::I

@@ -62,7 +62,7 @@ Being able to draw broadly requires three things:
 1. `image`: A canvas to draw on. It could be any `AbstractMatrix`.
 1. `shape`: The shape to be drawn. Also, `shape`s can be composed to create more complex `shape`s.
     ```julia
-    mutable struct MyComplexShape{I <: Integer} <: SD.AbstractShape
+    struct MyComplexShape{I <: Integer} <: SD.AbstractShape
         line::SD.Line{I}
         circle::SD.Circle{I}
     end
@@ -93,7 +93,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
 1. ### `Point`
 
     ```julia
-    mutable struct Point{I <: Integer} <: AbstractShape
+    struct Point{I <: Integer} <: AbstractShape
         i::I
         j::I
     end
@@ -112,7 +112,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
 1. ### `VerticalLine`
 
     ```julia
-    mutable struct VerticalLine{I <: Integer} <: AbstractShape
+    struct VerticalLine{I <: Integer} <: AbstractShape
         i_start::I
         i_end::I
         j::I
@@ -124,7 +124,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
 1. ### `HorizontalLine`
 
     ```julia
-    mutable struct HorizontalLine{I <: Integer} <: AbstractShape
+    struct HorizontalLine{I <: Integer} <: AbstractShape
         i::I
         j_start::I
         j_end::I
@@ -136,7 +136,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
 1. ### `Line`
 
     ```julia
-    mutable struct Line{I <: Integer} <: AbstractShape
+    struct Line{I <: Integer} <: AbstractShape
         point1::Point{I}
         point2::Point{I}
     end
@@ -147,7 +147,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
 1. ### `ThickLine`
 
     ```julia
-    mutable struct ThickLine{I <: Integer} <: AbstractShape
+    struct ThickLine{I <: Integer} <: AbstractShape
         point1::Point{I}
         point2::Point{I}
         radius::I
@@ -159,7 +159,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
 1. ### `Circle`
 
     ```julia
-    mutable struct Circle{I <: Integer} <: AbstractShape
+    struct Circle{I <: Integer} <: AbstractShape
         center::Point{I}
         radius::I
     end
@@ -170,7 +170,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
 1. ### `ThickCircle`
 
     ```julia
-    mutable struct ThickCircle{I <: Integer} <: AbstractShape
+    struct ThickCircle{I <: Integer} <: AbstractShape
         center::Point{I}
         radius::I
         thickness::I
@@ -182,7 +182,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
 1. ### `FilledCircle`
 
     ```julia
-    mutable struct FilledCircle{I <: Integer} <: AbstractShape
+    struct FilledCircle{I <: Integer} <: AbstractShape
         center::Point{I}
         radius::I
     end
@@ -193,7 +193,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
 1. ### `Rectangle`
 
     ```julia
-    mutable struct Rectangle{I <: Integer} <: AbstractShape
+    struct Rectangle{I <: Integer} <: AbstractShape
         top_left::Point{I}
         height::I
         width::I
@@ -205,7 +205,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
 1. ### `ThickRectangle`
 
     ```julia
-    mutable struct ThickRectangle{I <: Integer} <: AbstractShape
+    struct ThickRectangle{I <: Integer} <: AbstractShape
         top_left::Point{I}
         height::I
         width::I
@@ -218,7 +218,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
 1. ### `FilledRectangle`
 
     ```julia
-    mutable struct FilledRectangle{I <: Integer} <: AbstractShape
+    struct FilledRectangle{I <: Integer} <: AbstractShape
         top_left::Point{I}
         height::I
         width::I
@@ -230,7 +230,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
 1. ### `Cross`
 
     ```julia
-    mutable struct Cross{I <: Integer} <: AbstractShape
+    struct Cross{I <: Integer} <: AbstractShape
         center::Point{I}
         radius::I
     end
@@ -241,7 +241,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
 1. ### `HollowCross`
 
     ```julia
-    mutable struct HollowCross{I <: Integer} <: AbstractShape
+    struct HollowCross{I <: Integer} <: AbstractShape
         center::Point{I}
         radius::I
     end
@@ -252,7 +252,7 @@ The `visualize` function helps visualize a binary image inside the terminal usin
 1. ### `Polyline`
 
     ```julia
-    mutable struct Polyline{I <: Integer} <: AbstractShape
+    struct Polyline{I <: Integer} <: AbstractShape
         points::Vector{Point{I}}
     end
     ```

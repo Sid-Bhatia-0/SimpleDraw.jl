@@ -1,4 +1,4 @@
-mutable struct Polyline{I <: Integer} <: AbstractShape
+struct Polyline{I <: Integer} <: AbstractShape
     points::Vector{Point{I}}
 end
 

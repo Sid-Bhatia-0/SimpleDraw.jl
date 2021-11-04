@@ -1,4 +1,4 @@
-mutable struct Point{I <: Integer} <: AbstractShape
+struct Point{I <: Integer} <: AbstractShape
     i::I
     j::I
 end

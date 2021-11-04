@@ -1,21 +1,21 @@
-mutable struct VerticalLine{I <: Integer} <: AbstractShape
+struct VerticalLine{I <: Integer} <: AbstractShape
     i_start::I
     i_end::I
     j::I
 end
 
-mutable struct HorizontalLine{I <: Integer} <: AbstractShape
+struct HorizontalLine{I <: Integer} <: AbstractShape
     i::I
     j_start::I
     j_end::I
 end
 
-mutable struct Line{I <: Integer} <: AbstractShape
+struct Line{I <: Integer} <: AbstractShape
     point1::Point{I}
     point2::Point{I}
 end
 
-mutable struct ThickLine{I <: Integer} <: AbstractShape
+struct ThickLine{I <: Integer} <: AbstractShape
     point1::Point{I}
     point2::Point{I}
     radius::I
