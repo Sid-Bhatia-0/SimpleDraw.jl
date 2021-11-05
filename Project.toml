@@ -1,7 +1,7 @@
 name = "SimpleDraw"
 uuid = "d1acf6f4-8553-480e-80ae-3c883f0a995a"
 authors = ["Siddharth Bhatia <sidb60200@gmail.com> and contributors"]
-version = "0.1.0"
+version = "0.2.0"
 
 [compat]
 julia = "1"
