@@ -339,3 +339,5 @@ function get_bounding_box(shape::Circle)
 
     return Rectangle(Point(i - radius, j - radius), side, side)
 end
+
+get_bounding_box(shape::ThickCircle) = get_bounding_box(Circle(shape.center, shape.radius))
