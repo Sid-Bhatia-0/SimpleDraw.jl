@@ -255,3 +255,30 @@ end
 get_bounding_box(shape::VerticalLine{I}) where {I} = Rectangle(Point(shape.i_start, shape.j), shape.i_end - shape.i_start + one(I), one(I))
 
 get_bounding_box(shape::HorizontalLine{I}) where {I} = Rectangle(Point(shape.i, shape.j_start), one(I), shape.j_end - shape.j_start + one(I))
+
+function get_bounding_box(shape::Line{I}) where {I}
+    point1 = shape.point1
+    point2 = shape.point2
+    i1 = point1.i
+    j1 = point1.j
+    i2 = point2.i
+    j2 = point2.j
+
+    if i1 < i2
+        i_min = i1
+        height = i2 - i1 + one(I)
+    else
+        i_min = i2
+        height = i1 - i2 + one(I)
+    end
+
+    if j1 < j2
+        j_min = j1
+        width = j2 - j1 + one(I)
+    else
+        j_min = j2
+        width = j1 - j2 + one(I)
+    end
+
+    return Rectangle(Point(i_min, j_min), height, width)
+end
