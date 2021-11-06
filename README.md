@@ -10,6 +10,7 @@ This is a lightweight package that provides exact and efficient (for the most pa
   - [Draw with bounds checking](#draw-with-bounds-checking)
   - [Visualization](#visualization)
   - [Benchmarks](#benchmarks)
+  - [Fonts](#fonts)
 
 [List of shapes](#list-of-shapes):
 
@@ -131,6 +132,10 @@ Date: 2021_11_04_17_10_38 (yyyy_mm_dd_HH_MM_SS)
 |FilledRectangle|4.393 μs<br>0 bytes|72.216 μs<br>0 bytes|1.179 ms<br>0 bytes|
 |Cross|52.212 ns<br>0 bytes|945.432 ns<br>0 bytes|5.289 μs<br>0 bytes|
 |HollowCross|71.390 ns<br>0 bytes|926.110 ns<br>0 bytes|4.900 μs<br>0 bytes|
+
+### Fonts
+
+This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASCII) characters at this point. We use a subset of [Terminus Font](http://terminus-font.sourceforge.net/) for drawing the glyphs. Terminus Font is licensed under the SIL Open Font License, Version 1.1. The license is included as OFL.TXT in the `/src/fonts` directory in this repository, and is also available with a FAQ at [http://scripts.sil.org/OFL](http://scripts.sil.org/OFL).
 
 ## List of drawables
 
@@ -302,3 +307,15 @@ Date: 2021_11_04_17_10_38 (yyyy_mm_dd_HH_MM_SS)
     ```
 
     <img src="https://user-images.githubusercontent.com/32610387/139564892-28b1874f-62eb-43d4-81a9-6fd893bd1fa7.png">
+
+1. ### `Character`
+
+    ```julia
+    struct Character{I, C <: AbstractChar, F <: AbstractFont} <: AbstractShape
+        position::Point{I}
+        char::C
+        font::F
+    end
+    ```
+
+    <img src="https://user-images.githubusercontent.com/32610387/140615301-2a263b84-44ce-40ec-a081-8f465346f404.png">
