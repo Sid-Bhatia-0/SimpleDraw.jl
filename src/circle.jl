@@ -341,3 +341,5 @@ function get_bounding_box(shape::Circle)
 end
 
 get_bounding_box(shape::ThickCircle) = get_bounding_box(Circle(shape.center, shape.radius))
+
+get_bounding_box(shape::FilledCircle) = get_bounding_box(Circle(shape.center, shape.radius))
