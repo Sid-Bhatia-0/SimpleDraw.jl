@@ -23,5 +23,6 @@ include("rectangle.jl")
 include("cross.jl")
 include("polyline.jl")
 include("visualize.jl")
+include("character.jl")
 
 end
