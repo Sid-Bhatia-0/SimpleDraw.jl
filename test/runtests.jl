@@ -139,6 +139,8 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.VerticalLine(9, 24, 16)
+        bounding_box = SD.get_bounding_box(shape)
+        Test.@test bounding_box == SD.Rectangle(SD.Point(9, 16), 24 - 9 + 1, 1)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -180,6 +182,8 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.VerticalLine(-1, 34, 16)
+        bounding_box = SD.get_bounding_box(shape)
+        Test.@test bounding_box == SD.Rectangle(SD.Point(-1, 16), 34 + 1 + 1, 1)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([

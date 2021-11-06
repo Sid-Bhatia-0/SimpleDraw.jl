@@ -251,3 +251,5 @@ function draw_inbounds!(image::AbstractMatrix, shape::ThickLine, color)
 
     return nothing
 end
+
+get_bounding_box(shape::VerticalLine{I}) where {I} = Rectangle(Point(shape.i_start, shape.j), shape.i_end - shape.i_start + one(I), one(I))
