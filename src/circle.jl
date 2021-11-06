@@ -329,3 +329,13 @@ function draw_inbounds!(image::AbstractMatrix, shape::ThickCircle{I}, color) whe
 
     return nothing
 end
+
+function get_bounding_box(shape::Circle)
+    center = shape.center
+    radius = shape.radius
+    i = center.i
+    j = center.j
+    side = 2 * radius + 1
+
+    return Rectangle(Point(i - radius, j - radius), side, side)
+end
