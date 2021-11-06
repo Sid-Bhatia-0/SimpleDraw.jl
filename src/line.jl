@@ -282,3 +282,32 @@ function get_bounding_box(shape::Line{I}) where {I}
 
     return Rectangle(Point(i_min, j_min), height, width)
 end
+
+function get_bounding_box(shape::ThickLine{I}) where {I}
+    point1 = shape.point1
+    point2 = shape.point2
+    radius = shape.radius
+    radius2 = 2 * radius
+    i1 = point1.i
+    j1 = point1.j
+    i2 = point2.i
+    j2 = point2.j
+
+    if i1 < i2
+        i_min = i1 - radius
+        height = i2 - i1 + one(I)
+    else
+        i_min = i2 - radius
+        height = i1 - i2 + one(I)
+    end
+
+    if j1 < j2
+        j_min = j1 - radius
+        width = j2 - j1 + one(I)
+    else
+        j_min = j2 - radius
+        width = j1 - j2 + one(I)
+    end
+
+    return Rectangle(Point(i_min, j_min), height + radius2, width + radius2)
+end
