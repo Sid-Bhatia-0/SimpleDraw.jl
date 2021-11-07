@@ -14,19 +14,19 @@ function draw!(image::AbstractMatrix, shape::Cross, color)
     j_center = center.j
     radius = shape.radius
 
-    i_start = i_center - radius
-    i_end = i_center + radius
+    i_min = i_center - radius
+    i_max = i_center + radius
 
-    j_start = j_center - radius
-    j_end = j_center + radius
+    j_min = j_center - radius
+    j_max = j_center + radius
 
-    if checkbounds(Bool, image, i_start, j_start) && checkbounds(Bool, image, i_end, j_end)
+    if checkbounds(Bool, image, i_min, j_min) && checkbounds(Bool, image, i_max, j_max)
         draw_unchecked!(image, shape, color)
         return nothing
     end
 
-    draw!(image, HorizontalLine(i_center, j_start, j_end), color)
-    draw!(image, VerticalLine(i_start, i_end, j_center), color)
+    draw!(image, HorizontalLine(i_center, j_min, j_max), color)
+    draw!(image, VerticalLine(i_min, i_max, j_center), color)
 
     return nothing
 end
@@ -49,21 +49,21 @@ function draw!(image::AbstractMatrix, shape::HollowCross, color)
     j_center = center.j
     radius = shape.radius
 
-    i_start = i_center - radius
-    i_end = i_center + radius
+    i_min = i_center - radius
+    i_max = i_center + radius
 
-    j_start = j_center - radius
-    j_end = j_center + radius
+    j_min = j_center - radius
+    j_max = j_center + radius
 
-    if checkbounds(Bool, image, i_start, j_start) && checkbounds(Bool, image, i_end, j_end)
+    if checkbounds(Bool, image, i_min, j_min) && checkbounds(Bool, image, i_max, j_max)
         draw_unchecked!(image, shape, color)
         return nothing
     end
 
-    draw!(image, HorizontalLine(i_center, j_start, j_center - 1), color)
-    draw!(image, VerticalLine(i_start, i_center - 1, j_center), color)
-    draw!(image, VerticalLine(i_center + 1, i_end, j_center), color)
-    draw!(image, HorizontalLine(i_center, j_center + 1, j_end), color)
+    draw!(image, HorizontalLine(i_center, j_min, j_center - 1), color)
+    draw!(image, VerticalLine(i_min, i_center - 1, j_center), color)
+    draw!(image, VerticalLine(i_center + 1, i_max, j_center), color)
+    draw!(image, HorizontalLine(i_center, j_center + 1, j_max), color)
 
     return nothing
 end
@@ -74,16 +74,16 @@ function draw_unchecked!(image::AbstractMatrix, shape::HollowCross, color)
     j_center = center.j
     radius = shape.radius
 
-    i_start = i_center - radius
-    i_end = i_center + radius
+    i_min = i_center - radius
+    i_max = i_center + radius
 
-    j_start = j_center - radius
-    j_end = j_center + radius
+    j_min = j_center - radius
+    j_max = j_center + radius
 
-    draw_unchecked!(image, HorizontalLine(i_center, j_start, j_center - 1), color)
-    draw_unchecked!(image, VerticalLine(i_start, i_center - 1, j_center), color)
-    draw_unchecked!(image, VerticalLine(i_center + 1, i_end, j_center), color)
-    draw_unchecked!(image, HorizontalLine(i_center, j_center + 1, j_end), color)
+    draw_unchecked!(image, HorizontalLine(i_center, j_min, j_center - 1), color)
+    draw_unchecked!(image, VerticalLine(i_min, i_center - 1, j_center), color)
+    draw_unchecked!(image, VerticalLine(i_center + 1, i_max, j_center), color)
+    draw_unchecked!(image, HorizontalLine(i_center, j_center + 1, j_max), color)
 
     return nothing
 end

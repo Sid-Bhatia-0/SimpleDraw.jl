@@ -162,8 +162,8 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 
     ```julia
     struct VerticalLine{I <: Integer} <: AbstractShape
-        i_start::I
-        i_end::I
+        i_min::I
+        i_max::I
         j::I
     end
     ```
@@ -175,8 +175,8 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     ```julia
     struct HorizontalLine{I <: Integer} <: AbstractShape
         i::I
-        j_start::I
-        j_end::I
+        j_min::I
+        j_max::I
     end
     ```
 

@@ -1,13 +1,13 @@
 struct VerticalLine{I <: Integer} <: AbstractShape
-    i_start::I
-    i_end::I
+    i_min::I
+    i_max::I
     j::I
 end
 
 struct HorizontalLine{I <: Integer} <: AbstractShape
     i::I
-    j_start::I
-    j_end::I
+    j_min::I
+    j_max::I
 end
 
 struct Line{I <: Integer} <: AbstractShape
@@ -22,8 +22,8 @@ struct ThickLine{I <: Integer} <: AbstractShape
 end
 
 function draw!(image::AbstractMatrix, shape::VerticalLine, color)
-    i_start = shape.i_start
-    i_end = shape.i_end
+    i_min = shape.i_min
+    i_max = shape.i_max
     j = shape.j
 
     i_low = firstindex(image, 1)
@@ -32,32 +32,32 @@ function draw!(image::AbstractMatrix, shape::VerticalLine, color)
     j_low = firstindex(image, 2)
     j_high = lastindex(image, 2)
 
-    if i_end < i_low || i_start > i_high || j < j_low || j > j_high
+    if i_max < i_low || i_min > i_high || j < j_low || j > j_high
         return nothing
     else
-        if i_start < i_low
-            i_start = i_low
+        if i_min < i_low
+            i_min = i_low
         end
 
-        if i_end > i_high
-            i_end = i_high
+        if i_max > i_high
+            i_max = i_high
         end
 
-        draw_unchecked!(image, VerticalLine(i_start, i_end, j), color)
+        draw_unchecked!(image, VerticalLine(i_min, i_max, j), color)
 
         return nothing
     end
 end
 
 @inline function draw_unchecked!(image::AbstractMatrix, shape::VerticalLine, color)
-    @inbounds image[shape.i_start:shape.i_end, shape.j] .= color
+    @inbounds image[shape.i_min:shape.i_max, shape.j] .= color
     return nothing
 end
 
 function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
     i = shape.i
-    j_start = shape.j_start
-    j_end = shape.j_end
+    j_min = shape.j_min
+    j_max = shape.j_max
 
     i_low = firstindex(image, 1)
     i_high = lastindex(image, 1)
@@ -65,25 +65,25 @@ function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
     j_low = firstindex(image, 2)
     j_high = lastindex(image, 2)
 
-    if i < i_low || i > i_high || j_end < j_low || j_start > j_high
+    if i < i_low || i > i_high || j_max < j_low || j_min > j_high
         return nothing
     else
-        if j_start < j_low
-            j_start = j_low
+        if j_min < j_low
+            j_min = j_low
         end
 
-        if j_end > j_high
-            j_end = j_high
+        if j_max > j_high
+            j_max = j_high
         end
 
-        draw_unchecked!(image, HorizontalLine(i, j_start, j_end), color)
+        draw_unchecked!(image, HorizontalLine(i, j_min, j_max), color)
 
         return nothing
     end
 end
 
 @inline function draw_unchecked!(image::AbstractMatrix, shape::HorizontalLine, color)
-    @inbounds image[shape.i, shape.j_start:shape.j_end] .= color
+    @inbounds image[shape.i, shape.j_min:shape.j_max] .= color
     return nothing
 end
 
@@ -252,9 +252,9 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickLine, color)
     return nothing
 end
 
-get_bounding_box(shape::VerticalLine{I}) where {I} = Rectangle(Point(shape.i_start, shape.j), shape.i_end - shape.i_start + one(I), one(I))
+get_bounding_box(shape::VerticalLine{I}) where {I} = Rectangle(Point(shape.i_min, shape.j), shape.i_max - shape.i_min + one(I), one(I))
 
-get_bounding_box(shape::HorizontalLine{I}) where {I} = Rectangle(Point(shape.i, shape.j_start), one(I), shape.j_end - shape.j_start + one(I))
+get_bounding_box(shape::HorizontalLine{I}) where {I} = Rectangle(Point(shape.i, shape.j_min), one(I), shape.j_max - shape.j_min + one(I))
 
 function get_bounding_box(shape::Line{I}) where {I}
     point1 = shape.point1
