@@ -1,8 +1,8 @@
 struct Background <: AbstractShape end
 
-@inline draw!(image::AbstractMatrix, shape::Background, color) = draw_inbounds!(image, shape, color)
+@inline draw!(image::AbstractMatrix, shape::Background, color) = draw_unchecked!(image, shape, color)
 
-@inline function draw_inbounds!(image::AbstractMatrix, shape::Background, color)
+@inline function draw_unchecked!(image::AbstractMatrix, shape::Background, color)
     @inbounds image[:, :] .= color
     return nothing
 end

@@ -43,13 +43,13 @@ function draw!(image::AbstractMatrix, shape::VerticalLine, color)
             i_end = i_high
         end
 
-        draw_inbounds!(image, VerticalLine(i_start, i_end, j), color)
+        draw_unchecked!(image, VerticalLine(i_start, i_end, j), color)
 
         return nothing
     end
 end
 
-@inline function draw_inbounds!(image::AbstractMatrix, shape::VerticalLine, color)
+@inline function draw_unchecked!(image::AbstractMatrix, shape::VerticalLine, color)
     @inbounds image[shape.i_start:shape.i_end, shape.j] .= color
     return nothing
 end
@@ -76,13 +76,13 @@ function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
             j_end = j_high
         end
 
-        draw_inbounds!(image, HorizontalLine(i, j_start, j_end), color)
+        draw_unchecked!(image, HorizontalLine(i, j_start, j_end), color)
 
         return nothing
     end
 end
 
-@inline function draw_inbounds!(image::AbstractMatrix, shape::HorizontalLine, color)
+@inline function draw_unchecked!(image::AbstractMatrix, shape::HorizontalLine, color)
     @inbounds image[shape.i, shape.j_start:shape.j_end] .= color
     return nothing
 end
@@ -107,7 +107,7 @@ function draw!(image::AbstractMatrix, shape::Line, color)
     end
 
     if checkbounds(Bool, image, i1, j1) && checkbounds(Bool, image, i2, j2)
-        draw_inbounds!(image, shape, color)
+        draw_unchecked!(image, shape, color)
         return nothing
     end
 
@@ -140,7 +140,7 @@ function draw!(image::AbstractMatrix, shape::Line, color)
     return nothing
 end
 
-function draw_inbounds!(image::AbstractMatrix, shape::Line, color)
+function draw_unchecked!(image::AbstractMatrix, shape::Line, color)
     i1 = shape.point1.i
     j1 = shape.point1.j
     i2 = shape.point2.i
@@ -183,7 +183,7 @@ function draw!(image::AbstractMatrix, shape::ThickLine, color)
     radius = shape.radius
 
     if checkbounds(Bool, image, i1 - radius, j1 - radius) && checkbounds(Bool, image, i1 + radius, j1 + radius) && checkbounds(Bool, image, i2 - radius, j2 - radius) && checkbounds(Bool, image, i2 + radius, j2 + radius)
-        draw_inbounds!(image, shape, color)
+        draw_unchecked!(image, shape, color)
         return nothing
     end
 
@@ -216,7 +216,7 @@ function draw!(image::AbstractMatrix, shape::ThickLine, color)
     return nothing
 end
 
-function draw_inbounds!(image::AbstractMatrix, shape::ThickLine, color)
+function draw_unchecked!(image::AbstractMatrix, shape::ThickLine, color)
     i1 = shape.point1.i
     j1 = shape.point1.j
     i2 = shape.point2.i
@@ -230,7 +230,7 @@ function draw_inbounds!(image::AbstractMatrix, shape::ThickLine, color)
     err = di + dj
 
     while true
-        draw_inbounds!(image, FilledCircle(Point(i1, j1), radius), color)
+        draw_unchecked!(image, FilledCircle(Point(i1, j1), radius), color)
 
         if (i1 == i2 && j1 == j2)
             break

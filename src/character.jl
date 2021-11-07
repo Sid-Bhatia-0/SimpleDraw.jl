@@ -45,7 +45,7 @@ function draw!(image::AbstractMatrix, shape::Character, color)
     return nothing
 end
 
-function draw_inbounds!(image::AbstractMatrix, shape::Character, color)
+function draw_unchecked!(image::AbstractMatrix, shape::Character, color)
     position = shape.position
     char = shape.char
     font = shape.font

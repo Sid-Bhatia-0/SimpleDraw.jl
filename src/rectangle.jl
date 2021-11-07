@@ -24,7 +24,7 @@ function draw!(image::AbstractMatrix, shape::Rectangle, color)
     j_bottom_right = j_top_left + shape.width - 1
 
     if checkbounds(Bool, image, i_top_left, j_top_left) && checkbounds(Bool, image, i_bottom_right, j_bottom_right)
-        draw_inbounds!(image, shape, color)
+        draw_unchecked!(image, shape, color)
         return nothing
     end
 
@@ -36,16 +36,16 @@ function draw!(image::AbstractMatrix, shape::Rectangle, color)
     return nothing
 end
 
-function draw_inbounds!(image::AbstractMatrix, shape::Rectangle, color)
+function draw_unchecked!(image::AbstractMatrix, shape::Rectangle, color)
     i_top_left = shape.top_left.i
     j_top_left = shape.top_left.j
     i_bottom_right = i_top_left + shape.height - 1
     j_bottom_right = j_top_left + shape.width - 1
 
-    draw_inbounds!(image, VerticalLine(i_top_left, i_bottom_right, j_top_left), color)
-    draw_inbounds!(image, HorizontalLine(i_top_left, j_top_left, j_bottom_right), color)
-    draw_inbounds!(image, HorizontalLine(i_bottom_right, j_top_left, j_bottom_right), color)
-    draw_inbounds!(image, VerticalLine(i_top_left, i_bottom_right, j_bottom_right), color)
+    draw_unchecked!(image, VerticalLine(i_top_left, i_bottom_right, j_top_left), color)
+    draw_unchecked!(image, HorizontalLine(i_top_left, j_top_left, j_bottom_right), color)
+    draw_unchecked!(image, HorizontalLine(i_bottom_right, j_top_left, j_bottom_right), color)
+    draw_unchecked!(image, VerticalLine(i_top_left, i_bottom_right, j_bottom_right), color)
 
     return nothing
 end
@@ -62,7 +62,7 @@ function draw!(image::AbstractMatrix, shape::ThickRectangle, color)
     j_bottom_right = j_top_left + width - 1
 
     if checkbounds(Bool, image, i_top_left, j_top_left) && checkbounds(Bool, image, i_bottom_right, j_bottom_right)
-        draw_inbounds!(image, shape, color)
+        draw_unchecked!(image, shape, color)
         return nothing
     end
 
@@ -74,7 +74,7 @@ function draw!(image::AbstractMatrix, shape::ThickRectangle, color)
     return nothing
 end
 
-function draw_inbounds!(image::AbstractMatrix, shape::ThickRectangle, color)
+function draw_unchecked!(image::AbstractMatrix, shape::ThickRectangle, color)
     top_left = shape.top_left
     height = shape.height
     width = shape.width
@@ -84,10 +84,10 @@ function draw_inbounds!(image::AbstractMatrix, shape::ThickRectangle, color)
     i_bottom_right = i_top_left + height - 1
     j_bottom_right = j_top_left + width - 1
 
-    draw_inbounds!(image, FilledRectangle(top_left, height, thickness), color)
-    draw_inbounds!(image, FilledRectangle(Point(i_top_left, j_top_left + thickness), thickness, width - 2 * thickness), color)
-    draw_inbounds!(image, FilledRectangle(Point(i_top_left + height - thickness, j_top_left + thickness), thickness, width - 2 * thickness), color)
-    draw_inbounds!(image, FilledRectangle(Point(i_top_left, j_top_left + width - thickness), height, thickness), color)
+    draw_unchecked!(image, FilledRectangle(top_left, height, thickness), color)
+    draw_unchecked!(image, FilledRectangle(Point(i_top_left, j_top_left + thickness), thickness, width - 2 * thickness), color)
+    draw_unchecked!(image, FilledRectangle(Point(i_top_left + height - thickness, j_top_left + thickness), thickness, width - 2 * thickness), color)
+    draw_unchecked!(image, FilledRectangle(Point(i_top_left, j_top_left + width - thickness), height, thickness), color)
 
     return nothing
 end
@@ -133,7 +133,7 @@ function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
     return nothing
 end
 
-function draw_inbounds!(image::AbstractMatrix, shape::FilledRectangle, color)
+function draw_unchecked!(image::AbstractMatrix, shape::FilledRectangle, color)
     i_top_left = shape.top_left.i
     j_top_left = shape.top_left.j
     i_bottom_right = i_top_left + shape.height - 1

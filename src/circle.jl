@@ -24,10 +24,10 @@ end
 end
 
 @inline function draw_vertical_strip_reflections_inbounds!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
-    draw_inbounds!(image, VerticalLine(i_center - i, i_center + i, j_center - j), color)
-    draw_inbounds!(image, VerticalLine(i_center - j, i_center + j, j_center - i), color)
-    draw_inbounds!(image, VerticalLine(i_center - j, i_center + j, j_center + i), color)
-    draw_inbounds!(image, VerticalLine(i_center - i, i_center + i, j_center + j), color)
+    draw_unchecked!(image, VerticalLine(i_center - i, i_center + i, j_center - j), color)
+    draw_unchecked!(image, VerticalLine(i_center - j, i_center + j, j_center - i), color)
+    draw_unchecked!(image, VerticalLine(i_center - j, i_center + j, j_center + i), color)
+    draw_unchecked!(image, VerticalLine(i_center - i, i_center + i, j_center + j), color)
 
     return nothing
 end
@@ -72,14 +72,14 @@ end
 end
 
 @inline function draw_octant_reflections_lines_inbounds!(image::AbstractMatrix, i_center, j_center, i, j_inner, j_outer, color)
-    draw_inbounds!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
-    draw_inbounds!(image, HorizontalLine(i_center + i, j_center - j_outer, j_center - j_inner), color)
-    draw_inbounds!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
-    draw_inbounds!(image, VerticalLine(i_center + j_inner, i_center + j_outer, j_center - i), color)
-    draw_inbounds!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center + i), color)
-    draw_inbounds!(image, VerticalLine(i_center + j_inner, i_center + j_outer, j_center + i), color)
-    draw_inbounds!(image, HorizontalLine(i_center - i, j_center + j_inner, j_center + j_outer), color)
-    draw_inbounds!(image, HorizontalLine(i_center + i, j_center + j_inner, j_center + j_outer), color)
+    draw_unchecked!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
+    draw_unchecked!(image, HorizontalLine(i_center + i, j_center - j_outer, j_center - j_inner), color)
+    draw_unchecked!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
+    draw_unchecked!(image, VerticalLine(i_center + j_inner, i_center + j_outer, j_center - i), color)
+    draw_unchecked!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center + i), color)
+    draw_unchecked!(image, VerticalLine(i_center + j_inner, i_center + j_outer, j_center + i), color)
+    draw_unchecked!(image, HorizontalLine(i_center - i, j_center + j_inner, j_center + j_outer), color)
+    draw_unchecked!(image, HorizontalLine(i_center + i, j_center + j_inner, j_center + j_outer), color)
 
     return nothing
 end
@@ -93,7 +93,7 @@ function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
     radius = shape.radius
 
     if checkbounds(Bool, image, i_center - radius, j_center - radius) && checkbounds(Bool, image, i_center + radius, j_center + radius)
-        draw_inbounds!(image, shape, color)
+        draw_unchecked!(image, shape, color)
         return nothing
     end
 
@@ -121,7 +121,7 @@ function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
     return nothing
 end
 
-function draw_inbounds!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
+function draw_unchecked!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
     i_center = shape.center.i
     j_center = shape.center.j
     radius = shape.radius
@@ -156,7 +156,7 @@ function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
     radius = shape.radius
 
     if checkbounds(Bool, image, i_center - radius, j_center - radius) && checkbounds(Bool, image, i_center + radius, j_center + radius)
-        draw_inbounds!(image, shape, color)
+        draw_unchecked!(image, shape, color)
         return nothing
     end
 
@@ -184,7 +184,7 @@ function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
     return nothing
 end
 
-function draw_inbounds!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
+function draw_unchecked!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
     i_center = shape.center.i
     j_center = shape.center.j
     radius = shape.radius
@@ -222,7 +222,7 @@ function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
     radius_inner = radius_outer - thickness + 1
 
     if checkbounds(Bool, image, i_center - radius_outer, j_center - radius_outer) && checkbounds(Bool, image, i_center + radius_outer, j_center + radius_outer)
-        draw_inbounds!(image, shape, color)
+        draw_unchecked!(image, shape, color)
         return nothing
     end
 
@@ -274,7 +274,7 @@ function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
     return nothing
 end
 
-function draw_inbounds!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
+function draw_unchecked!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
     center = shape.center
     i_center = center.i
     j_center = center.j
