@@ -143,3 +143,7 @@ function draw_inbounds!(image::AbstractMatrix, shape::FilledRectangle, color)
 
     return nothing
 end
+
+get_bounding_box(shape::Rectangle) = shape
+get_bounding_box(shape::ThickRectangle) = Rectangle(shape.top_left, shape.height, shape.width)
+get_bounding_box(shape::FilledRectangle) = Rectangle(shape.top_left, shape.height, shape.width)

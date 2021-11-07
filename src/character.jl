@@ -77,3 +77,13 @@ function draw_inbounds!(image::AbstractMatrix, shape::Character, color)
 
     return nothing
 end
+
+function get_bounding_box(shape::Character)
+    position = shape.position
+    bitmap = shape.font.bitmap
+
+    height = size(bitmap, 1)
+    width = size(bitmap, 2)
+
+    return Rectangle(position, height, width)
+end

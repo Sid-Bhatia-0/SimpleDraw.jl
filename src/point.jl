@@ -12,3 +12,5 @@ end
     put_pixel_inbounds!(image, shape.i, shape.j, color)
     return nothing
 end
+
+get_bounding_box(shape::Point{I}) where {I} = Rectangle(shape, one(I), one(I))

@@ -87,3 +87,6 @@ function draw_inbounds!(image::AbstractMatrix, shape::HollowCross, color)
 
     return nothing
 end
+
+get_bounding_box(shape::Cross) = get_bounding_box(Circle(shape.center, shape.radius))
+get_bounding_box(shape::HollowCross) = get_bounding_box(Circle(shape.center, shape.radius))
