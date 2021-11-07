@@ -177,31 +177,56 @@ function draw_unchecked!(image::AbstractMatrix, shape::Circle{I}, color) where {
 end
 
 function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
-    i_center = shape.center.i
-    j_center = shape.center.j
+    center = shape.center
+    i_center = center.i
+    j_center = center.j
     radius = shape.radius
 
-    if checkbounds(Bool, image, i_center - radius, j_center - radius) && checkbounds(Bool, image, i_center + radius, j_center + radius)
-        draw_unchecked!(image, shape, color)
+    zero_value = zero(I)
+    one_value = one(I)
+
+    if radius <= zero_value
+        return nothing
+    elseif radius == one_value
+        draw!(image, center, color)
         return nothing
     end
 
-    zero_value = zero(I)
+    i_min = i_center - radius
+    j_min = j_center - radius
+
+    i_max = i_center + radius
+    j_max = j_center + radius
+
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
+
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
+
+    if i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
+        return nothing
+    end
+
+    if i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
+        draw_unchecked!(image, shape, color)
+        return nothing
+    end
 
     i = zero_value
     j = radius
 
     draw_vertical_strip_reflections!(image, i_center, j_center, i, j, color)
 
-    constant = 3 - 2 * radius * radius
+    constant = convert(I, 3) - convert(I, 2) * radius * radius
 
     while j >= i
-        d = 2 * j * j + 2 * i * i + 4 * i - 2 * j + constant
+        d = convert(I, 2) * j * j + convert(I, 2) * i * i + convert(I, 4) * i - convert(I, 2) * j + constant
 
-        i += 1
+        i += one_value
 
         if d > zero_value
-            j -= 1
+            j -= one_value
         end
 
         draw_vertical_strip_reflections!(image, i_center, j_center, i, j, color)
@@ -216,21 +241,22 @@ function draw_unchecked!(image::AbstractMatrix, shape::FilledCircle{I}, color) w
     radius = shape.radius
 
     zero_value = zero(I)
+    one_value = one(I)
 
     i = zero_value
     j = radius
 
     draw_vertical_strip_reflections_unchecked!(image, i_center, j_center, i, j, color)
 
-    constant = 3 - 2 * radius * radius
+    constant = convert(I, 3) - convert(I, 2) * radius * radius
 
     while j >= i
-        d = 2 * j * j + 2 * i * i + 4 * i - 2 * j + constant
+        d = convert(I, 2) * j * j + convert(I, 2) * i * i + convert(I, 4) * i - convert(I, 2) * j + constant
 
-        i += 1
+        i += one_value
 
         if d > zero_value
-            j -= 1
+            j -= one_value
         end
 
         draw_vertical_strip_reflections_unchecked!(image, i_center, j_center, i, j, color)
