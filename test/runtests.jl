@@ -1195,6 +1195,8 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.Polyline([SD.Point(30, 4), SD.Point(24, 30), SD.Point(6, 24), SD.Point(12, 8)])
+        bounding_box = SD.get_bounding_box(shape)
+        Test.@test bounding_box == SD.Rectangle(SD.Point(6, 4), 25, 27)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1236,6 +1238,8 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.Polyline([SD.Point(30, 4), SD.Point(24, 40), SD.Point(6, 24), SD.Point(12, 8)])
+        bounding_box = SD.get_bounding_box(shape)
+        Test.@test bounding_box == SD.Rectangle(SD.Point(6, 4), 25, 37)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
