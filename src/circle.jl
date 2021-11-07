@@ -46,14 +46,14 @@ end
 end
 
 @inline function draw_octant_reflections_inbounds!(image::AbstractMatrix, i_center, j_center, i, j, color)
-    put_pixel_inbounds!(image, i_center - i, j_center - j, color)
-    put_pixel_inbounds!(image, i_center + i, j_center - j, color)
-    put_pixel_inbounds!(image, i_center - j, j_center - i, color)
-    put_pixel_inbounds!(image, i_center + j, j_center - i, color)
-    put_pixel_inbounds!(image, i_center - j, j_center + i, color)
-    put_pixel_inbounds!(image, i_center + j, j_center + i, color)
-    put_pixel_inbounds!(image, i_center - i, j_center + j, color)
-    put_pixel_inbounds!(image, i_center + i, j_center + j, color)
+    put_pixel_unchecked!(image, i_center - i, j_center - j, color)
+    put_pixel_unchecked!(image, i_center + i, j_center - j, color)
+    put_pixel_unchecked!(image, i_center - j, j_center - i, color)
+    put_pixel_unchecked!(image, i_center + j, j_center - i, color)
+    put_pixel_unchecked!(image, i_center - j, j_center + i, color)
+    put_pixel_unchecked!(image, i_center + j, j_center + i, color)
+    put_pixel_unchecked!(image, i_center - i, j_center + j, color)
+    put_pixel_unchecked!(image, i_center + i, j_center + j, color)
 
     return nothing
 end

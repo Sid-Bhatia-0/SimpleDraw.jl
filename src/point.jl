@@ -9,7 +9,7 @@ end
 end
 
 @inline function draw_inbounds!(image::AbstractMatrix, shape::Point, color)
-    put_pixel_inbounds!(image, shape.i, shape.j, color)
+    put_pixel_unchecked!(image, shape.i, shape.j, color)
     return nothing
 end
 

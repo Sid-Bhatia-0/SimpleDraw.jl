@@ -153,7 +153,7 @@ function draw_inbounds!(image::AbstractMatrix, shape::Line, color)
     err = di + dj
 
     while true
-        put_pixel_inbounds!(image, i1, j1, color)
+        put_pixel_unchecked!(image, i1, j1, color)
 
         if (i1 == i2 && j1 == j2)
             break

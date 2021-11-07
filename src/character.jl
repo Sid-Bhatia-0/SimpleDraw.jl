@@ -36,7 +36,7 @@ function draw!(image::AbstractMatrix, shape::Character, color)
                 i_bitmap = i - position_i + 1
                 j_bitmap = j - position_j + 1
                 if bitmap[i_bitmap, j_bitmap, k]
-                    put_pixel_inbounds!(image, i, j, color)
+                    put_pixel_unchecked!(image, i, j, color)
                 end
             end
         end
@@ -69,7 +69,7 @@ function draw_inbounds!(image::AbstractMatrix, shape::Character, color)
                 i_bitmap = i - position_i + 1
                 j_bitmap = j - position_j + 1
                 if bitmap[i_bitmap, j_bitmap, k]
-                    put_pixel_inbounds!(image, i, j, color)
+                    put_pixel_unchecked!(image, i, j, color)
                 end
             end
         end
