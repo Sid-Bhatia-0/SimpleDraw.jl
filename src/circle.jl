@@ -23,7 +23,7 @@ end
     return nothing
 end
 
-@inline function draw_vertical_strip_reflections_inbounds!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
+@inline function draw_vertical_strip_reflections_unchecked!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
     draw_unchecked!(image, VerticalLine(i_center - i, i_center + i, j_center - j), color)
     draw_unchecked!(image, VerticalLine(i_center - j, i_center + j, j_center - i), color)
     draw_unchecked!(image, VerticalLine(i_center - j, i_center + j, j_center + i), color)
@@ -45,7 +45,7 @@ end
     return nothing
 end
 
-@inline function draw_octant_reflections_inbounds!(image::AbstractMatrix, i_center, j_center, i, j, color)
+@inline function draw_octant_reflections_unchecked!(image::AbstractMatrix, i_center, j_center, i, j, color)
     put_pixel_unchecked!(image, i_center - i, j_center - j, color)
     put_pixel_unchecked!(image, i_center + i, j_center - j, color)
     put_pixel_unchecked!(image, i_center - j, j_center - i, color)
@@ -71,7 +71,7 @@ end
     return nothing
 end
 
-@inline function draw_octant_reflections_lines_inbounds!(image::AbstractMatrix, i_center, j_center, i, j_inner, j_outer, color)
+@inline function draw_octant_reflections_lines_unchecked!(image::AbstractMatrix, i_center, j_center, i, j_inner, j_outer, color)
     draw_unchecked!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
     draw_unchecked!(image, HorizontalLine(i_center + i, j_center - j_outer, j_center - j_inner), color)
     draw_unchecked!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
@@ -131,7 +131,7 @@ function draw_unchecked!(image::AbstractMatrix, shape::Circle{I}, color) where {
     i = zero_value
     j = radius
 
-    draw_octant_reflections_inbounds!(image, i_center, j_center, i, j, color)
+    draw_octant_reflections_unchecked!(image, i_center, j_center, i, j, color)
 
     constant = 3 - 2 * radius * radius
 
@@ -144,7 +144,7 @@ function draw_unchecked!(image::AbstractMatrix, shape::Circle{I}, color) where {
             j -= 1
         end
 
-        draw_octant_reflections_inbounds!(image, i_center, j_center, i, j, color)
+        draw_octant_reflections_unchecked!(image, i_center, j_center, i, j, color)
     end
 
     return nothing
@@ -194,7 +194,7 @@ function draw_unchecked!(image::AbstractMatrix, shape::FilledCircle{I}, color) w
     i = zero_value
     j = radius
 
-    draw_vertical_strip_reflections_inbounds!(image, i_center, j_center, i, j, color)
+    draw_vertical_strip_reflections_unchecked!(image, i_center, j_center, i, j, color)
 
     constant = 3 - 2 * radius * radius
 
@@ -207,7 +207,7 @@ function draw_unchecked!(image::AbstractMatrix, shape::FilledCircle{I}, color) w
             j -= 1
         end
 
-        draw_vertical_strip_reflections_inbounds!(image, i_center, j_center, i, j, color)
+        draw_vertical_strip_reflections_unchecked!(image, i_center, j_center, i, j, color)
     end
 
     return nothing
@@ -290,7 +290,7 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickCircle{I}, color) wh
     i_outer = zero_value
     j_outer = radius_outer
 
-    draw_octant_reflections_lines_inbounds!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
+    draw_octant_reflections_lines_unchecked!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
 
     constant_inner = 3 - 2 * radius_inner * radius_inner
     constant_outer = 3 - 2 * radius_outer * radius_outer
@@ -310,7 +310,7 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickCircle{I}, color) wh
             j_outer -= 1
         end
 
-        draw_octant_reflections_lines_inbounds!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
+        draw_octant_reflections_lines_unchecked!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
     end
 
     while j_outer >= i_outer
@@ -324,7 +324,7 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickCircle{I}, color) wh
 
         i = min(i_outer, j_outer)
 
-        draw_octant_reflections_lines_inbounds!(image, i_center, j_center, i, i_outer, j_outer, color)
+        draw_octant_reflections_lines_unchecked!(image, i_center, j_center, i, i_outer, j_outer, color)
     end
 
     return nothing
