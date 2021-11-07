@@ -26,21 +26,21 @@ function draw!(image::AbstractMatrix, shape::VerticalLine, color)
     i_max = shape.i_max
     j = shape.j
 
-    i_low = firstindex(image, 1)
-    i_high = lastindex(image, 1)
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
 
-    j_low = firstindex(image, 2)
-    j_high = lastindex(image, 2)
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
 
-    if i_max < i_low || i_min > i_high || j < j_low || j > j_high
+    if i_max < i_min_image || i_min > i_max_image || j < j_min_image || j > j_max_image
         return nothing
     else
-        if i_min < i_low
-            i_min = i_low
+        if i_min < i_min_image
+            i_min = i_min_image
         end
 
-        if i_max > i_high
-            i_max = i_high
+        if i_max > i_max_image
+            i_max = i_max_image
         end
 
         draw_unchecked!(image, VerticalLine(i_min, i_max, j), color)
@@ -59,21 +59,21 @@ function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
     j_min = shape.j_min
     j_max = shape.j_max
 
-    i_low = firstindex(image, 1)
-    i_high = lastindex(image, 1)
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
 
-    j_low = firstindex(image, 2)
-    j_high = lastindex(image, 2)
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
 
-    if i < i_low || i > i_high || j_max < j_low || j_min > j_high
+    if i < i_min_image || i > i_max_image || j_max < j_min_image || j_min > j_max_image
         return nothing
     else
-        if j_min < j_low
-            j_min = j_low
+        if j_min < j_min_image
+            j_min = j_min_image
         end
 
-        if j_max > j_high
-            j_max = j_high
+        if j_max > j_max_image
+            j_max = j_max_image
         end
 
         draw_unchecked!(image, HorizontalLine(i, j_min, j_max), color)

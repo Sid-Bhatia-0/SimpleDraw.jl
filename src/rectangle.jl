@@ -98,34 +98,34 @@ function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
     i_bottom_right = i_top_left + shape.height - 1
     j_bottom_right = j_top_left + shape.width - 1
 
-    i_low = firstindex(image, 1)
-    i_high = lastindex(image, 1)
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
 
-    j_low = firstindex(image, 2)
-    j_high = lastindex(image, 2)
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
 
-    if i_top_left > i_high
+    if i_top_left > i_max_image
         return nothing
-    elseif i_top_left < i_low
-        i_top_left = i_low
+    elseif i_top_left < i_min_image
+        i_top_left = i_min_image
     end
 
-    if i_bottom_right < i_low
+    if i_bottom_right < i_min_image
         return nothing
-    elseif i_bottom_right > i_high
-        i_bottom_right = i_high
+    elseif i_bottom_right > i_max_image
+        i_bottom_right = i_max_image
     end
 
-    if j_top_left > j_high
+    if j_top_left > j_max_image
         return nothing
-    elseif j_top_left < j_low
-        j_top_left = j_low
+    elseif j_top_left < j_min_image
+        j_top_left = j_min_image
     end
 
-    if j_bottom_right < j_low
+    if j_bottom_right < j_min_image
         return nothing
-    elseif j_bottom_right > j_high
-        j_bottom_right = j_high
+    elseif j_bottom_right > j_max_image
+        j_bottom_right = j_max_image
     end
 
     @inbounds image[i_top_left:i_bottom_right, j_top_left:j_bottom_right] .= color
