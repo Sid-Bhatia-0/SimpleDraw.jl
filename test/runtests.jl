@@ -1283,6 +1283,8 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.Character(SD.Point(1, 1), 'A', SD.TERMINUS_32_16)
+        bounding_box = SD.get_bounding_box(shape)
+        Test.@test bounding_box == SD.Rectangle(SD.Point(1, 1), 32, 16)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
