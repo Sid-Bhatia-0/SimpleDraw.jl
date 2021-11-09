@@ -17,86 +17,22 @@ struct FilledRectangle{I <: Integer} <: AbstractShape
     width::I
 end
 
-function draw!(image::AbstractMatrix, shape::Rectangle, color)
-    i_min = shape.origin.i
-    j_min = shape.origin.j
-    i_max = i_min + shape.height - 1
-    j_max = j_min + shape.width - 1
-
-    if checkbounds(Bool, image, i_min, j_min) && checkbounds(Bool, image, i_max, j_max)
-        draw_unchecked!(image, shape, color)
-        return nothing
-    end
-
-    draw!(image, VerticalLine(i_min, i_max, j_min), color)
-    draw!(image, HorizontalLine(i_min, j_min, j_max), color)
-    draw!(image, HorizontalLine(i_max, j_min, j_max), color)
-    draw!(image, VerticalLine(i_min, i_max, j_max), color)
-
-    return nothing
-end
-
-function draw_unchecked!(image::AbstractMatrix, shape::Rectangle, color)
-    i_min = shape.origin.i
-    j_min = shape.origin.j
-    i_max = i_min + shape.height - 1
-    j_max = j_min + shape.width - 1
-
-    draw_unchecked!(image, VerticalLine(i_min, i_max, j_min), color)
-    draw_unchecked!(image, HorizontalLine(i_min, j_min, j_max), color)
-    draw_unchecked!(image, HorizontalLine(i_max, j_min, j_max), color)
-    draw_unchecked!(image, VerticalLine(i_min, i_max, j_max), color)
-
-    return nothing
-end
-
-function draw!(image::AbstractMatrix, shape::ThickRectangle, color)
+function draw!(image::AbstractMatrix, shape::Rectangle{I}, color) where {I}
     origin = shape.origin
     height = shape.height
     width = shape.width
-    thickness = shape.thickness
 
-    i_min = origin.i
-    j_min = origin.j
-    i_max = i_min + height - 1
-    j_max = j_min + width - 1
+    one_value = one(I)
 
-    if checkbounds(Bool, image, i_min, j_min) && checkbounds(Bool, image, i_max, j_max)
-        draw_unchecked!(image, shape, color)
+    if height < one_value || width < one_value
         return nothing
     end
 
-    draw!(image, FilledRectangle(origin, height, thickness), color)
-    draw!(image, FilledRectangle(Point(i_min, j_min + thickness), thickness, width - 2 * thickness), color)
-    draw!(image, FilledRectangle(Point(i_min + height - thickness, j_min + thickness), thickness, width - 2 * thickness), color)
-    draw!(image, FilledRectangle(Point(i_min, j_min + width - thickness), height, thickness), color)
-
-    return nothing
-end
-
-function draw_unchecked!(image::AbstractMatrix, shape::ThickRectangle, color)
-    origin = shape.origin
-    height = shape.height
-    width = shape.width
-    thickness = shape.thickness
     i_min = origin.i
     j_min = origin.j
-    i_max = i_min + height - 1
-    j_max = j_min + width - 1
 
-    draw_unchecked!(image, FilledRectangle(origin, height, thickness), color)
-    draw_unchecked!(image, FilledRectangle(Point(i_min, j_min + thickness), thickness, width - 2 * thickness), color)
-    draw_unchecked!(image, FilledRectangle(Point(i_min + height - thickness, j_min + thickness), thickness, width - 2 * thickness), color)
-    draw_unchecked!(image, FilledRectangle(Point(i_min, j_min + width - thickness), height, thickness), color)
-
-    return nothing
-end
-
-function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
-    i_min = shape.origin.i
-    j_min = shape.origin.j
-    i_max = i_min + shape.height - 1
-    j_max = j_min + shape.width - 1
+    i_max = i_min + height - one_value
+    j_max = j_min + width - one_value
 
     i_min_image = firstindex(image, 1)
     i_max_image = lastindex(image, 1)
@@ -104,27 +40,159 @@ function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
     j_min_image = firstindex(image, 2)
     j_max_image = lastindex(image, 2)
 
-    if i_min > i_max_image
+    if i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
         return nothing
-    elseif i_min < i_min_image
+    end
+
+    if i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
+        draw_unchecked!(image, shape, color)
+        return nothing
+    end
+
+    j_min_plus_1 = j_min + one_value
+    j_max_minus_1 = j_max - one_value
+
+    draw!(image, VerticalLine(i_min, i_max, j_min), color)
+    draw!(image, HorizontalLine(i_min, j_min_plus_1, j_max_minus_1), color)
+    draw!(image, HorizontalLine(i_max, j_min_plus_1, j_max_minus_1), color)
+    draw!(image, VerticalLine(i_min, i_max, j_max), color)
+
+    return nothing
+end
+
+function draw_unchecked!(image::AbstractMatrix, shape::Rectangle{I}, color) where {I}
+    origin = shape.origin
+    height = shape.height
+    width = shape.width
+
+    one_value = one(I)
+
+    i_min = origin.i
+    j_min = origin.j
+
+    i_max = i_min + height - one_value
+    j_max = j_min + width - one_value
+
+    j_min_plus_1 = j_min + one_value
+    j_max_minus_1 = j_max - one_value
+
+    draw_unchecked!(image, VerticalLine(i_min, i_max, j_min), color)
+    draw_unchecked!(image, HorizontalLine(i_min, j_min_plus_1, j_max_minus_1), color)
+    draw_unchecked!(image, HorizontalLine(i_max, j_min_plus_1, j_max_minus_1), color)
+    draw_unchecked!(image, VerticalLine(i_min, i_max, j_max), color)
+
+    return nothing
+end
+
+function draw!(image::AbstractMatrix, shape::ThickRectangle{I}, color) where {I}
+    origin = shape.origin
+    height = shape.height
+    width = shape.width
+    thickness = shape.thickness
+
+    one_value = one(I)
+
+    if height < one_value || width < one_value || thickness < one_value
+        return nothing
+    end
+
+    i_min = origin.i
+    j_min = origin.j
+
+    i_max = i_min + height - one_value
+    j_max = j_min + width - one_value
+
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
+
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
+
+    if i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
+        return nothing
+    end
+
+    if i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
+        draw_unchecked!(image, shape, color)
+        return nothing
+    end
+
+    j_min_plus_thickness = j_min + thickness
+    width_minus_twice_thickness = width - convert(I, 2) * thickness
+
+    draw!(image, FilledRectangle(origin, height, thickness), color)
+    draw!(image, FilledRectangle(Point(i_min, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
+    draw!(image, FilledRectangle(Point(i_min + height - thickness, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
+    draw!(image, FilledRectangle(Point(i_min, j_min + width - thickness), height, thickness), color)
+
+    return nothing
+end
+
+function draw_unchecked!(image::AbstractMatrix, shape::ThickRectangle{I}, color) where {I}
+    origin = shape.origin
+    height = shape.height
+    width = shape.width
+    thickness = shape.thickness
+
+    one_value = one(I)
+
+    i_min = origin.i
+    j_min = origin.j
+
+    i_max = i_min + height - one_value
+    j_max = j_min + width - one_value
+
+    j_min_plus_thickness = j_min + thickness
+    width_minus_twice_thickness = width - convert(I, 2) * thickness
+
+    draw_unchecked!(image, FilledRectangle(origin, height, thickness), color)
+    draw_unchecked!(image, FilledRectangle(Point(i_min, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
+    draw_unchecked!(image, FilledRectangle(Point(i_min + height - thickness, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
+    draw_unchecked!(image, FilledRectangle(Point(i_min, j_min + width - thickness), height, thickness), color)
+
+    return nothing
+end
+
+function draw!(image::AbstractMatrix, shape::FilledRectangle{I}, color) where {I}
+    origin = shape.origin
+    height = shape.height
+    width = shape.width
+
+    one_value = one(I)
+
+    if height < one_value || width < one_value
+        return nothing
+    end
+
+    i_min = origin.i
+    j_min = origin.j
+
+    i_max = i_min + height - one_value
+    j_max = j_min + width - one_value
+
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
+
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
+
+    if i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
+        return nothing
+    end
+
+    if i_min < i_min_image
         i_min = i_min_image
     end
 
-    if i_max < i_min_image
-        return nothing
-    elseif i_max > i_max_image
+    if i_max > i_max_image
         i_max = i_max_image
     end
 
-    if j_min > j_max_image
-        return nothing
-    elseif j_min < j_min_image
+    if j_min < j_min_image
         j_min = j_min_image
     end
 
-    if j_max < j_min_image
-        return nothing
-    elseif j_max > j_max_image
+    if j_max > j_max_image
         j_max = j_max_image
     end
 
@@ -133,11 +201,18 @@ function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
     return nothing
 end
 
-function draw_unchecked!(image::AbstractMatrix, shape::FilledRectangle, color)
-    i_min = shape.origin.i
-    j_min = shape.origin.j
-    i_max = i_min + shape.height - 1
-    j_max = j_min + shape.width - 1
+function draw_unchecked!(image::AbstractMatrix, shape::FilledRectangle{I}, color) where {I}
+    origin = shape.origin
+    height = shape.height
+    width = shape.width
+
+    one_value = one(I)
+
+    i_min = origin.i
+    j_min = origin.j
+
+    i_max = i_min + height - one_value
+    j_max = j_min + width - one_value
 
     @inbounds image[i_min:i_max, j_min:j_max] .= color
 
