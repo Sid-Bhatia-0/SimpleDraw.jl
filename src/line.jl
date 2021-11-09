@@ -34,19 +34,19 @@ function draw!(image::AbstractMatrix, shape::VerticalLine, color)
 
     if i_max < i_min_image || i_min > i_max_image || j < j_min_image || j > j_max_image
         return nothing
-    else
-        if i_min < i_min_image
-            i_min = i_min_image
-        end
-
-        if i_max > i_max_image
-            i_max = i_max_image
-        end
-
-        draw_unchecked!(image, VerticalLine(i_min, i_max, j), color)
-
-        return nothing
     end
+
+    if i_min < i_min_image
+        i_min = i_min_image
+    end
+
+    if i_max > i_max_image
+        i_max = i_max_image
+    end
+
+    draw_unchecked!(image, VerticalLine(i_min, i_max, j), color)
+
+    return nothing
 end
 
 @inline function draw_unchecked!(image::AbstractMatrix, shape::VerticalLine, color)
@@ -67,19 +67,19 @@ function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
 
     if i < i_min_image || i > i_max_image || j_max < j_min_image || j_min > j_max_image
         return nothing
-    else
-        if j_min < j_min_image
-            j_min = j_min_image
-        end
-
-        if j_max > j_max_image
-            j_max = j_max_image
-        end
-
-        draw_unchecked!(image, HorizontalLine(i, j_min, j_max), color)
-
-        return nothing
     end
+
+    if j_min < j_min_image
+        j_min = j_min_image
+    end
+
+    if j_max > j_max_image
+        j_max = j_max_image
+    end
+
+    draw_unchecked!(image, HorizontalLine(i, j_min, j_max), color)
+
+    return nothing
 end
 
 @inline function draw_unchecked!(image::AbstractMatrix, shape::HorizontalLine, color)
@@ -90,19 +90,23 @@ end
 """
 Draw a line. Ref: https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 """
-function draw!(image::AbstractMatrix, shape::Line, color)
+function draw!(image::AbstractMatrix, shape::Line{I}, color) where {I}
     i1 = shape.point1.i
     j1 = shape.point1.j
     i2 = shape.point2.i
     j2 = shape.point2.j
 
+    one_value = one(I)
+
+    if j1 == j2
+        i1, i2 = minmax(i1, i2)
+        draw!(image, VerticalLine(i1, i2, j1), color)
+        return nothing
+    end
+
     if i1 == i2
         j1, j2 = minmax(j1, j2)
         draw!(image, HorizontalLine(i1, j1, j2), color)
-        return nothing
-    elseif j1 == j2
-        i1, i2 = minmax(i1, i2)
-        draw!(image, VerticalLine(i1, i2, j1), color)
         return nothing
     end
 
@@ -113,8 +117,8 @@ function draw!(image::AbstractMatrix, shape::Line, color)
 
     di = abs(i2 - i1)
     dj = -abs(j2 - j1)
-    si = i1 < i2 ? 1 : -1
-    sj = j1 < j2 ? 1 : -1
+    si = i1 < i2 ? one_value : -one_value
+    sj = j1 < j2 ? one_value : -one_value
     err = di + dj
 
     while true
@@ -124,7 +128,7 @@ function draw!(image::AbstractMatrix, shape::Line, color)
             break
         end
 
-        e2 = 2 * err
+        e2 = convert(I, 2) * err
 
         if (e2 >= dj)
             err += dj
@@ -140,16 +144,18 @@ function draw!(image::AbstractMatrix, shape::Line, color)
     return nothing
 end
 
-function draw_unchecked!(image::AbstractMatrix, shape::Line, color)
+function draw_unchecked!(image::AbstractMatrix, shape::Line{I}, color) where {I}
     i1 = shape.point1.i
     j1 = shape.point1.j
     i2 = shape.point2.i
     j2 = shape.point2.j
 
+    one_value = one(I)
+
     di = abs(i2 - i1)
     dj = -abs(j2 - j1)
-    si = i1 < i2 ? 1 : -1
-    sj = j1 < j2 ? 1 : -1
+    si = i1 < i2 ? one_value : -one_value
+    sj = j1 < j2 ? one_value : -one_value
     err = di + dj
 
     while true
@@ -159,7 +165,7 @@ function draw_unchecked!(image::AbstractMatrix, shape::Line, color)
             break
         end
 
-        e2 = 2 * err
+        e2 = convert(I, 2) * err
 
         if (e2 >= dj)
             err += dj
@@ -175,12 +181,14 @@ function draw_unchecked!(image::AbstractMatrix, shape::Line, color)
     return nothing
 end
 
-function draw!(image::AbstractMatrix, shape::ThickLine, color)
+function draw!(image::AbstractMatrix, shape::ThickLine{I}, color) where {I}
     i1 = shape.point1.i
     j1 = shape.point1.j
     i2 = shape.point2.i
     j2 = shape.point2.j
     radius = shape.radius
+
+    one_value = one(I)
 
     if checkbounds(Bool, image, i1 - radius, j1 - radius) && checkbounds(Bool, image, i1 + radius, j1 + radius) && checkbounds(Bool, image, i2 - radius, j2 - radius) && checkbounds(Bool, image, i2 + radius, j2 + radius)
         draw_unchecked!(image, shape, color)
@@ -189,8 +197,8 @@ function draw!(image::AbstractMatrix, shape::ThickLine, color)
 
     di = abs(i2 - i1)
     dj = -abs(j2 - j1)
-    si = i1 < i2 ? 1 : -1
-    sj = j1 < j2 ? 1 : -1
+    si = i1 < i2 ? one_value : -one_value
+    sj = j1 < j2 ? one_value : -one_value
     err = di + dj
 
     while true
@@ -200,7 +208,7 @@ function draw!(image::AbstractMatrix, shape::ThickLine, color)
             break
         end
 
-        e2 = 2 * err
+        e2 = convert(I, 2) * err
 
         if (e2 >= dj)
             err += dj
@@ -216,17 +224,19 @@ function draw!(image::AbstractMatrix, shape::ThickLine, color)
     return nothing
 end
 
-function draw_unchecked!(image::AbstractMatrix, shape::ThickLine, color)
+function draw_unchecked!(image::AbstractMatrix, shape::ThickLine{I}, color) where {I}
     i1 = shape.point1.i
     j1 = shape.point1.j
     i2 = shape.point2.i
     j2 = shape.point2.j
     radius = shape.radius
 
+    one_value = one(I)
+
     di = abs(i2 - i1)
     dj = -abs(j2 - j1)
-    si = i1 < i2 ? 1 : -1
-    sj = j1 < j2 ? 1 : -1
+    si = i1 < i2 ? one_value : -one_value
+    sj = j1 < j2 ? one_value : -one_value
     err = di + dj
 
     while true
@@ -236,7 +246,7 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickLine, color)
             break
         end
 
-        e2 = 2 * err
+        e2 = convert(I, 2) * err
 
         if (e2 >= dj)
             err += dj
