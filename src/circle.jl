@@ -271,14 +271,46 @@ function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
     j_center = center.j
     radius_outer = shape.radius
     thickness = shape.thickness
-    radius_inner = radius_outer - thickness + 1
 
-    if checkbounds(Bool, image, i_center - radius_outer, j_center - radius_outer) && checkbounds(Bool, image, i_center + radius_outer, j_center + radius_outer)
+    zero_value = zero(I)
+    one_value = one(I)
+
+    if thickness < one_value || thickness > radius_outer || radius_outer < one_value
+        return nothing
+    end
+
+    i_min = i_center - radius_outer
+    j_min = j_center - radius_outer
+
+    i_max = i_center + radius_outer
+    j_max = j_center + radius_outer
+
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
+
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
+
+    if i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
+        return nothing
+    end
+
+    if thickness == one_value
+        draw!(image, Circle(center, radius_outer), color)
+        return nothing
+    end
+
+    if thickness == radius_outer
+        draw!(image, FilledCircle(center, radius_outer), color)
+        return nothing
+    end
+
+    if i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
         draw_unchecked!(image, shape, color)
         return nothing
     end
 
-    zero_value = zero(I)
+    radius_inner = radius_outer - thickness + one_value
 
     i_inner = zero_value
     j_inner = radius_inner
@@ -288,34 +320,34 @@ function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
 
     draw_octant_reflections_lines!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
 
-    constant_inner = 3 - 2 * radius_inner * radius_inner
-    constant_outer = 3 - 2 * radius_outer * radius_outer
+    constant_inner = convert(I, 3) - convert(I, 2) * radius_inner * radius_inner
+    constant_outer = convert(I, 3) - convert(I, 2) * radius_outer * radius_outer
 
     while j_inner >= i_inner
-        d_inner = 2 * j_inner * j_inner + 2 * i_inner * i_inner + 4 * i_inner - 2 * j_inner + constant_inner
-        d_outer = 2 * j_outer * j_outer + 2 * i_outer * i_outer + 4 * i_outer - 2 * j_outer + constant_outer
+        d_inner = convert(I, 2) * j_inner * j_inner + convert(I, 2) * i_inner * i_inner + convert(I, 4) * i_inner - convert(I, 2) * j_inner + constant_inner
+        d_outer = convert(I, 2) * j_outer * j_outer + convert(I, 2) * i_outer * i_outer + convert(I, 4) * i_outer - convert(I, 2) * j_outer + constant_outer
 
-        i_inner += 1
-        i_outer += 1
+        i_inner += one_value
+        i_outer += one_value
 
         if d_inner > zero_value
-            j_inner -= 1
+            j_inner -= one_value
         end
 
         if d_outer > zero_value
-            j_outer -= 1
+            j_outer -= one_value
         end
 
         draw_octant_reflections_lines!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
     end
 
     while j_outer >= i_outer
-        d_outer = 2 * j_outer * j_outer + 2 * i_outer * i_outer + 4 * i_outer - 2 * j_outer + constant_outer
+        d_outer = convert(I, 2) * j_outer * j_outer + convert(I, 2) * i_outer * i_outer + convert(I, 4) * i_outer - convert(I, 2) * j_outer + constant_outer
 
-        i_outer += 1
+        i_outer += one_value
 
         if d_outer > zero_value
-            j_outer -= 1
+            j_outer -= one_value
         end
 
         i = min(i_outer, j_outer)
@@ -335,6 +367,9 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickCircle{I}, color) wh
     radius_inner = radius_outer - thickness + 1
 
     zero_value = zero(I)
+    one_value = one(I)
+
+    radius_inner = radius_outer - thickness + one_value
 
     i_inner = zero_value
     j_inner = radius_inner
@@ -344,34 +379,34 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickCircle{I}, color) wh
 
     draw_octant_reflections_lines_unchecked!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
 
-    constant_inner = 3 - 2 * radius_inner * radius_inner
-    constant_outer = 3 - 2 * radius_outer * radius_outer
+    constant_inner = convert(I, 3) - convert(I, 2) * radius_inner * radius_inner
+    constant_outer = convert(I, 3) - convert(I, 2) * radius_outer * radius_outer
 
     while j_inner >= i_inner
-        d_inner = 2 * j_inner * j_inner + 2 * i_inner * i_inner + 4 * i_inner - 2 * j_inner + constant_inner
-        d_outer = 2 * j_outer * j_outer + 2 * i_outer * i_outer + 4 * i_outer - 2 * j_outer + constant_outer
+        d_inner = convert(I, 2) * j_inner * j_inner + convert(I, 2) * i_inner * i_inner + convert(I, 4) * i_inner - convert(I, 2) * j_inner + constant_inner
+        d_outer = convert(I, 2) * j_outer * j_outer + convert(I, 2) * i_outer * i_outer + convert(I, 4) * i_outer - convert(I, 2) * j_outer + constant_outer
 
-        i_inner += 1
-        i_outer += 1
+        i_inner += one_value
+        i_outer += one_value
 
         if d_inner > zero_value
-            j_inner -= 1
+            j_inner -= one_value
         end
 
         if d_outer > zero_value
-            j_outer -= 1
+            j_outer -= one_value
         end
 
         draw_octant_reflections_lines_unchecked!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
     end
 
     while j_outer >= i_outer
-        d_outer = 2 * j_outer * j_outer + 2 * i_outer * i_outer + 4 * i_outer - 2 * j_outer + constant_outer
+        d_outer = convert(I, 2) * j_outer * j_outer + convert(I, 2) * i_outer * i_outer + convert(I, 4) * i_outer - convert(I, 2) * j_outer + constant_outer
 
-        i_outer += 1
+        i_outer += one_value
 
         if d_outer > zero_value
-            j_outer -= 1
+            j_outer -= one_value
         end
 
         i = min(i_outer, j_outer)
