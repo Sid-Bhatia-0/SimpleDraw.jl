@@ -96,10 +96,7 @@ function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
     zero_value = zero(I)
     one_value = one(I)
 
-    if radius <= zero_value
-        return nothing
-    elseif radius == one_value
-        draw!(image, center, color)
+    if radius < zero_value
         return nothing
     end
 
@@ -116,6 +113,11 @@ function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
     j_max_image = lastindex(image, 2)
 
     if i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
+        return nothing
+    end
+
+    if radius == zero_value
+        draw!(image, center, color)
         return nothing
     end
 
@@ -185,10 +187,7 @@ function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
     zero_value = zero(I)
     one_value = one(I)
 
-    if radius <= zero_value
-        return nothing
-    elseif radius == one_value
-        draw!(image, center, color)
+    if radius < zero_value
         return nothing
     end
 
@@ -205,6 +204,11 @@ function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
     j_max_image = lastindex(image, 2)
 
     if i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
+        return nothing
+    end
+
+    if radius == zero_value
+        draw!(image, center, color)
         return nothing
     end
 
@@ -275,7 +279,7 @@ function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
     zero_value = zero(I)
     one_value = one(I)
 
-    if thickness < one_value || thickness > radius_outer || radius_outer < one_value
+    if thickness < one_value || thickness > radius_outer || radius_outer < zero_value
         return nothing
     end
 
@@ -292,6 +296,11 @@ function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
     j_max_image = lastindex(image, 2)
 
     if i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
+        return nothing
+    end
+
+    if radius_outer == zero_value
+        draw!(image, center, color)
         return nothing
     end
 
@@ -364,7 +373,6 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickCircle{I}, color) wh
     j_center = center.j
     radius_outer = shape.radius
     thickness = shape.thickness
-    radius_inner = radius_outer - thickness + 1
 
     zero_value = zero(I)
     one_value = one(I)
