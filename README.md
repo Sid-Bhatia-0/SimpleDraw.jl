@@ -29,6 +29,8 @@ This is a lightweight package that provides exact and efficient (for the most pa
 1. [`Cross`](#cross)
 1. [`HollowCross`](#hollowcross)
 1. [`Polyline`](#polyline)
+1. [`Character`](#character)
+1. [`TextLine`](#textline)
 
 ## Getting Started
 
@@ -319,3 +321,15 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     ```
 
     <img src="https://user-images.githubusercontent.com/32610387/140615301-2a263b84-44ce-40ec-a081-8f465346f404.png">
+
+1. ### `TextLine`
+
+    ```julia
+    struct TextLine{I, S, F <: AbstractFont} <: AbstractShape
+        position::Point{I}
+        text::S
+        font::F
+    end
+    ```
+
+    <img src="https://user-images.githubusercontent.com/32610387/141676460-3b38faed-f7b9-4b6e-8699-5f71b064e620.png">
