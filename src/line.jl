@@ -1,13 +1,13 @@
 struct VerticalLine{I <: Integer} <: AbstractShape
-    i_start::I
-    i_end::I
+    i_min::I
+    i_max::I
     j::I
 end
 
 struct HorizontalLine{I <: Integer} <: AbstractShape
     i::I
-    j_start::I
-    j_end::I
+    j_min::I
+    j_max::I
 end
 
 struct Line{I <: Integer} <: AbstractShape
@@ -22,99 +22,103 @@ struct ThickLine{I <: Integer} <: AbstractShape
 end
 
 function draw!(image::AbstractMatrix, shape::VerticalLine, color)
-    i_start = shape.i_start
-    i_end = shape.i_end
+    i_min = shape.i_min
+    i_max = shape.i_max
     j = shape.j
 
-    i_low = firstindex(image, 1)
-    i_high = lastindex(image, 1)
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
 
-    j_low = firstindex(image, 2)
-    j_high = lastindex(image, 2)
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
 
-    if i_end < i_low || i_start > i_high || j < j_low || j > j_high
-        return nothing
-    else
-        if i_start < i_low
-            i_start = i_low
-        end
-
-        if i_end > i_high
-            i_end = i_high
-        end
-
-        draw_inbounds!(image, VerticalLine(i_start, i_end, j), color)
-
+    if i_max < i_min_image || i_min > i_max_image || j < j_min_image || j > j_max_image
         return nothing
     end
+
+    if i_min < i_min_image
+        i_min = i_min_image
+    end
+
+    if i_max > i_max_image
+        i_max = i_max_image
+    end
+
+    draw_unchecked!(image, VerticalLine(i_min, i_max, j), color)
+
+    return nothing
 end
 
-@inline function draw_inbounds!(image::AbstractMatrix, shape::VerticalLine, color)
-    @inbounds image[shape.i_start:shape.i_end, shape.j] .= color
+@inline function draw_unchecked!(image::AbstractMatrix, shape::VerticalLine, color)
+    @inbounds image[shape.i_min:shape.i_max, shape.j] .= color
     return nothing
 end
 
 function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
     i = shape.i
-    j_start = shape.j_start
-    j_end = shape.j_end
+    j_min = shape.j_min
+    j_max = shape.j_max
 
-    i_low = firstindex(image, 1)
-    i_high = lastindex(image, 1)
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
 
-    j_low = firstindex(image, 2)
-    j_high = lastindex(image, 2)
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
 
-    if i < i_low || i > i_high || j_end < j_low || j_start > j_high
-        return nothing
-    else
-        if j_start < j_low
-            j_start = j_low
-        end
-
-        if j_end > j_high
-            j_end = j_high
-        end
-
-        draw_inbounds!(image, HorizontalLine(i, j_start, j_end), color)
-
+    if i < i_min_image || i > i_max_image || j_max < j_min_image || j_min > j_max_image
         return nothing
     end
+
+    if j_min < j_min_image
+        j_min = j_min_image
+    end
+
+    if j_max > j_max_image
+        j_max = j_max_image
+    end
+
+    draw_unchecked!(image, HorizontalLine(i, j_min, j_max), color)
+
+    return nothing
 end
 
-@inline function draw_inbounds!(image::AbstractMatrix, shape::HorizontalLine, color)
-    @inbounds image[shape.i, shape.j_start:shape.j_end] .= color
+@inline function draw_unchecked!(image::AbstractMatrix, shape::HorizontalLine, color)
+    @inbounds image[shape.i, shape.j_min:shape.j_max] .= color
     return nothing
 end
 
 """
 Draw a line. Ref: https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 """
-function draw!(image::AbstractMatrix, shape::Line, color)
+function draw!(image::AbstractMatrix, shape::Line{I}, color) where {I}
     i1 = shape.point1.i
     j1 = shape.point1.j
     i2 = shape.point2.i
     j2 = shape.point2.j
 
-    if i1 == i2
-        j1, j2 = minmax(j1, j2)
-        draw!(image, HorizontalLine(i1, j1, j2), color)
-        return nothing
-    elseif j1 == j2
+    one_value = one(I)
+
+    if j1 == j2
         i1, i2 = minmax(i1, i2)
         draw!(image, VerticalLine(i1, i2, j1), color)
         return nothing
     end
 
+    if i1 == i2
+        j1, j2 = minmax(j1, j2)
+        draw!(image, HorizontalLine(i1, j1, j2), color)
+        return nothing
+    end
+
     if checkbounds(Bool, image, i1, j1) && checkbounds(Bool, image, i2, j2)
-        draw_inbounds!(image, shape, color)
+        draw_unchecked!(image, shape, color)
         return nothing
     end
 
     di = abs(i2 - i1)
     dj = -abs(j2 - j1)
-    si = i1 < i2 ? 1 : -1
-    sj = j1 < j2 ? 1 : -1
+    si = i1 < i2 ? one_value : -one_value
+    sj = j1 < j2 ? one_value : -one_value
     err = di + dj
 
     while true
@@ -124,7 +128,7 @@ function draw!(image::AbstractMatrix, shape::Line, color)
             break
         end
 
-        e2 = 2 * err
+        e2 = convert(I, 2) * err
 
         if (e2 >= dj)
             err += dj
@@ -140,26 +144,28 @@ function draw!(image::AbstractMatrix, shape::Line, color)
     return nothing
 end
 
-function draw_inbounds!(image::AbstractMatrix, shape::Line, color)
+function draw_unchecked!(image::AbstractMatrix, shape::Line{I}, color) where {I}
     i1 = shape.point1.i
     j1 = shape.point1.j
     i2 = shape.point2.i
     j2 = shape.point2.j
 
+    one_value = one(I)
+
     di = abs(i2 - i1)
     dj = -abs(j2 - j1)
-    si = i1 < i2 ? 1 : -1
-    sj = j1 < j2 ? 1 : -1
+    si = i1 < i2 ? one_value : -one_value
+    sj = j1 < j2 ? one_value : -one_value
     err = di + dj
 
     while true
-        put_pixel_inbounds!(image, i1, j1, color)
+        put_pixel_unchecked!(image, i1, j1, color)
 
         if (i1 == i2 && j1 == j2)
             break
         end
 
-        e2 = 2 * err
+        e2 = convert(I, 2) * err
 
         if (e2 >= dj)
             err += dj
@@ -175,22 +181,24 @@ function draw_inbounds!(image::AbstractMatrix, shape::Line, color)
     return nothing
 end
 
-function draw!(image::AbstractMatrix, shape::ThickLine, color)
+function draw!(image::AbstractMatrix, shape::ThickLine{I}, color) where {I}
     i1 = shape.point1.i
     j1 = shape.point1.j
     i2 = shape.point2.i
     j2 = shape.point2.j
     radius = shape.radius
 
+    one_value = one(I)
+
     if checkbounds(Bool, image, i1 - radius, j1 - radius) && checkbounds(Bool, image, i1 + radius, j1 + radius) && checkbounds(Bool, image, i2 - radius, j2 - radius) && checkbounds(Bool, image, i2 + radius, j2 + radius)
-        draw_inbounds!(image, shape, color)
+        draw_unchecked!(image, shape, color)
         return nothing
     end
 
     di = abs(i2 - i1)
     dj = -abs(j2 - j1)
-    si = i1 < i2 ? 1 : -1
-    sj = j1 < j2 ? 1 : -1
+    si = i1 < i2 ? one_value : -one_value
+    sj = j1 < j2 ? one_value : -one_value
     err = di + dj
 
     while true
@@ -200,7 +208,7 @@ function draw!(image::AbstractMatrix, shape::ThickLine, color)
             break
         end
 
-        e2 = 2 * err
+        e2 = convert(I, 2) * err
 
         if (e2 >= dj)
             err += dj
@@ -216,27 +224,29 @@ function draw!(image::AbstractMatrix, shape::ThickLine, color)
     return nothing
 end
 
-function draw_inbounds!(image::AbstractMatrix, shape::ThickLine, color)
+function draw_unchecked!(image::AbstractMatrix, shape::ThickLine{I}, color) where {I}
     i1 = shape.point1.i
     j1 = shape.point1.j
     i2 = shape.point2.i
     j2 = shape.point2.j
     radius = shape.radius
 
+    one_value = one(I)
+
     di = abs(i2 - i1)
     dj = -abs(j2 - j1)
-    si = i1 < i2 ? 1 : -1
-    sj = j1 < j2 ? 1 : -1
+    si = i1 < i2 ? one_value : -one_value
+    sj = j1 < j2 ? one_value : -one_value
     err = di + dj
 
     while true
-        draw_inbounds!(image, FilledCircle(Point(i1, j1), radius), color)
+        draw_unchecked!(image, FilledCircle(Point(i1, j1), radius), color)
 
         if (i1 == i2 && j1 == j2)
             break
         end
 
-        e2 = 2 * err
+        e2 = convert(I, 2) * err
 
         if (e2 >= dj)
             err += dj
@@ -252,9 +262,9 @@ function draw_inbounds!(image::AbstractMatrix, shape::ThickLine, color)
     return nothing
 end
 
-get_bounding_box(shape::VerticalLine{I}) where {I} = Rectangle(Point(shape.i_start, shape.j), shape.i_end - shape.i_start + one(I), one(I))
+get_bounding_box(shape::VerticalLine{I}) where {I} = Rectangle(Point(shape.i_min, shape.j), shape.i_max - shape.i_min + one(I), one(I))
 
-get_bounding_box(shape::HorizontalLine{I}) where {I} = Rectangle(Point(shape.i, shape.j_start), one(I), shape.j_end - shape.j_start + one(I))
+get_bounding_box(shape::HorizontalLine{I}) where {I} = Rectangle(Point(shape.i, shape.j_min), one(I), shape.j_max - shape.j_min + one(I))
 
 function get_bounding_box(shape::Line{I}) where {I}
     point1 = shape.point1

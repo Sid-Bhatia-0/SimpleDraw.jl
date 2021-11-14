@@ -2,40 +2,38 @@ struct Polyline{I <: Integer} <: AbstractShape
     points::Vector{Point{I}}
 end
 
-function draw!(image::AbstractMatrix, shape::Polyline, color)
+function draw!(image::AbstractMatrix, shape::Polyline{I}, color) where {I}
     points = shape.points
     num_points = length(points)
 
-    if num_points == 0
+    zero_value = zero(I)
+    one_value = one(I)
+
+    if num_points == zero_value
         return nothing
-    elseif num_points == 1
+    end
+
+    if num_points == one_value
         draw!(image, first(points), color)
         return nothing
-    else
-        for i in 1 : num_points - 1
-            draw!(image, Line(points[i], points[i + 1]), color)
-        end
-
-        return nothing
     end
+
+    for i in 1 : num_points - 1
+        draw!(image, Line(points[i], points[i + 1]), color)
+    end
+
+    return nothing
 end
 
-function draw_inbounds!(image::AbstractMatrix, shape::Polyline, color)
+function draw_unchecked!(image::AbstractMatrix, shape::Polyline, color)
     points = shape.points
     num_points = length(points)
 
-    if num_points == 0
-        return nothing
-    elseif num_points == 1
-        draw_inbounds!(image, first(points), color)
-        return nothing
-    else
-        for i in 1 : num_points - 1
-            draw_inbounds!(image, Line(points[i], points[i + 1]), color)
-        end
-
-        return nothing
+    for i in 1 : num_points - 1
+        draw_unchecked!(image, Line(points[i], points[i + 1]), color)
     end
+
+    return nothing
 end
 
 function get_bounding_box(shape::Polyline{I}) where {I}

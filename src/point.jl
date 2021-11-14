@@ -8,8 +8,8 @@ end
     return nothing
 end
 
-@inline function draw_inbounds!(image::AbstractMatrix, shape::Point, color)
-    put_pixel_inbounds!(image, shape.i, shape.j, color)
+@inline function draw_unchecked!(image::AbstractMatrix, shape::Point, color)
+    put_pixel_unchecked!(image, shape.i, shape.j, color)
     return nothing
 end
 
