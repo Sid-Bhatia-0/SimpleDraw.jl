@@ -12,7 +12,7 @@ struct Character{I, C <: AbstractChar, F <: AbstractFont} <: AbstractShape
     font::F
 end
 
-function draw!(image::AbstractMatrix, shape::Character, color)
+function draw!(image::AbstractMatrix, shape::Character{I}, color) where {I}
     position = shape.position
     char = shape.char
     font = shape.font
@@ -20,15 +20,17 @@ function draw!(image::AbstractMatrix, shape::Character, color)
     position_j = position.j
     bitmap = font.bitmap
 
+    one_value = one(I)
+
     height, width, _ = size(bitmap)
 
     k = codepoint(char) - codepoint('!') + 1
 
     i_min = max(position_i, firstindex(image, 1))
-    i_max = min(position_i + height - 1, lastindex(image, 1))
+    i_max = min(position_i + height - one_value, lastindex(image, 1))
 
     j_min = max(position_j, firstindex(image, 1))
-    j_max = min(position_j + width - 1, lastindex(image, 1))
+    j_max = min(position_j + width - one_value, lastindex(image, 2))
 
     if k in axes(bitmap, 3)
         for j in j_min:j_max
