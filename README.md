@@ -211,35 +211,35 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 
     ```julia
     struct Circle{I <: Integer} <: AbstractShape
-        center::Point{I}
-        radius::I
+        position::Point{I}
+        diameter::I
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/139564772-f1d6eb10-0f52-4b65-9a08-f26447b53223.png">
+    <img src="https://user-images.githubusercontent.com/32610387/144611658-fa47d384-85c7-4024-9421-cd1cff2c175a.png">
 
 1. ### `ThickCircle`
 
     ```julia
     struct ThickCircle{I <: Integer} <: AbstractShape
-        center::Point{I}
-        radius::I
+        position::Point{I}
+        diameter::I
         thickness::I
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/139564796-48abbce7-6378-4ceb-9859-300921c18c98.png">
+    <img src="https://user-images.githubusercontent.com/32610387/144611729-74a4cf1f-82de-4e3d-ae6d-874180330129.png">
 
 1. ### `FilledCircle`
 
     ```julia
     struct FilledCircle{I <: Integer} <: AbstractShape
-        center::Point{I}
-        radius::I
+        position::Point{I}
+        diameter::I
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/139564810-757ee422-1d83-47a4-8894-b54f6d4bcf48.png">
+    <img src="https://user-images.githubusercontent.com/32610387/144611779-6d814e74-b797-41e0-84f7-83fcb5a650a9.png">
 
 1. ### `Rectangle`
 
