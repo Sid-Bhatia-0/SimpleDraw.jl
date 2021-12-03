@@ -202,7 +202,7 @@ function draw!(image::AbstractMatrix, shape::ThickLine{I}, color) where {I}
     err = di + dj
 
     while true
-        draw!(image, FilledCircle(Point(i1, j1), radius), color)
+        draw!(image, DiameterFilledCircle(Point(i1 - radius, j1 - radius), convert(I, 2) * radius + one_value), color)
 
         if (i1 == i2 && j1 == j2)
             break
@@ -240,7 +240,7 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickLine{I}, color) wher
     err = di + dj
 
     while true
-        draw_unchecked!(image, FilledCircle(Point(i1, j1), radius), color)
+        draw!(image, DiameterFilledCircle(Point(i1 - radius, j1 - radius), convert(I, 2) * radius + one_value), color)
 
         if (i1 == i2 && j1 == j2)
             break
