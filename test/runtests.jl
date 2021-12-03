@@ -662,11 +662,11 @@ Test.@testset "SimpleDraw.jl" begin
                                      ])
     end
 
-    Test.@testset "DiameterThickCircle (odd)" begin
+    Test.@testset "ThickCircle (odd)" begin
         height = 32
         width = 32
         image = falses(height, width)
-        shape = SD.DiameterThickCircle(SD.Point(2, 2), 29, 5)
+        shape = SD.ThickCircle(SD.Point(2, 2), 29, 5)
         bounding_box = SD.get_bounding_box(shape)
         Test.@test bounding_box == SD.Rectangle(SD.Point(2, 2), 29, 29)
         color = true
@@ -709,7 +709,7 @@ Test.@testset "SimpleDraw.jl" begin
         height = 32
         width = 32
         image = falses(height, width)
-        shape = SD.DiameterThickCircle(SD.Point(10, 10), 29, 5)
+        shape = SD.ThickCircle(SD.Point(10, 10), 29, 5)
         bounding_box = SD.get_bounding_box(shape)
         Test.@test bounding_box == SD.Rectangle(SD.Point(10, 10), 29, 29)
         color = true
@@ -750,11 +750,11 @@ Test.@testset "SimpleDraw.jl" begin
                                      ])
     end
 
-    Test.@testset "DiameterThickCircle (even)" begin
+    Test.@testset "ThickCircle (even)" begin
         height = 32
         width = 32
         image = falses(height, width)
-        shape = SD.DiameterThickCircle(SD.Point(2, 2), 30, 5)
+        shape = SD.ThickCircle(SD.Point(2, 2), 30, 5)
         bounding_box = SD.get_bounding_box(shape)
         Test.@test bounding_box == SD.Rectangle(SD.Point(2, 2), 30, 30)
         color = true
@@ -797,7 +797,7 @@ Test.@testset "SimpleDraw.jl" begin
         height = 32
         width = 32
         image = falses(height, width)
-        shape = SD.DiameterThickCircle(SD.Point(10, 10), 30, 5)
+        shape = SD.ThickCircle(SD.Point(10, 10), 30, 5)
         bounding_box = SD.get_bounding_box(shape)
         Test.@test bounding_box == SD.Rectangle(SD.Point(10, 10), 30, 30)
         color = true

@@ -8,7 +8,7 @@ struct FilledCircle{I <: Integer} <: AbstractShape
     diameter::I
 end
 
-struct DiameterThickCircle{I <: Integer} <: AbstractShape
+struct ThickCircle{I <: Integer} <: AbstractShape
     position::Point{I}
     diameter::I
     thickness::I
@@ -396,7 +396,7 @@ function draw_unchecked!(image::AbstractMatrix, shape::FilledCircle{I}, color) w
     return nothing
 end
 
-function draw!(image::AbstractMatrix, shape::DiameterThickCircle{I}, color) where {I}
+function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
     position = shape.position
     i_position = position.i
     j_position = position.j
@@ -515,7 +515,7 @@ function draw!(image::AbstractMatrix, shape::DiameterThickCircle{I}, color) wher
     return nothing
 end
 
-function draw_unchecked!(image::AbstractMatrix, shape::DiameterThickCircle{I}, color) where {I}
+function draw_unchecked!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
     position = shape.position
     i_position = position.i
     j_position = position.j
@@ -595,6 +595,6 @@ end
 
 get_bounding_box(shape::Circle) = Rectangle(shape.position, shape.diameter, shape.diameter)
 
-get_bounding_box(shape::DiameterThickCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
+get_bounding_box(shape::ThickCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
 
 get_bounding_box(shape::FilledCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
