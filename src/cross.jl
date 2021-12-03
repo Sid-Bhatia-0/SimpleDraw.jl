@@ -129,5 +129,13 @@ function draw_unchecked!(image::AbstractMatrix, shape::HollowCross{I}, color) wh
     return nothing
 end
 
-get_bounding_box(shape::Cross) = get_bounding_box(Circle(shape.center, shape.radius))
-get_bounding_box(shape::HollowCross) = get_bounding_box(Circle(shape.center, shape.radius))
+function get_bounding_box(shape::Cross)
+    center = shape.center
+    radius = shape.radius
+    i = center.i
+    j = center.j
+    side = 2 * radius + 1
+
+    return Rectangle(Point(i - radius, j - radius), side, side)
+end
+get_bounding_box(shape::HollowCross) = get_bounding_box(Cross(shape.center, shape.radius))

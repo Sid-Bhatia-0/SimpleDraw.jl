@@ -1,16 +1,16 @@
 struct Circle{I <: Integer} <: AbstractShape
-    center::Point{I}
-    radius::I
+    position::Point{I}
+    diameter::I
 end
 
 struct FilledCircle{I <: Integer} <: AbstractShape
-    center::Point{I}
-    radius::I
+    position::Point{I}
+    diameter::I
 end
 
 struct ThickCircle{I <: Integer} <: AbstractShape
-    center::Point{I}
-    radius::I
+    position::Point{I}
+    diameter::I
     thickness::I
 end
 
@@ -19,6 +19,16 @@ end
     draw!(image, VerticalLine(i_center - j, i_center + j, j_center - i), color)
     draw!(image, VerticalLine(i_center - j, i_center + j, j_center + i), color)
     draw!(image, VerticalLine(i_center - i, i_center + i, j_center + j), color)
+
+    return nothing
+end
+
+@inline function draw_vertical_strip_reflections_even!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
+    one_value = one(i_center)
+    draw!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center - j), color)
+    draw!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center - i), color)
+    draw!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center + i - one_value), color)
+    draw!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center + j - one_value), color)
 
     return nothing
 end
@@ -32,6 +42,16 @@ end
     return nothing
 end
 
+@inline function draw_vertical_strip_reflections_even_unchecked!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
+    one_value = one(i_center)
+    draw_unchecked!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center - j), color)
+    draw_unchecked!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center - i), color)
+    draw_unchecked!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center + i - one_value), color)
+    draw_unchecked!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center + j - one_value), color)
+
+    return nothing
+end
+
 @inline function draw_octant_reflections!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
     put_pixel!(image, i_center - i, j_center - j, color)
     put_pixel!(image, i_center + i, j_center - j, color)
@@ -41,6 +61,34 @@ end
     put_pixel!(image, i_center + j, j_center + i, color)
     put_pixel!(image, i_center - i, j_center + j, color)
     put_pixel!(image, i_center + i, j_center + j, color)
+
+    return nothing
+end
+
+@inline function draw_octant_reflections_even!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
+    one_value = one(i_center)
+    put_pixel!(image, i_center - i, j_center - j, color)
+    put_pixel!(image, i_center + i - one_value, j_center - j, color)
+    put_pixel!(image, i_center - j, j_center - i, color)
+    put_pixel!(image, i_center + j - one_value, j_center - i, color)
+    put_pixel!(image, i_center - j, j_center + i - one_value, color)
+    put_pixel!(image, i_center + j - one_value, j_center + i - one_value, color)
+    put_pixel!(image, i_center - i, j_center + j - one_value, color)
+    put_pixel!(image, i_center + i - one_value, j_center + j - one_value, color)
+
+    return nothing
+end
+
+@inline function draw_octant_reflections_even_unchecked!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
+    one_value = one(i_center)
+    put_pixel_unchecked!(image, i_center - i, j_center - j, color)
+    put_pixel_unchecked!(image, i_center + i - one_value, j_center - j, color)
+    put_pixel_unchecked!(image, i_center - j, j_center - i, color)
+    put_pixel_unchecked!(image, i_center + j - one_value, j_center - i, color)
+    put_pixel_unchecked!(image, i_center - j, j_center + i - one_value, color)
+    put_pixel_unchecked!(image, i_center + j - one_value, j_center + i - one_value, color)
+    put_pixel_unchecked!(image, i_center - i, j_center + j - one_value, color)
+    put_pixel_unchecked!(image, i_center + i - one_value, j_center + j - one_value, color)
 
     return nothing
 end
@@ -84,27 +132,39 @@ end
     return nothing
 end
 
-"""
-Draw a circle. Ref: https://en.wikipedia.org/wiki/Midpoint_circle_algorithm variant with integer-based arithmetic
-"""
+@inline function draw_octant_reflections_lines_even_unchecked!(image::AbstractMatrix, i_center, j_center, i, j_inner, j_outer, color)
+    one_value = one(i_center)
+    draw_unchecked!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
+    draw_unchecked!(image, HorizontalLine(i_center + i - one_value, j_center - j_outer, j_center - j_inner), color)
+    draw_unchecked!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
+    draw_unchecked!(image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center - i), color)
+    draw_unchecked!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center + i - one_value), color)
+    draw_unchecked!(image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center + i - one_value), color)
+    draw_unchecked!(image, HorizontalLine(i_center - i, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
+    draw_unchecked!(image, HorizontalLine(i_center + i - one_value, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
+
+    return nothing
+end
+
 function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
-    center = shape.center
-    i_center = center.i
-    j_center = center.j
-    radius = shape.radius
+    position = shape.position
+    i_position = position.i
+    j_position = position.j
+    diameter = shape.diameter
 
     zero_value = zero(I)
     one_value = one(I)
 
-    if radius < zero_value
+    if diameter < one_value
         return nothing
     end
 
-    i_min = i_center - radius
-    j_min = j_center - radius
+    i_min = i_position
+    j_min = j_position
 
-    i_max = i_center + radius
-    j_max = j_center + radius
+    diameter_minus_1 = diameter - one_value
+    i_max = i_position + diameter_minus_1
+    j_max = j_position + diameter_minus_1
 
     i_min_image = firstindex(image, 1)
     i_max_image = lastindex(image, 1)
@@ -116,8 +176,18 @@ function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
         return nothing
     end
 
-    if radius == zero_value
-        draw!(image, center, color)
+    if diameter == one_value
+        draw!(image, position, color)
+        return nothing
+    end
+
+    if diameter == convert(I, 2)
+        i_position_plus_1 = i_position + one_value
+        j_position_plus_1 = j_position + one_value
+        draw!(image, position, color)
+        draw!(image, Point(i_position_plus_1, j_position), color)
+        draw!(image, Point(i_position, j_position_plus_1), color)
+        draw!(image, Point(i_position_plus_1, j_position_plus_1), color)
         return nothing
     end
 
@@ -126,10 +196,17 @@ function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
         return nothing
     end
 
+    radius = diameter ÷ 2 # d = 1 and d = 2 cases have been take care of above
     i = zero_value
     j = radius
+    i_center = i_position + radius
+    j_center = j_position + radius
 
-    draw_octant_reflections!(image, i_center, j_center, i, j, color)
+    if iseven(diameter)
+        draw_octant_reflections_even!(image, i_center, j_center, i, j, color)
+    else
+        draw_octant_reflections!(image, i_center, j_center, i, j, color)
+    end
 
     constant = convert(I, 3) - convert(I, 2) * radius * radius
 
@@ -142,24 +219,36 @@ function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
             j -= one_value
         end
 
-        draw_octant_reflections!(image, i_center, j_center, i, j, color)
+        if iseven(diameter)
+            draw_octant_reflections_even!(image, i_center, j_center, i, j, color)
+        else
+            draw_octant_reflections!(image, i_center, j_center, i, j, color)
+        end
     end
 
     return nothing
 end
 
 function draw_unchecked!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
-    i_center = shape.center.i
-    j_center = shape.center.j
-    radius = shape.radius
+    position = shape.position
+    i_position = position.i
+    j_position = position.j
+    diameter = shape.diameter
 
     zero_value = zero(I)
     one_value = one(I)
 
+    radius = diameter ÷ 2
     i = zero_value
     j = radius
+    i_center = i_position + radius
+    j_center = j_position + radius
 
-    draw_octant_reflections_unchecked!(image, i_center, j_center, i, j, color)
+    if iseven(diameter)
+        draw_octant_reflections_even!(image, i_center, j_center, i, j, color)
+    else
+        draw_octant_reflections!(image, i_center, j_center, i, j, color)
+    end
 
     constant = convert(I, 3) - convert(I, 2) * radius * radius
 
@@ -172,30 +261,35 @@ function draw_unchecked!(image::AbstractMatrix, shape::Circle{I}, color) where {
             j -= one_value
         end
 
-        draw_octant_reflections_unchecked!(image, i_center, j_center, i, j, color)
+        if iseven(diameter)
+            draw_octant_reflections_even!(image, i_center, j_center, i, j, color)
+        else
+            draw_octant_reflections!(image, i_center, j_center, i, j, color)
+        end
     end
 
     return nothing
 end
 
 function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
-    center = shape.center
-    i_center = center.i
-    j_center = center.j
-    radius = shape.radius
+    position = shape.position
+    i_position = position.i
+    j_position = position.j
+    diameter = shape.diameter
 
     zero_value = zero(I)
     one_value = one(I)
 
-    if radius < zero_value
+    if diameter < one_value
         return nothing
     end
 
-    i_min = i_center - radius
-    j_min = j_center - radius
+    i_min = i_position
+    j_min = j_position
 
-    i_max = i_center + radius
-    j_max = j_center + radius
+    diameter_minus_1 = diameter - one_value
+    i_max = i_position + diameter_minus_1
+    j_max = j_position + diameter_minus_1
 
     i_min_image = firstindex(image, 1)
     i_max_image = lastindex(image, 1)
@@ -207,8 +301,18 @@ function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
         return nothing
     end
 
-    if radius == zero_value
-        draw!(image, center, color)
+    if diameter == one_value
+        draw!(image, position, color)
+        return nothing
+    end
+
+    if diameter == convert(I, 2)
+        i_position_plus_1 = i_position + one_value
+        j_position_plus_1 = j_position + one_value
+        draw!(image, position, color)
+        draw!(image, Point(i_position_plus_1, j_position), color)
+        draw!(image, Point(i_position, j_position_plus_1), color)
+        draw!(image, Point(i_position_plus_1, j_position_plus_1), color)
         return nothing
     end
 
@@ -217,10 +321,17 @@ function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
         return nothing
     end
 
+    radius = diameter ÷ 2 # d = 1 and d = 2 cases have been take care of above
     i = zero_value
     j = radius
+    i_center = i_position + radius
+    j_center = j_position + radius
 
-    draw_vertical_strip_reflections!(image, i_center, j_center, i, j, color)
+    if iseven(diameter)
+        draw_vertical_strip_reflections_even!(image, i_center, j_center, i, j, color)
+    else
+        draw_vertical_strip_reflections!(image, i_center, j_center, i, j, color)
+    end
 
     constant = convert(I, 3) - convert(I, 2) * radius * radius
 
@@ -233,24 +344,36 @@ function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
             j -= one_value
         end
 
-        draw_vertical_strip_reflections!(image, i_center, j_center, i, j, color)
+        if iseven(diameter)
+            draw_vertical_strip_reflections_even!(image, i_center, j_center, i, j, color)
+        else
+            draw_vertical_strip_reflections!(image, i_center, j_center, i, j, color)
+        end
     end
 
     return nothing
 end
 
 function draw_unchecked!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
-    i_center = shape.center.i
-    j_center = shape.center.j
-    radius = shape.radius
+    position = shape.position
+    i_position = position.i
+    j_position = position.j
+    diameter = shape.diameter
 
     zero_value = zero(I)
     one_value = one(I)
 
+    radius = diameter ÷ 2
     i = zero_value
     j = radius
+    i_center = i_position + radius
+    j_center = j_position + radius
 
-    draw_vertical_strip_reflections_unchecked!(image, i_center, j_center, i, j, color)
+    if iseven(diameter)
+        draw_vertical_strip_reflections_even_unchecked!(image, i_center, j_center, i, j, color)
+    else
+        draw_vertical_strip_reflections_unchecked!(image, i_center, j_center, i, j, color)
+    end
 
     constant = convert(I, 3) - convert(I, 2) * radius * radius
 
@@ -263,31 +386,37 @@ function draw_unchecked!(image::AbstractMatrix, shape::FilledCircle{I}, color) w
             j -= one_value
         end
 
-        draw_vertical_strip_reflections_unchecked!(image, i_center, j_center, i, j, color)
+        if iseven(diameter)
+            draw_vertical_strip_reflections_even_unchecked!(image, i_center, j_center, i, j, color)
+        else
+            draw_vertical_strip_reflections_unchecked!(image, i_center, j_center, i, j, color)
+        end
     end
 
     return nothing
 end
 
 function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
-    center = shape.center
-    i_center = center.i
-    j_center = center.j
-    radius_outer = shape.radius
+    position = shape.position
+    i_position = position.i
+    j_position = position.j
+    diameter = shape.diameter
+    diameter_outer = diameter
     thickness = shape.thickness
 
     zero_value = zero(I)
     one_value = one(I)
 
-    if thickness < one_value || thickness > radius_outer || radius_outer < zero_value
+    if diameter < one_value || thickness < one_value || convert(I, 2) * thickness + one_value > diameter
         return nothing
     end
 
-    i_min = i_center - radius_outer
-    j_min = j_center - radius_outer
+    i_min = i_position
+    j_min = j_position
 
-    i_max = i_center + radius_outer
-    j_max = j_center + radius_outer
+    diameter_minus_1 = diameter - one_value
+    i_max = i_position + diameter_minus_1
+    j_max = j_position + diameter_minus_1
 
     i_min_image = firstindex(image, 1)
     i_max_image = lastindex(image, 1)
@@ -299,18 +428,28 @@ function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
         return nothing
     end
 
-    if radius_outer == zero_value
-        draw!(image, center, color)
+    if diameter == one_value
+        draw!(image, position, color)
         return nothing
     end
 
     if thickness == one_value
-        draw!(image, Circle(center, radius_outer), color)
+        draw!(image, Circle(position, diameter), color)
         return nothing
     end
 
-    if thickness == radius_outer
-        draw!(image, FilledCircle(center, radius_outer), color)
+    if diameter == convert(I, 2)
+        i_position_plus_1 = i_position + one_value
+        j_position_plus_1 = j_position + one_value
+        draw!(image, position, color)
+        draw!(image, Point(i_position_plus_1, j_position), color)
+        draw!(image, Point(i_position, j_position_plus_1), color)
+        draw!(image, Point(i_position_plus_1, j_position_plus_1), color)
+        return nothing
+    end
+
+    if convert(I, 2) * thickness + one_value == diameter
+        draw!(image, FilledCircle(position, diameter), color)
         return nothing
     end
 
@@ -319,7 +458,16 @@ function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
         return nothing
     end
 
-    radius_inner = radius_outer - thickness + one_value
+    # radius_inner = radius_outer - thickness + one_value
+    radius = diameter ÷ 2
+    i_center = i_position + radius
+    j_center = j_position + radius
+
+    i_position_inner = i_position + thickness - one_value
+    j_position_inner = j_position + thickness - one_value
+    diameter_inner = diameter - convert(I, 2) * (thickness - one_value)
+    radius_outer = radius
+    radius_inner = diameter_inner ÷ 2
 
     i_inner = zero_value
     j_inner = radius_inner
@@ -368,16 +516,24 @@ function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
 end
 
 function draw_unchecked!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
-    center = shape.center
-    i_center = center.i
-    j_center = center.j
-    radius_outer = shape.radius
+    position = shape.position
+    i_position = position.i
+    j_position = position.j
+    diameter = shape.diameter
     thickness = shape.thickness
 
     zero_value = zero(I)
     one_value = one(I)
 
-    radius_inner = radius_outer - thickness + one_value
+    radius = diameter ÷ 2
+    i_center = i_position + radius
+    j_center = j_position + radius
+
+    i_position_inner = i_position + thickness - one_value
+    j_position_inner = j_position + thickness - one_value
+    diameter_inner = diameter - convert(I, 2) * (thickness - one_value)
+    radius_outer = radius
+    radius_inner = diameter_inner ÷ 2
 
     i_inner = zero_value
     j_inner = radius_inner
@@ -385,7 +541,11 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickCircle{I}, color) wh
     i_outer = zero_value
     j_outer = radius_outer
 
-    draw_octant_reflections_lines_unchecked!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
+    if iseven(diameter)
+        draw_octant_reflections_lines_even_unchecked!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
+    else
+        draw_octant_reflections_lines_unchecked!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
+    end
 
     constant_inner = convert(I, 3) - convert(I, 2) * radius_inner * radius_inner
     constant_outer = convert(I, 3) - convert(I, 2) * radius_outer * radius_outer
@@ -405,7 +565,11 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickCircle{I}, color) wh
             j_outer -= one_value
         end
 
-        draw_octant_reflections_lines_unchecked!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
+        if iseven(diameter)
+            draw_octant_reflections_lines_even_unchecked!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
+        else
+            draw_octant_reflections_lines_unchecked!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
+        end
     end
 
     while j_outer >= i_outer
@@ -419,22 +583,18 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickCircle{I}, color) wh
 
         i = min(i_outer, j_outer)
 
-        draw_octant_reflections_lines_unchecked!(image, i_center, j_center, i, i_outer, j_outer, color)
+        if iseven(diameter)
+            draw_octant_reflections_lines_even_unchecked!(image, i_center, j_center, i, i_outer, j_outer, color)
+        else
+            draw_octant_reflections_lines_unchecked!(image, i_center, j_center, i, i_outer, j_outer, color)
+        end
     end
 
     return nothing
 end
 
-function get_bounding_box(shape::Circle)
-    center = shape.center
-    radius = shape.radius
-    i = center.i
-    j = center.j
-    side = 2 * radius + 1
+get_bounding_box(shape::Circle) = Rectangle(shape.position, shape.diameter, shape.diameter)
 
-    return Rectangle(Point(i - radius, j - radius), side, side)
-end
+get_bounding_box(shape::ThickCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
 
-get_bounding_box(shape::ThickCircle) = get_bounding_box(Circle(shape.center, shape.radius))
-
-get_bounding_box(shape::FilledCircle) = get_bounding_box(Circle(shape.center, shape.radius))
+get_bounding_box(shape::FilledCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
