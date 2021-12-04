@@ -1,24 +1,24 @@
 struct Rectangle{I <: Integer} <: AbstractShape
-    origin::Point{I}
+    position::Point{I}
     height::I
     width::I
 end
 
 struct ThickRectangle{I <: Integer} <: AbstractShape
-    origin::Point{I}
+    position::Point{I}
     height::I
     width::I
     thickness::I
 end
 
 struct FilledRectangle{I <: Integer} <: AbstractShape
-    origin::Point{I}
+    position::Point{I}
     height::I
     width::I
 end
 
 function draw!(image::AbstractMatrix, shape::Rectangle{I}, color) where {I}
-    origin = shape.origin
+    position = shape.position
     height = shape.height
     width = shape.width
 
@@ -28,8 +28,8 @@ function draw!(image::AbstractMatrix, shape::Rectangle{I}, color) where {I}
         return nothing
     end
 
-    i_min = origin.i
-    j_min = origin.j
+    i_min = position.i
+    j_min = position.j
 
     i_max = i_min + height - one_value
     j_max = j_min + width - one_value
@@ -61,14 +61,14 @@ function draw!(image::AbstractMatrix, shape::Rectangle{I}, color) where {I}
 end
 
 function draw_unchecked!(image::AbstractMatrix, shape::Rectangle{I}, color) where {I}
-    origin = shape.origin
+    position = shape.position
     height = shape.height
     width = shape.width
 
     one_value = one(I)
 
-    i_min = origin.i
-    j_min = origin.j
+    i_min = position.i
+    j_min = position.j
 
     i_max = i_min + height - one_value
     j_max = j_min + width - one_value
@@ -85,7 +85,7 @@ function draw_unchecked!(image::AbstractMatrix, shape::Rectangle{I}, color) wher
 end
 
 function draw!(image::AbstractMatrix, shape::ThickRectangle{I}, color) where {I}
-    origin = shape.origin
+    position = shape.position
     height = shape.height
     width = shape.width
     thickness = shape.thickness
@@ -96,8 +96,8 @@ function draw!(image::AbstractMatrix, shape::ThickRectangle{I}, color) where {I}
         return nothing
     end
 
-    i_min = origin.i
-    j_min = origin.j
+    i_min = position.i
+    j_min = position.j
 
     i_max = i_min + height - one_value
     j_max = j_min + width - one_value
@@ -120,7 +120,7 @@ function draw!(image::AbstractMatrix, shape::ThickRectangle{I}, color) where {I}
     j_min_plus_thickness = j_min + thickness
     width_minus_twice_thickness = width - convert(I, 2) * thickness
 
-    draw!(image, FilledRectangle(origin, height, thickness), color)
+    draw!(image, FilledRectangle(position, height, thickness), color)
     draw!(image, FilledRectangle(Point(i_min, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
     draw!(image, FilledRectangle(Point(i_min + height - thickness, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
     draw!(image, FilledRectangle(Point(i_min, j_min + width - thickness), height, thickness), color)
@@ -129,15 +129,15 @@ function draw!(image::AbstractMatrix, shape::ThickRectangle{I}, color) where {I}
 end
 
 function draw_unchecked!(image::AbstractMatrix, shape::ThickRectangle{I}, color) where {I}
-    origin = shape.origin
+    position = shape.position
     height = shape.height
     width = shape.width
     thickness = shape.thickness
 
     one_value = one(I)
 
-    i_min = origin.i
-    j_min = origin.j
+    i_min = position.i
+    j_min = position.j
 
     i_max = i_min + height - one_value
     j_max = j_min + width - one_value
@@ -145,7 +145,7 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickRectangle{I}, color)
     j_min_plus_thickness = j_min + thickness
     width_minus_twice_thickness = width - convert(I, 2) * thickness
 
-    draw_unchecked!(image, FilledRectangle(origin, height, thickness), color)
+    draw_unchecked!(image, FilledRectangle(position, height, thickness), color)
     draw_unchecked!(image, FilledRectangle(Point(i_min, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
     draw_unchecked!(image, FilledRectangle(Point(i_min + height - thickness, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
     draw_unchecked!(image, FilledRectangle(Point(i_min, j_min + width - thickness), height, thickness), color)
@@ -154,7 +154,7 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickRectangle{I}, color)
 end
 
 function draw!(image::AbstractMatrix, shape::FilledRectangle{I}, color) where {I}
-    origin = shape.origin
+    position = shape.position
     height = shape.height
     width = shape.width
 
@@ -164,8 +164,8 @@ function draw!(image::AbstractMatrix, shape::FilledRectangle{I}, color) where {I
         return nothing
     end
 
-    i_min = origin.i
-    j_min = origin.j
+    i_min = position.i
+    j_min = position.j
 
     i_max = i_min + height - one_value
     j_max = j_min + width - one_value
@@ -202,14 +202,14 @@ function draw!(image::AbstractMatrix, shape::FilledRectangle{I}, color) where {I
 end
 
 function draw_unchecked!(image::AbstractMatrix, shape::FilledRectangle{I}, color) where {I}
-    origin = shape.origin
+    position = shape.position
     height = shape.height
     width = shape.width
 
     one_value = one(I)
 
-    i_min = origin.i
-    j_min = origin.j
+    i_min = position.i
+    j_min = position.j
 
     i_max = i_min + height - one_value
     j_max = j_min + width - one_value
@@ -220,5 +220,5 @@ function draw_unchecked!(image::AbstractMatrix, shape::FilledRectangle{I}, color
 end
 
 get_bounding_box(shape::Rectangle) = shape
-get_bounding_box(shape::ThickRectangle) = Rectangle(shape.origin, shape.height, shape.width)
-get_bounding_box(shape::FilledRectangle) = Rectangle(shape.origin, shape.height, shape.width)
+get_bounding_box(shape::ThickRectangle) = Rectangle(shape.position, shape.height, shape.width)
+get_bounding_box(shape::FilledRectangle) = Rectangle(shape.position, shape.height, shape.width)
