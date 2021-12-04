@@ -1,31 +1,32 @@
 struct Cross{I <: Integer} <: AbstractShape
-    center::Point{I}
-    radius::I
+    position::Point{I}
+    diameter::I
 end
 
 struct HollowCross{I <: Integer} <: AbstractShape
-    center::Point{I}
-    radius::I
+    position::Point{I}
+    diameter::I
 end
 
 function draw!(image::AbstractMatrix, shape::Cross{I}, color) where {I}
-    center = shape.center
-    i_center = center.i
-    j_center = center.j
-    radius = shape.radius
+    position = shape.position
+    i_position = position.i
+    j_position = position.j
+    diameter = shape.diameter
 
     zero_value = zero(I)
     one_value = one(I)
 
-    if radius < zero_value
+    if diameter < one_value
         return nothing
     end
 
-    i_min = i_center - radius
-    j_min = j_center - radius
+    i_min = i_position
+    j_min = j_position
 
-    i_max = i_center + radius
-    j_max = j_center + radius
+    diameter_minus_1 = diameter - one_value
+    i_max = i_position + diameter_minus_1
+    j_max = j_position + diameter_minus_1
 
     i_min_image = firstindex(image, 1)
     i_max_image = lastindex(image, 1)
@@ -37,8 +38,8 @@ function draw!(image::AbstractMatrix, shape::Cross{I}, color) where {I}
         return nothing
     end
 
-    if radius == zero_value
-        draw!(image, center, color)
+    if diameter == one_value
+        draw!(image, position, color)
         return nothing
     end
 
@@ -46,6 +47,10 @@ function draw!(image::AbstractMatrix, shape::Cross{I}, color) where {I}
         draw_unchecked!(image, shape, color)
         return nothing
     end
+
+    radius = diameter ÷ 2
+    i_center = i_position + radius
+    j_center = j_position + radius
 
     draw!(image, HorizontalLine(i_center, j_min, j_max), color)
     draw!(image, VerticalLine(i_min, i_max, j_center), color)
@@ -54,10 +59,13 @@ function draw!(image::AbstractMatrix, shape::Cross{I}, color) where {I}
 end
 
 function draw_unchecked!(image::AbstractMatrix, shape::Cross, color)
-    center = shape.center
-    i_center = center.i
-    j_center = center.j
-    radius = shape.radius
+    position = shape.position
+    i_position = position.i
+    j_position = position.j
+    diameter = shape.diameter
+    radius = diameter ÷ 2
+    i_center = i_position + radius
+    j_center = j_position + radius
 
     draw_unchecked!(image, HorizontalLine(i_center, j_center - radius, j_center + radius), color)
     draw_unchecked!(image, VerticalLine(i_center - radius, i_center + radius, j_center), color)
@@ -66,23 +74,24 @@ function draw_unchecked!(image::AbstractMatrix, shape::Cross, color)
 end
 
 function draw!(image::AbstractMatrix, shape::HollowCross{I}, color) where {I}
-    center = shape.center
-    i_center = center.i
-    j_center = center.j
-    radius = shape.radius
+    position = shape.position
+    i_position = position.i
+    j_position = position.j
+    diameter = shape.diameter
 
     zero_value = zero(I)
     one_value = one(I)
 
-    if radius < one_value
+    if diameter < one_value
         return nothing
     end
 
-    i_min = i_center - radius
-    j_min = j_center - radius
+    i_min = i_position
+    j_min = j_position
 
-    i_max = i_center + radius
-    j_max = j_center + radius
+    diameter_minus_1 = diameter - one_value
+    i_max = i_position + diameter_minus_1
+    j_max = j_position + diameter_minus_1
 
     i_min_image = firstindex(image, 1)
     i_max_image = lastindex(image, 1)
@@ -98,6 +107,10 @@ function draw!(image::AbstractMatrix, shape::HollowCross{I}, color) where {I}
         draw_unchecked!(image, shape, color)
         return nothing
     end
+
+    radius = diameter ÷ 2
+    i_center = i_position + radius
+    j_center = j_position + radius
 
     draw!(image, HorizontalLine(i_center, j_min, j_center - one_value), color)
     draw!(image, VerticalLine(i_min, i_center - one_value, j_center), color)
@@ -108,18 +121,22 @@ function draw!(image::AbstractMatrix, shape::HollowCross{I}, color) where {I}
 end
 
 function draw_unchecked!(image::AbstractMatrix, shape::HollowCross{I}, color) where {I}
-    center = shape.center
-    i_center = center.i
-    j_center = center.j
-    radius = shape.radius
+    position = shape.position
+    i_position = position.i
+    j_position = position.j
+    diameter = shape.diameter
+    radius = diameter ÷ 2
+    i_center = i_position + radius
+    j_center = j_position + radius
 
     one_value = one(I)
 
-    i_min = i_center - radius
-    i_max = i_center + radius
+    i_min = i_position
+    j_min = j_position
 
-    j_min = j_center - radius
-    j_max = j_center + radius
+    diameter_minus_1 = diameter - one_value
+    i_max = i_position + diameter_minus_1
+    j_max = j_position + diameter_minus_1
 
     draw_unchecked!(image, HorizontalLine(i_center, j_min, j_center - one_value), color)
     draw_unchecked!(image, VerticalLine(i_min, i_center - one_value, j_center), color)
@@ -129,13 +146,6 @@ function draw_unchecked!(image::AbstractMatrix, shape::HollowCross{I}, color) wh
     return nothing
 end
 
-function get_bounding_box(shape::Cross)
-    center = shape.center
-    radius = shape.radius
-    i = center.i
-    j = center.j
-    side = 2 * radius + 1
+get_bounding_box(shape::Cross) = Rectangle(shape.position, shape.diameter, shape.diameter)
 
-    return Rectangle(Point(i - radius, j - radius), side, side)
-end
-get_bounding_box(shape::HollowCross) = get_bounding_box(Cross(shape.center, shape.radius))
+get_bounding_box(shape::HollowCross) = get_bounding_box(Cross(shape.position, shape.diameter))
