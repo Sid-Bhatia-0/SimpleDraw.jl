@@ -245,7 +245,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 
     ```julia
     struct Rectangle{I <: Integer} <: AbstractShape
-        top_left::Point{I}
+        position::Point{I}
         height::I
         width::I
     end
@@ -257,7 +257,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 
     ```julia
     struct ThickRectangle{I <: Integer} <: AbstractShape
-        top_left::Point{I}
+        position::Point{I}
         height::I
         width::I
         thickness::I
@@ -270,7 +270,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 
     ```julia
     struct FilledRectangle{I <: Integer} <: AbstractShape
-        top_left::Point{I}
+        position::Point{I}
         height::I
         width::I
     end
