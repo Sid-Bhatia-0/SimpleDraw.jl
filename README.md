@@ -201,11 +201,11 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     struct ThickLine{I <: Integer} <: AbstractShape
         point1::Point{I}
         point2::Point{I}
-        radius::I
+        diameter::I
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/139564767-7be5f1a7-112e-4077-902e-29ad58a871f2.png">
+    <img src="https://user-images.githubusercontent.com/32610387/144703038-3c3904da-044d-4bae-a9ac-b6a0ae7f5545.png">
 
 1. ### `Circle`
 

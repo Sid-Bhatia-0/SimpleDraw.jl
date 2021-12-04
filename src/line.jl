@@ -18,7 +18,7 @@ end
 struct ThickLine{I <: Integer} <: AbstractShape
     point1::Point{I}
     point2::Point{I}
-    radius::I
+    diameter::I
 end
 
 function draw!(image::AbstractMatrix, shape::VerticalLine, color)
@@ -186,11 +186,12 @@ function draw!(image::AbstractMatrix, shape::ThickLine{I}, color) where {I}
     j1 = shape.point1.j
     i2 = shape.point2.i
     j2 = shape.point2.j
-    radius = shape.radius
+    diameter = shape.diameter
+    radius = diameter ÷ 2
 
     one_value = one(I)
 
-    if checkbounds(Bool, image, i1 - radius, j1 - radius) && checkbounds(Bool, image, i1 + radius, j1 + radius) && checkbounds(Bool, image, i2 - radius, j2 - radius) && checkbounds(Bool, image, i2 + radius, j2 + radius)
+    if checkbounds(Bool, image, i1 - radius, j1 - radius) && checkbounds(Bool, image, i1 + radius - one_value, j1 + radius - one_value) && checkbounds(Bool, image, i2 - radius, j2 - radius) && checkbounds(Bool, image, i2 + radius - one_value, j2 + radius - one_value)
         draw_unchecked!(image, shape, color)
         return nothing
     end
@@ -202,7 +203,7 @@ function draw!(image::AbstractMatrix, shape::ThickLine{I}, color) where {I}
     err = di + dj
 
     while true
-        draw!(image, FilledCircle(Point(i1 - radius, j1 - radius), convert(I, 2) * radius + one_value), color)
+        draw!(image, FilledCircle(Point(i1 - radius, j1 - radius), diameter), color)
 
         if (i1 == i2 && j1 == j2)
             break
@@ -229,7 +230,8 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickLine{I}, color) wher
     j1 = shape.point1.j
     i2 = shape.point2.i
     j2 = shape.point2.j
-    radius = shape.radius
+    diameter = shape.diameter
+    radius = diameter ÷ 2
 
     one_value = one(I)
 
@@ -240,7 +242,7 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickLine{I}, color) wher
     err = di + dj
 
     while true
-        draw!(image, FilledCircle(Point(i1 - radius, j1 - radius), convert(I, 2) * radius + one_value), color)
+        draw!(image, FilledCircle(Point(i1 - radius, j1 - radius), diameter), color)
 
         if (i1 == i2 && j1 == j2)
             break
@@ -296,8 +298,11 @@ end
 function get_bounding_box(shape::ThickLine{I}) where {I}
     point1 = shape.point1
     point2 = shape.point2
-    radius = shape.radius
-    radius2 = 2 * radius
+    diameter = shape.diameter
+    radius = diameter ÷ convert(I, 2)
+
+    one_value = one(I)
+
     i1 = point1.i
     j1 = point1.j
     i2 = point2.i
@@ -305,19 +310,19 @@ function get_bounding_box(shape::ThickLine{I}) where {I}
 
     if i1 < i2
         i_min = i1 - radius
-        height = i2 - i1 + one(I)
+        i_diff = i2 - i1
     else
         i_min = i2 - radius
-        height = i1 - i2 + one(I)
+        i_diff = i1 - i2
     end
 
     if j1 < j2
         j_min = j1 - radius
-        width = j2 - j1 + one(I)
+        j_diff = j2 - j1
     else
         j_min = j2 - radius
-        width = j1 - j2 + one(I)
+        j_diff = j1 - j2
     end
 
-    return Rectangle(Point(i_min, j_min), height + radius2, width + radius2)
+    return Rectangle(Point(i_min, j_min), i_diff + diameter, j_diff + diameter)
 end
