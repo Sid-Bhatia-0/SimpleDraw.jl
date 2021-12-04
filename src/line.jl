@@ -26,6 +26,10 @@ function draw!(image::AbstractMatrix, shape::VerticalLine, color)
     i_max = shape.i_max
     j = shape.j
 
+    if i_min > i_max
+        return nothing
+    end
+
     i_min_image = firstindex(image, 1)
     i_max_image = lastindex(image, 1)
 
@@ -33,6 +37,11 @@ function draw!(image::AbstractMatrix, shape::VerticalLine, color)
     j_max_image = lastindex(image, 2)
 
     if i_max < i_min_image || i_min > i_max_image || j < j_min_image || j > j_max_image
+        return nothing
+    end
+
+    if i_min == i_max
+        draw!(image, Point(i_min, j), color)
         return nothing
     end
 
@@ -59,6 +68,10 @@ function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
     j_min = shape.j_min
     j_max = shape.j_max
 
+    if j_min > j_max
+        return nothing
+    end
+
     i_min_image = firstindex(image, 1)
     i_max_image = lastindex(image, 1)
 
@@ -66,6 +79,11 @@ function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
     j_max_image = lastindex(image, 2)
 
     if i < i_min_image || i > i_max_image || j_max < j_min_image || j_min > j_max_image
+        return nothing
+    end
+
+    if j_min == j_max
+        draw!(image, Point(i, j_min), color)
         return nothing
     end
 
