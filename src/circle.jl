@@ -438,82 +438,48 @@ function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
         return nothing
     end
 
-    if i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
-        draw_unchecked!(image, shape, color)
-        return nothing
-    end
-
-    radius = diameter ÷ 2 # d = 1 and d = 2 cases have been take care of above
-    i = zero_value
-    j = radius
+    radius = diameter ÷ convert(I, 2)
     i_center = i_position + radius
     j_center = j_position + radius
+    center = Point(i_center, j_center)
 
-    if iseven(diameter)
-        draw!(image, EvenSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
-    else
-        draw!(image, OddSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
-    end
-
-    constant = convert(I, 3) - convert(I, 2) * radius * radius
-
-    while j >= i
-        d = convert(I, 2) * j * j + convert(I, 2) * i * i + convert(I, 4) * i - convert(I, 2) * j + constant
-
-        i += one_value
-
-        if d > zero_value
-            j -= one_value
-        end
-
+    if i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
         if iseven(diameter)
-            draw!(image, EvenSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
+            f = (image, i, j, color) -> _draw!(image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
         else
-            draw!(image, OddSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
+            f = (image, i, j, color) -> _draw!(image, OddSymmetricVerticalLines4(center, Point(i, j)), color)
+        end
+    else
+        if iseven(diameter)
+            f = (image, i, j, color) -> draw!(image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
+        else
+            f = (image, i, j, color) -> draw!(image, OddSymmetricVerticalLines4(center, Point(i, j)), color)
         end
     end
+
+    _draw!(f, image, Circle(position, diameter), color)
 
     return nothing
 end
 
-function draw_unchecked!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
+function _draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
     position = shape.position
     i_position = position.i
     j_position = position.j
     diameter = shape.diameter
 
-    zero_value = zero(I)
-    one_value = one(I)
-
-    radius = diameter ÷ 2
-    i = zero_value
-    j = radius
+    radius = diameter ÷ convert(I, 2)
     i_center = i_position + radius
     j_center = j_position + radius
+    center = Point(i_center, j_center)
 
     if iseven(diameter)
-        _draw!(image, EvenSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
+        f = (image, i, j, color) -> _draw!(image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
     else
-        _draw!(image, OddSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
+        f = (image, i, j, color) -> _draw!(image, OddSymmetricVerticalLines4(center, Point(i, j)), color)
     end
 
-    constant = convert(I, 3) - convert(I, 2) * radius * radius
-
-    while j >= i
-        d = convert(I, 2) * j * j + convert(I, 2) * i * i + convert(I, 4) * i - convert(I, 2) * j + constant
-
-        i += one_value
-
-        if d > zero_value
-            j -= one_value
-        end
-
-        if iseven(diameter)
-            _draw!(image, EvenSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
-        else
-            _draw!(image, OddSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
-        end
-    end
+    _draw!(f, image, Circle(position, diameter), color)
 
     return nothing
 end
