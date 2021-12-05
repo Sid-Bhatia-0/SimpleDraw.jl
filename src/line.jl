@@ -30,12 +30,12 @@ function draw!(image::AbstractMatrix, shape::VerticalLine, color)
         return nothing
     end
 
-    draw_unchecked!(image, clip(shape, image), color)
+    _draw!(image, clip(shape, image), color)
 
     return nothing
 end
 
-@inline function draw_unchecked!(image::AbstractMatrix, shape::VerticalLine, color)
+@inline function _draw!(image::AbstractMatrix, shape::VerticalLine, color)
     @inbounds image[shape.i_min:shape.i_max, shape.j] .= color
     return nothing
 end
@@ -49,12 +49,12 @@ function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
         return nothing
     end
 
-    draw_unchecked!(image, clip(shape, image), color)
+    _draw!(image, clip(shape, image), color)
 
     return nothing
 end
 
-@inline function draw_unchecked!(image::AbstractMatrix, shape::HorizontalLine, color)
+@inline function _draw!(image::AbstractMatrix, shape::HorizontalLine, color)
     @inbounds image[shape.i, shape.j_min:shape.j_max] .= color
     return nothing
 end
@@ -91,6 +91,8 @@ function draw!(image::AbstractMatrix, shape::Line, color)
     return nothing
 end
 
+_draw!(image::AbstractMatrix, shape::Line, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
 function _draw!(f::Function, image::AbstractMatrix, shape::Line{I}, color) where {I}
     i1 = shape.point1.i
     j1 = shape.point1.j
@@ -107,43 +109,6 @@ function _draw!(f::Function, image::AbstractMatrix, shape::Line{I}, color) where
 
     while true
         f(image, i1, j1, color)
-
-        if (i1 == i2 && j1 == j2)
-            break
-        end
-
-        e2 = convert(I, 2) * err
-
-        if (e2 >= dj)
-            err += dj
-            i1 += si
-        end
-
-        if (e2 <= di)
-            err += di
-            j1 += sj
-        end
-    end
-
-    return nothing
-end
-
-function draw_unchecked!(image::AbstractMatrix, shape::Line{I}, color) where {I}
-    i1 = shape.point1.i
-    j1 = shape.point1.j
-    i2 = shape.point2.i
-    j2 = shape.point2.j
-
-    one_value = one(I)
-
-    di = abs(i2 - i1)
-    dj = -abs(j2 - j1)
-    si = i1 < i2 ? one_value : -one_value
-    sj = j1 < j2 ? one_value : -one_value
-    err = di + dj
-
-    while true
-        put_pixel_unchecked!(image, i1, j1, color)
 
         if (i1 == i2 && j1 == j2)
             break
@@ -184,45 +149,6 @@ function draw!(image::AbstractMatrix, shape::ThickLine{I}, color) where {I}
     end
 
     _draw!(f, image, Line(point1, point2), color)
-
-    return nothing
-end
-
-function draw_unchecked!(image::AbstractMatrix, shape::ThickLine{I}, color) where {I}
-    i1 = shape.point1.i
-    j1 = shape.point1.j
-    i2 = shape.point2.i
-    j2 = shape.point2.j
-    diameter = shape.diameter
-    radius = diameter ÷ 2
-
-    one_value = one(I)
-
-    di = abs(i2 - i1)
-    dj = -abs(j2 - j1)
-    si = i1 < i2 ? one_value : -one_value
-    sj = j1 < j2 ? one_value : -one_value
-    err = di + dj
-
-    while true
-        draw!(image, FilledCircle(Point(i1 - radius, j1 - radius), diameter), color)
-
-        if (i1 == i2 && j1 == j2)
-            break
-        end
-
-        e2 = convert(I, 2) * err
-
-        if (e2 >= dj)
-            err += dj
-            i1 += si
-        end
-
-        if (e2 <= di)
-            err += di
-            j1 += sj
-        end
-    end
 
     return nothing
 end

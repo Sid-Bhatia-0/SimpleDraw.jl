@@ -34,20 +34,20 @@ end
 end
 
 @inline function draw_vertical_strip_reflections_unchecked!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
-    draw_unchecked!(image, VerticalLine(i_center - i, i_center + i, j_center - j), color)
-    draw_unchecked!(image, VerticalLine(i_center - j, i_center + j, j_center - i), color)
-    draw_unchecked!(image, VerticalLine(i_center - j, i_center + j, j_center + i), color)
-    draw_unchecked!(image, VerticalLine(i_center - i, i_center + i, j_center + j), color)
+    _draw!(image, VerticalLine(i_center - i, i_center + i, j_center - j), color)
+    _draw!(image, VerticalLine(i_center - j, i_center + j, j_center - i), color)
+    _draw!(image, VerticalLine(i_center - j, i_center + j, j_center + i), color)
+    _draw!(image, VerticalLine(i_center - i, i_center + i, j_center + j), color)
 
     return nothing
 end
 
 @inline function draw_vertical_strip_reflections_even_unchecked!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
     one_value = one(i_center)
-    draw_unchecked!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center - j), color)
-    draw_unchecked!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center - i), color)
-    draw_unchecked!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center + i - one_value), color)
-    draw_unchecked!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center + j - one_value), color)
+    _draw!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center - j), color)
+    _draw!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center - i), color)
+    _draw!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center + i - one_value), color)
+    _draw!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center + j - one_value), color)
 
     return nothing
 end
@@ -120,28 +120,28 @@ end
 end
 
 @inline function draw_octant_reflections_lines_unchecked!(image::AbstractMatrix, i_center, j_center, i, j_inner, j_outer, color)
-    draw_unchecked!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
-    draw_unchecked!(image, HorizontalLine(i_center + i, j_center - j_outer, j_center - j_inner), color)
-    draw_unchecked!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
-    draw_unchecked!(image, VerticalLine(i_center + j_inner, i_center + j_outer, j_center - i), color)
-    draw_unchecked!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center + i), color)
-    draw_unchecked!(image, VerticalLine(i_center + j_inner, i_center + j_outer, j_center + i), color)
-    draw_unchecked!(image, HorizontalLine(i_center - i, j_center + j_inner, j_center + j_outer), color)
-    draw_unchecked!(image, HorizontalLine(i_center + i, j_center + j_inner, j_center + j_outer), color)
+    _draw!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
+    _draw!(image, HorizontalLine(i_center + i, j_center - j_outer, j_center - j_inner), color)
+    _draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
+    _draw!(image, VerticalLine(i_center + j_inner, i_center + j_outer, j_center - i), color)
+    _draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center + i), color)
+    _draw!(image, VerticalLine(i_center + j_inner, i_center + j_outer, j_center + i), color)
+    _draw!(image, HorizontalLine(i_center - i, j_center + j_inner, j_center + j_outer), color)
+    _draw!(image, HorizontalLine(i_center + i, j_center + j_inner, j_center + j_outer), color)
 
     return nothing
 end
 
 @inline function draw_octant_reflections_lines_even_unchecked!(image::AbstractMatrix, i_center, j_center, i, j_inner, j_outer, color)
     one_value = one(i_center)
-    draw_unchecked!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
-    draw_unchecked!(image, HorizontalLine(i_center + i - one_value, j_center - j_outer, j_center - j_inner), color)
-    draw_unchecked!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
-    draw_unchecked!(image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center - i), color)
-    draw_unchecked!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center + i - one_value), color)
-    draw_unchecked!(image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center + i - one_value), color)
-    draw_unchecked!(image, HorizontalLine(i_center - i, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
-    draw_unchecked!(image, HorizontalLine(i_center + i - one_value, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
+    _draw!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
+    _draw!(image, HorizontalLine(i_center + i - one_value, j_center - j_outer, j_center - j_inner), color)
+    _draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
+    _draw!(image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center - i), color)
+    _draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center + i - one_value), color)
+    _draw!(image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center + i - one_value), color)
+    _draw!(image, HorizontalLine(i_center - i, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
+    _draw!(image, HorizontalLine(i_center + i - one_value, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
 
     return nothing
 end

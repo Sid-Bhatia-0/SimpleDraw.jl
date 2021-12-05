@@ -67,8 +67,8 @@ function draw_unchecked!(image::AbstractMatrix, shape::Cross, color)
     i_center = i_position + radius
     j_center = j_position + radius
 
-    draw_unchecked!(image, HorizontalLine(i_center, j_center - radius, j_center + radius), color)
-    draw_unchecked!(image, VerticalLine(i_center - radius, i_center + radius, j_center), color)
+    _draw!(image, HorizontalLine(i_center, j_center - radius, j_center + radius), color)
+    _draw!(image, VerticalLine(i_center - radius, i_center + radius, j_center), color)
 
     return nothing
 end
@@ -138,10 +138,10 @@ function draw_unchecked!(image::AbstractMatrix, shape::HollowCross{I}, color) wh
     i_max = i_position + diameter_minus_1
     j_max = j_position + diameter_minus_1
 
-    draw_unchecked!(image, HorizontalLine(i_center, j_min, j_center - one_value), color)
-    draw_unchecked!(image, VerticalLine(i_min, i_center - one_value, j_center), color)
-    draw_unchecked!(image, VerticalLine(i_center + one_value, i_max, j_center), color)
-    draw_unchecked!(image, HorizontalLine(i_center, j_center + one_value, j_max), color)
+    _draw!(image, HorizontalLine(i_center, j_min, j_center - one_value), color)
+    _draw!(image, VerticalLine(i_min, i_center - one_value, j_center), color)
+    _draw!(image, VerticalLine(i_center + one_value, i_max, j_center), color)
+    _draw!(image, HorizontalLine(i_center, j_center + one_value, j_max), color)
 
     return nothing
 end
