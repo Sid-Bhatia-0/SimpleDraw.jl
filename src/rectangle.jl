@@ -76,10 +76,10 @@ function draw_unchecked!(image::AbstractMatrix, shape::Rectangle{I}, color) wher
     j_min_plus_1 = j_min + one_value
     j_max_minus_1 = j_max - one_value
 
-    draw_unchecked!(image, VerticalLine(i_min, i_max, j_min), color)
-    draw_unchecked!(image, HorizontalLine(i_min, j_min_plus_1, j_max_minus_1), color)
-    draw_unchecked!(image, HorizontalLine(i_max, j_min_plus_1, j_max_minus_1), color)
-    draw_unchecked!(image, VerticalLine(i_min, i_max, j_max), color)
+    _draw!(image, VerticalLine(i_min, i_max, j_min), color)
+    _draw!(image, HorizontalLine(i_min, j_min_plus_1, j_max_minus_1), color)
+    _draw!(image, HorizontalLine(i_max, j_min_plus_1, j_max_minus_1), color)
+    _draw!(image, VerticalLine(i_min, i_max, j_max), color)
 
     return nothing
 end
