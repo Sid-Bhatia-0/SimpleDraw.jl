@@ -24,6 +24,16 @@ struct OddSymmetricPoints8{I <: Integer} <: AbstractShape
     point::Point{I}
 end
 
+struct EvenSymmetricVerticalLines4{I <: Integer} <: AbstractShape
+    center::Point{I}
+    point::Point{I}
+end
+
+struct OddSymmetricVerticalLines8{I <: Integer} <: AbstractShape
+    center::Point{I}
+    point::Point{I}
+end
+
 function draw!(image::AbstractMatrix, shape::EvenSymmetricPoints8{I}, color) where {I}
     _draw!(put_pixel!, image, shape, color)
     return nothing
@@ -82,17 +92,17 @@ function _draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricPoints8, 
     return nothing
 end
 
-@inline function draw_vertical_strip_reflections!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
-    draw!(image, VerticalLine(i_center - i, i_center + i, j_center - j), color)
-    draw!(image, VerticalLine(i_center - j, i_center + j, j_center - i), color)
-    draw!(image, VerticalLine(i_center - j, i_center + j, j_center + i), color)
-    draw!(image, VerticalLine(i_center - i, i_center + i, j_center + j), color)
+function draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4{I}, color) where {I}
+    center = shape.center
+    point = shape.point
 
-    return nothing
-end
+    i_center = center.i
+    j_center = center.j
+    i = point.i
+    j = point.j
 
-@inline function draw_vertical_strip_reflections_even!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
-    one_value = one(i_center)
+    one_value = one(I)
+
     draw!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center - j), color)
     draw!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center - i), color)
     draw!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center + i - one_value), color)
@@ -101,21 +111,55 @@ end
     return nothing
 end
 
-@inline function draw_vertical_strip_reflections_unchecked!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
-    _draw!(image, VerticalLine(i_center - i, i_center + i, j_center - j), color)
-    _draw!(image, VerticalLine(i_center - j, i_center + j, j_center - i), color)
-    _draw!(image, VerticalLine(i_center - j, i_center + j, j_center + i), color)
-    _draw!(image, VerticalLine(i_center - i, i_center + i, j_center + j), color)
+function _draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4{I}, color) where {I}
+    center = shape.center
+    point = shape.point
 
-    return nothing
-end
+    i_center = center.i
+    j_center = center.j
+    i = point.i
+    j = point.j
 
-@inline function draw_vertical_strip_reflections_even_unchecked!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
-    one_value = one(i_center)
+    one_value = one(I)
+
     _draw!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center - j), color)
     _draw!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center - i), color)
     _draw!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center + i - one_value), color)
     _draw!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center + j - one_value), color)
+
+    return nothing
+end
+
+function draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines8, color)
+    center = shape.center
+    point = shape.point
+
+    i_center = center.i
+    j_center = center.j
+    i = point.i
+    j = point.j
+
+    draw!(image, VerticalLine(i_center - i, i_center + i, j_center - j), color)
+    draw!(image, VerticalLine(i_center - j, i_center + j, j_center - i), color)
+    draw!(image, VerticalLine(i_center - j, i_center + j, j_center + i), color)
+    draw!(image, VerticalLine(i_center - i, i_center + i, j_center + j), color)
+
+    return nothing
+end
+
+function _draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines8, color)
+    center = shape.center
+    point = shape.point
+
+    i_center = center.i
+    j_center = center.j
+    i = point.i
+    j = point.j
+
+    _draw!(image, VerticalLine(i_center - i, i_center + i, j_center - j), color)
+    _draw!(image, VerticalLine(i_center - j, i_center + j, j_center - i), color)
+    _draw!(image, VerticalLine(i_center - j, i_center + j, j_center + i), color)
+    _draw!(image, VerticalLine(i_center - i, i_center + i, j_center + j), color)
 
     return nothing
 end
@@ -342,9 +386,9 @@ function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
     j_center = j_position + radius
 
     if iseven(diameter)
-        draw_vertical_strip_reflections_even!(image, i_center, j_center, i, j, color)
+        draw!(image, EvenSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
     else
-        draw_vertical_strip_reflections!(image, i_center, j_center, i, j, color)
+        draw!(image, OddSymmetricVerticalLines8(Point(i_center, j_center), Point(i, j)), color)
     end
 
     constant = convert(I, 3) - convert(I, 2) * radius * radius
@@ -359,9 +403,9 @@ function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
         end
 
         if iseven(diameter)
-            draw_vertical_strip_reflections_even!(image, i_center, j_center, i, j, color)
+            draw!(image, EvenSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
         else
-            draw_vertical_strip_reflections!(image, i_center, j_center, i, j, color)
+            draw!(image, OddSymmetricVerticalLines8(Point(i_center, j_center), Point(i, j)), color)
         end
     end
 
@@ -384,9 +428,9 @@ function draw_unchecked!(image::AbstractMatrix, shape::FilledCircle{I}, color) w
     j_center = j_position + radius
 
     if iseven(diameter)
-        draw_vertical_strip_reflections_even_unchecked!(image, i_center, j_center, i, j, color)
+        _draw!(image, EvenSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
     else
-        draw_vertical_strip_reflections_unchecked!(image, i_center, j_center, i, j, color)
+        _draw!(image, OddSymmetricVerticalLines8(Point(i_center, j_center), Point(i, j)), color)
     end
 
     constant = convert(I, 3) - convert(I, 2) * radius * radius
@@ -401,9 +445,9 @@ function draw_unchecked!(image::AbstractMatrix, shape::FilledCircle{I}, color) w
         end
 
         if iseven(diameter)
-            draw_vertical_strip_reflections_even_unchecked!(image, i_center, j_center, i, j, color)
+            _draw!(image, EvenSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
         else
-            draw_vertical_strip_reflections_unchecked!(image, i_center, j_center, i, j, color)
+            _draw!(image, OddSymmetricVerticalLines8(Point(i_center, j_center), Point(i, j)), color)
         end
     end
 
