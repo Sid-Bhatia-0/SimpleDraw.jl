@@ -30,15 +30,6 @@ function draw!(image::AbstractMatrix, shape::VerticalLine, color)
         return nothing
     end
 
-    i_min = shape.i_min
-    i_max = shape.i_max
-    j = shape.j
-
-    if i_min == i_max
-        draw!(image, Point(i_min, j), color)
-        return nothing
-    end
-
     draw_unchecked!(image, clip(shape, image), color)
 
     return nothing
@@ -55,15 +46,6 @@ function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
     end
 
     if is_outbounds(shape, image)
-        return nothing
-    end
-
-    i = shape.i
-    j_min = shape.j_min
-    j_max = shape.j_max
-
-    if j_min == j_max
-        draw!(image, Point(i, j_min), color)
         return nothing
     end
 
