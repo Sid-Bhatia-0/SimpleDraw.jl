@@ -64,38 +64,24 @@ end
 end
 
 function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
+    if !is_valid(shape)
+        return nothing
+    end
+
+    if is_outbounds(shape, image)
+        return nothing
+    end
+
     i = shape.i
     j_min = shape.j_min
     j_max = shape.j_max
-
-    if j_min > j_max
-        return nothing
-    end
-
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    if i < i_min_image || i > i_max_image || j_max < j_min_image || j_min > j_max_image
-        return nothing
-    end
 
     if j_min == j_max
         draw!(image, Point(i, j_min), color)
         return nothing
     end
 
-    if j_min < j_min_image
-        j_min = j_min_image
-    end
-
-    if j_max > j_max_image
-        j_max = j_max_image
-    end
-
-    draw_unchecked!(image, HorizontalLine(i, j_min, j_max), color)
+    draw_unchecked!(image, clip(shape, image), color)
 
     return nothing
 end
@@ -343,4 +329,42 @@ function get_bounding_box(shape::ThickLine{I}) where {I}
     end
 
     return Rectangle(Point(i_min, j_min), i_diff + diameter, j_diff + diameter)
+end
+
+is_valid(shape::HorizontalLine) = shape.j_min <= shape.j_max
+
+function is_outbounds(shape::HorizontalLine, image::AbstractMatrix)
+    i = shape.i
+    j_min = shape.j_min
+    j_max = shape.j_max
+
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
+
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
+
+    return i < i_min_image || i > i_max_image || j_max < j_min_image || j_min > j_max_image
+end
+
+function clip(shape::HorizontalLine, image::AbstractMatrix)
+    i = shape.i
+    j_min = shape.j_min
+    j_max = shape.j_max
+
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
+
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
+
+    if j_min < j_min_image
+        j_min = j_min_image
+    end
+
+    if j_max > j_max_image
+        j_max = j_max_image
+    end
+
+    return HorizontalLine(i, j_min, j_max)
 end
