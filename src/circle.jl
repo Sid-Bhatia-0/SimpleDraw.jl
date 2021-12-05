@@ -14,6 +14,74 @@ struct ThickCircle{I <: Integer} <: AbstractShape
     thickness::I
 end
 
+struct EvenSymmetricPoints8{I <: Integer} <: AbstractShape
+    center::Point{I}
+    point::Point{I}
+end
+
+struct OddSymmetricPoints8{I <: Integer} <: AbstractShape
+    center::Point{I}
+    point::Point{I}
+end
+
+function draw!(image::AbstractMatrix, shape::EvenSymmetricPoints8{I}, color) where {I}
+    _draw!(put_pixel!, image, shape, color)
+    return nothing
+end
+
+_draw!(image::AbstractMatrix, shape::EvenSymmetricPoints8, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricPoints8{I}, color) where {I}
+    center = shape.center
+    point = shape.point
+
+    i_center = center.i
+    j_center = center.j
+    i = point.i
+    j = point.j
+
+    one_value = one(I)
+
+    f(image, i_center - i, j_center - j, color)
+    f(image, i_center + i - one_value, j_center - j, color)
+    f(image, i_center - j, j_center - i, color)
+    f(image, i_center + j - one_value, j_center - i, color)
+    f(image, i_center - j, j_center + i - one_value, color)
+    f(image, i_center + j - one_value, j_center + i - one_value, color)
+    f(image, i_center - i, j_center + j - one_value, color)
+    f(image, i_center + i - one_value, j_center + j - one_value, color)
+
+    return nothing
+end
+
+function draw!(image::AbstractMatrix, shape::OddSymmetricPoints8, color)
+    _draw!(put_pixel!, image, shape, color)
+    return nothing
+end
+
+_draw!(image::AbstractMatrix, shape::OddSymmetricPoints8, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricPoints8, color)
+    center = shape.center
+    point = shape.point
+
+    i_center = center.i
+    j_center = center.j
+    i = point.i
+    j = point.j
+
+    f(image, i_center - i, j_center - j, color)
+    f(image, i_center + i, j_center - j, color)
+    f(image, i_center - j, j_center - i, color)
+    f(image, i_center + j, j_center - i, color)
+    f(image, i_center - j, j_center + i, color)
+    f(image, i_center + j, j_center + i, color)
+    f(image, i_center - i, j_center + j, color)
+    f(image, i_center + i, j_center + j, color)
+
+    return nothing
+end
+
 @inline function draw_vertical_strip_reflections!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
     draw!(image, VerticalLine(i_center - i, i_center + i, j_center - j), color)
     draw!(image, VerticalLine(i_center - j, i_center + j, j_center - i), color)
@@ -48,60 +116,6 @@ end
     _draw!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center - i), color)
     _draw!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center + i - one_value), color)
     _draw!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center + j - one_value), color)
-
-    return nothing
-end
-
-@inline function draw_octant_reflections!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
-    put_pixel!(image, i_center - i, j_center - j, color)
-    put_pixel!(image, i_center + i, j_center - j, color)
-    put_pixel!(image, i_center - j, j_center - i, color)
-    put_pixel!(image, i_center + j, j_center - i, color)
-    put_pixel!(image, i_center - j, j_center + i, color)
-    put_pixel!(image, i_center + j, j_center + i, color)
-    put_pixel!(image, i_center - i, j_center + j, color)
-    put_pixel!(image, i_center + i, j_center + j, color)
-
-    return nothing
-end
-
-@inline function draw_octant_reflections_even!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
-    one_value = one(i_center)
-    put_pixel!(image, i_center - i, j_center - j, color)
-    put_pixel!(image, i_center + i - one_value, j_center - j, color)
-    put_pixel!(image, i_center - j, j_center - i, color)
-    put_pixel!(image, i_center + j - one_value, j_center - i, color)
-    put_pixel!(image, i_center - j, j_center + i - one_value, color)
-    put_pixel!(image, i_center + j - one_value, j_center + i - one_value, color)
-    put_pixel!(image, i_center - i, j_center + j - one_value, color)
-    put_pixel!(image, i_center + i - one_value, j_center + j - one_value, color)
-
-    return nothing
-end
-
-@inline function draw_octant_reflections_even_unchecked!(image::AbstractMatrix, i_center::Integer, j_center::Integer, i::Integer, j::Integer, color)
-    one_value = one(i_center)
-    put_pixel_unchecked!(image, i_center - i, j_center - j, color)
-    put_pixel_unchecked!(image, i_center + i - one_value, j_center - j, color)
-    put_pixel_unchecked!(image, i_center - j, j_center - i, color)
-    put_pixel_unchecked!(image, i_center + j - one_value, j_center - i, color)
-    put_pixel_unchecked!(image, i_center - j, j_center + i - one_value, color)
-    put_pixel_unchecked!(image, i_center + j - one_value, j_center + i - one_value, color)
-    put_pixel_unchecked!(image, i_center - i, j_center + j - one_value, color)
-    put_pixel_unchecked!(image, i_center + i - one_value, j_center + j - one_value, color)
-
-    return nothing
-end
-
-@inline function draw_octant_reflections_unchecked!(image::AbstractMatrix, i_center, j_center, i, j, color)
-    put_pixel_unchecked!(image, i_center - i, j_center - j, color)
-    put_pixel_unchecked!(image, i_center + i, j_center - j, color)
-    put_pixel_unchecked!(image, i_center - j, j_center - i, color)
-    put_pixel_unchecked!(image, i_center + j, j_center - i, color)
-    put_pixel_unchecked!(image, i_center - j, j_center + i, color)
-    put_pixel_unchecked!(image, i_center + j, j_center + i, color)
-    put_pixel_unchecked!(image, i_center - i, j_center + j, color)
-    put_pixel_unchecked!(image, i_center + i, j_center + j, color)
 
     return nothing
 end
@@ -203,9 +217,9 @@ function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
     j_center = j_position + radius
 
     if iseven(diameter)
-        draw_octant_reflections_even!(image, i_center, j_center, i, j, color)
+        draw!(image, EvenSymmetricPoints8(Point(i_center, j_center), Point(i, j)), color)
     else
-        draw_octant_reflections!(image, i_center, j_center, i, j, color)
+        draw!(image, OddSymmetricPoints8(Point(i_center, j_center), Point(i, j)), color)
     end
 
     constant = convert(I, 3) - convert(I, 2) * radius * radius
@@ -220,9 +234,9 @@ function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
         end
 
         if iseven(diameter)
-            draw_octant_reflections_even!(image, i_center, j_center, i, j, color)
+            draw!(image, EvenSymmetricPoints8(Point(i_center, j_center), Point(i, j)), color)
         else
-            draw_octant_reflections!(image, i_center, j_center, i, j, color)
+            draw!(image, OddSymmetricPoints8(Point(i_center, j_center), Point(i, j)), color)
         end
     end
 
@@ -245,9 +259,9 @@ function draw_unchecked!(image::AbstractMatrix, shape::Circle{I}, color) where {
     j_center = j_position + radius
 
     if iseven(diameter)
-        draw_octant_reflections_even!(image, i_center, j_center, i, j, color)
+        _draw!(image, EvenSymmetricPoints8(Point(i_center, j_center), Point(i, j)), color)
     else
-        draw_octant_reflections!(image, i_center, j_center, i, j, color)
+        _draw!(image, OddSymmetricPoints8(Point(i_center, j_center), Point(i, j)), color)
     end
 
     constant = convert(I, 3) - convert(I, 2) * radius * radius
@@ -262,9 +276,9 @@ function draw_unchecked!(image::AbstractMatrix, shape::Circle{I}, color) where {
         end
 
         if iseven(diameter)
-            draw_octant_reflections_even!(image, i_center, j_center, i, j, color)
+            _draw!(image, EvenSymmetricPoints8(Point(i_center, j_center), Point(i, j)), color)
         else
-            draw_octant_reflections!(image, i_center, j_center, i, j, color)
+            _draw!(image, OddSymmetricPoints8(Point(i_center, j_center), Point(i, j)), color)
         end
     end
 
