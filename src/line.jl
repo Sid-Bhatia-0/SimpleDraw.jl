@@ -62,13 +62,11 @@ end
 """
 Draw a line. Ref: https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 """
-function draw!(image::AbstractMatrix, shape::Line{I}, color) where {I}
+function draw!(image::AbstractMatrix, shape::Line, color)
     i1 = shape.point1.i
     j1 = shape.point1.j
     i2 = shape.point2.i
     j2 = shape.point2.j
-
-    one_value = one(I)
 
     if j1 == j2
         i1, i2 = minmax(i1, i2)
@@ -83,9 +81,23 @@ function draw!(image::AbstractMatrix, shape::Line{I}, color) where {I}
     end
 
     if checkbounds(Bool, image, i1, j1) && checkbounds(Bool, image, i2, j2)
-        draw_unchecked!(image, shape, color)
-        return nothing
+        f = put_pixel_unchecked!
+    else
+        f = put_pixel!
     end
+
+    _draw!(f, image, shape, color)
+
+    return nothing
+end
+
+function _draw!(f::Function, image::AbstractMatrix, shape::Line{I}, color) where {I}
+    i1 = shape.point1.i
+    j1 = shape.point1.j
+    i2 = shape.point2.i
+    j2 = shape.point2.j
+
+    one_value = one(I)
 
     di = abs(i2 - i1)
     dj = -abs(j2 - j1)
@@ -94,7 +106,7 @@ function draw!(image::AbstractMatrix, shape::Line{I}, color) where {I}
     err = di + dj
 
     while true
-        put_pixel!(image, i1, j1, color)
+        f(image, i1, j1, color)
 
         if (i1 == i2 && j1 == j2)
             break
@@ -154,45 +166,24 @@ function draw_unchecked!(image::AbstractMatrix, shape::Line{I}, color) where {I}
 end
 
 function draw!(image::AbstractMatrix, shape::ThickLine{I}, color) where {I}
-    i1 = shape.point1.i
-    j1 = shape.point1.j
-    i2 = shape.point2.i
-    j2 = shape.point2.j
+    point1 = shape.point1
+    point2 = shape.point2
     diameter = shape.diameter
+    i1 = point1.i
+    j1 = point1.j
+    i2 = point2.i
+    j2 = point2.j
     radius = diameter ÷ 2
 
     one_value = one(I)
 
     if checkbounds(Bool, image, i1 - radius, j1 - radius) && checkbounds(Bool, image, i1 + radius - one_value, j1 + radius - one_value) && checkbounds(Bool, image, i2 - radius, j2 - radius) && checkbounds(Bool, image, i2 + radius - one_value, j2 + radius - one_value)
-        draw_unchecked!(image, shape, color)
-        return nothing
+        f = (image, i, j, color) -> draw_unchecked!(image, FilledCircle(Point(i - radius, j - radius), diameter), color)
+    else
+        f = (image, i, j, color) -> draw!(image, FilledCircle(Point(i - radius, j - radius), diameter), color)
     end
 
-    di = abs(i2 - i1)
-    dj = -abs(j2 - j1)
-    si = i1 < i2 ? one_value : -one_value
-    sj = j1 < j2 ? one_value : -one_value
-    err = di + dj
-
-    while true
-        draw!(image, FilledCircle(Point(i1 - radius, j1 - radius), diameter), color)
-
-        if (i1 == i2 && j1 == j2)
-            break
-        end
-
-        e2 = convert(I, 2) * err
-
-        if (e2 >= dj)
-            err += dj
-            i1 += si
-        end
-
-        if (e2 <= di)
-            err += di
-            j1 += sj
-        end
-    end
+    _draw!(f, image, Line(point1, point2), color)
 
     return nothing
 end
