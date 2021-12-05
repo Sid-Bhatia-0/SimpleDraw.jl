@@ -22,38 +22,24 @@ struct ThickLine{I <: Integer} <: AbstractShape
 end
 
 function draw!(image::AbstractMatrix, shape::VerticalLine, color)
+    if !is_valid(shape)
+        return nothing
+    end
+
+    if is_outbounds(shape, image)
+        return nothing
+    end
+
     i_min = shape.i_min
     i_max = shape.i_max
     j = shape.j
-
-    if i_min > i_max
-        return nothing
-    end
-
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    if i_max < i_min_image || i_min > i_max_image || j < j_min_image || j > j_max_image
-        return nothing
-    end
 
     if i_min == i_max
         draw!(image, Point(i_min, j), color)
         return nothing
     end
 
-    if i_min < i_min_image
-        i_min = i_min_image
-    end
-
-    if i_max > i_max_image
-        i_max = i_max_image
-    end
-
-    draw_unchecked!(image, VerticalLine(i_min, i_max, j), color)
+    draw_unchecked!(image, clip(shape, image), color)
 
     return nothing
 end
@@ -330,6 +316,52 @@ function get_bounding_box(shape::ThickLine{I}) where {I}
 
     return Rectangle(Point(i_min, j_min), i_diff + diameter, j_diff + diameter)
 end
+
+#####
+##### VerticalLine
+#####
+
+is_valid(shape::VerticalLine) = shape.i_min <= shape.i_max
+
+function is_outbounds(shape::VerticalLine, image::AbstractMatrix)
+    i_min = shape.i_min
+    i_max = shape.i_max
+    j = shape.j
+
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
+
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
+
+    return i_max < i_min_image || i_min > i_max_image || j < j_min_image || j > j_max_image
+end
+
+function clip(shape::VerticalLine, image::AbstractMatrix)
+    i_min = shape.i_min
+    i_max = shape.i_max
+    j = shape.j
+
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
+
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
+
+    if i_min < i_min_image
+        i_min = i_min_image
+    end
+
+    if i_max > i_max_image
+        i_max = i_max_image
+    end
+
+    return VerticalLine(i_min, i_max, j)
+end
+
+#####
+##### HorizontalLine
+#####
 
 is_valid(shape::HorizontalLine) = shape.j_min <= shape.j_max
 
