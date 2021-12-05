@@ -29,9 +29,23 @@ struct EvenSymmetricVerticalLines4{I <: Integer} <: AbstractShape
     point::Point{I}
 end
 
-struct OddSymmetricVerticalLines8{I <: Integer} <: AbstractShape
+struct OddSymmetricVerticalLines4{I <: Integer} <: AbstractShape
     center::Point{I}
     point::Point{I}
+end
+
+struct EvenSymmetricLines8{I <: Integer} <: AbstractShape
+    center::Point{I}
+    i::I
+    j_inner::I
+    j_outer::I
+end
+
+struct OddSymmetricLines8{I <: Integer} <: AbstractShape
+    center::Point{I}
+    i::I
+    j_inner::I
+    j_outer::I
 end
 
 function draw!(image::AbstractMatrix, shape::EvenSymmetricPoints8{I}, color) where {I}
@@ -130,7 +144,7 @@ function _draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4{I}, co
     return nothing
 end
 
-function draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines8, color)
+function draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color)
     center = shape.center
     point = shape.point
 
@@ -147,7 +161,7 @@ function draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines8, color)
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines8, color)
+function _draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color)
     center = shape.center
     point = shape.point
 
@@ -164,7 +178,61 @@ function _draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines8, color)
     return nothing
 end
 
-@inline function draw_octant_reflections_lines!(image::AbstractMatrix, i_center, j_center, i, j_inner, j_outer, color)
+function draw!(image::AbstractMatrix, shape::EvenSymmetricLines8{I}, color) where {I}
+    center = shape.center
+    i = shape.i
+    j_inner = shape.j_inner
+    j_outer = shape.j_outer
+
+    i_center = center.i
+    j_center = center.j
+
+    one_value = one(I)
+
+    draw!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
+    draw!(image, HorizontalLine(i_center + i - one_value, j_center - j_outer, j_center - j_inner), color)
+    draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
+    draw!(image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center - i), color)
+    draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center + i - one_value), color)
+    draw!(image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center + i - one_value), color)
+    draw!(image, HorizontalLine(i_center - i, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
+    draw!(image, HorizontalLine(i_center + i - one_value, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
+
+    return nothing
+end
+
+function _draw!(image::AbstractMatrix, shape::EvenSymmetricLines8{I}, color) where {I}
+    center = shape.center
+    i = shape.i
+    j_inner = shape.j_inner
+    j_outer = shape.j_outer
+
+    i_center = center.i
+    j_center = center.j
+
+    one_value = one(I)
+
+    _draw!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
+    _draw!(image, HorizontalLine(i_center + i - one_value, j_center - j_outer, j_center - j_inner), color)
+    _draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
+    _draw!(image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center - i), color)
+    _draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center + i - one_value), color)
+    _draw!(image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center + i - one_value), color)
+    _draw!(image, HorizontalLine(i_center - i, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
+    _draw!(image, HorizontalLine(i_center + i - one_value, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
+
+    return nothing
+end
+
+function draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color)
+    center = shape.center
+    i = shape.i
+    j_inner = shape.j_inner
+    j_outer = shape.j_outer
+
+    i_center = center.i
+    j_center = center.j
+
     draw!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
     draw!(image, HorizontalLine(i_center + i, j_center - j_outer, j_center - j_inner), color)
     draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
@@ -177,7 +245,15 @@ end
     return nothing
 end
 
-@inline function draw_octant_reflections_lines_unchecked!(image::AbstractMatrix, i_center, j_center, i, j_inner, j_outer, color)
+function _draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color)
+    center = shape.center
+    i = shape.i
+    j_inner = shape.j_inner
+    j_outer = shape.j_outer
+
+    i_center = center.i
+    j_center = center.j
+
     _draw!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
     _draw!(image, HorizontalLine(i_center + i, j_center - j_outer, j_center - j_inner), color)
     _draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
@@ -186,20 +262,6 @@ end
     _draw!(image, VerticalLine(i_center + j_inner, i_center + j_outer, j_center + i), color)
     _draw!(image, HorizontalLine(i_center - i, j_center + j_inner, j_center + j_outer), color)
     _draw!(image, HorizontalLine(i_center + i, j_center + j_inner, j_center + j_outer), color)
-
-    return nothing
-end
-
-@inline function draw_octant_reflections_lines_even_unchecked!(image::AbstractMatrix, i_center, j_center, i, j_inner, j_outer, color)
-    one_value = one(i_center)
-    _draw!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
-    _draw!(image, HorizontalLine(i_center + i - one_value, j_center - j_outer, j_center - j_inner), color)
-    _draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
-    _draw!(image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center - i), color)
-    _draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center + i - one_value), color)
-    _draw!(image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center + i - one_value), color)
-    _draw!(image, HorizontalLine(i_center - i, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
-    _draw!(image, HorizontalLine(i_center + i - one_value, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
 
     return nothing
 end
@@ -388,7 +450,7 @@ function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
     if iseven(diameter)
         draw!(image, EvenSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
     else
-        draw!(image, OddSymmetricVerticalLines8(Point(i_center, j_center), Point(i, j)), color)
+        draw!(image, OddSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
     end
 
     constant = convert(I, 3) - convert(I, 2) * radius * radius
@@ -405,7 +467,7 @@ function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
         if iseven(diameter)
             draw!(image, EvenSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
         else
-            draw!(image, OddSymmetricVerticalLines8(Point(i_center, j_center), Point(i, j)), color)
+            draw!(image, OddSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
         end
     end
 
@@ -430,7 +492,7 @@ function draw_unchecked!(image::AbstractMatrix, shape::FilledCircle{I}, color) w
     if iseven(diameter)
         _draw!(image, EvenSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
     else
-        _draw!(image, OddSymmetricVerticalLines8(Point(i_center, j_center), Point(i, j)), color)
+        _draw!(image, OddSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
     end
 
     constant = convert(I, 3) - convert(I, 2) * radius * radius
@@ -447,7 +509,7 @@ function draw_unchecked!(image::AbstractMatrix, shape::FilledCircle{I}, color) w
         if iseven(diameter)
             _draw!(image, EvenSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
         else
-            _draw!(image, OddSymmetricVerticalLines8(Point(i_center, j_center), Point(i, j)), color)
+            _draw!(image, OddSymmetricVerticalLines4(Point(i_center, j_center), Point(i, j)), color)
         end
     end
 
@@ -533,7 +595,11 @@ function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
     i_outer = zero_value
     j_outer = radius_outer
 
-    draw_octant_reflections_lines!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
+    if iseven(diameter)
+        draw!(image, EvenSymmetricLines8(Point(i_center, j_center), i_outer, j_inner, j_outer), color)
+    else
+        draw!(image, OddSymmetricLines8(Point(i_center, j_center), i_outer, j_inner, j_outer), color)
+    end
 
     constant_inner = convert(I, 3) - convert(I, 2) * radius_inner * radius_inner
     constant_outer = convert(I, 3) - convert(I, 2) * radius_outer * radius_outer
@@ -553,7 +619,11 @@ function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
             j_outer -= one_value
         end
 
-        draw_octant_reflections_lines!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
+        if iseven(diameter)
+            draw!(image, EvenSymmetricLines8(Point(i_center, j_center), i_outer, j_inner, j_outer), color)
+        else
+            draw!(image, OddSymmetricLines8(Point(i_center, j_center), i_outer, j_inner, j_outer), color)
+        end
     end
 
     while j_outer >= i_outer
@@ -567,7 +637,11 @@ function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
 
         i = min(i_outer, j_outer)
 
-        draw_octant_reflections_lines!(image, i_center, j_center, i, i_outer, j_outer, color)
+        if iseven(diameter)
+            draw!(image, EvenSymmetricLines8(Point(i_center, j_center), i_outer, j_inner, j_outer), color)
+        else
+            draw!(image, OddSymmetricLines8(Point(i_center, j_center), i_outer, j_inner, j_outer), color)
+        end
     end
 
     return nothing
@@ -600,9 +674,9 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickCircle{I}, color) wh
     j_outer = radius_outer
 
     if iseven(diameter)
-        draw_octant_reflections_lines_even_unchecked!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
+        _draw!(image, EvenSymmetricLines8(Point(i_center, j_center), i_outer, j_inner, j_outer), color)
     else
-        draw_octant_reflections_lines_unchecked!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
+        _draw!(image, OddSymmetricLines8(Point(i_center, j_center), i_outer, j_inner, j_outer), color)
     end
 
     constant_inner = convert(I, 3) - convert(I, 2) * radius_inner * radius_inner
@@ -624,9 +698,9 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickCircle{I}, color) wh
         end
 
         if iseven(diameter)
-            draw_octant_reflections_lines_even_unchecked!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
+            _draw!(image, EvenSymmetricLines8(Point(i_center, j_center), i_outer, j_inner, j_outer), color)
         else
-            draw_octant_reflections_lines_unchecked!(image, i_center, j_center, i_outer, j_inner, j_outer, color)
+            _draw!(image, OddSymmetricLines8(Point(i_center, j_center), i_outer, j_inner, j_outer), color)
         end
     end
 
@@ -642,9 +716,9 @@ function draw_unchecked!(image::AbstractMatrix, shape::ThickCircle{I}, color) wh
         i = min(i_outer, j_outer)
 
         if iseven(diameter)
-            draw_octant_reflections_lines_even_unchecked!(image, i_center, j_center, i, i_outer, j_outer, color)
+            _draw!(image, EvenSymmetricLines8(Point(i_center, j_center), i_outer, j_inner, j_outer), color)
         else
-            draw_octant_reflections_lines_unchecked!(image, i_center, j_center, i, i_outer, j_outer, color)
+            _draw!(image, OddSymmetricLines8(Point(i_center, j_center), i_outer, j_inner, j_outer), color)
         end
     end
 
