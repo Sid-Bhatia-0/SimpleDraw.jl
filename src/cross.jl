@@ -12,7 +12,7 @@ end
 ##### Cross
 #####
 
-is_valid(shape::Union{Cross, HollowCross}) = shape.diameter > zero(shape.diameter)
+is_valid(shape::Union{Cross, HollowCross}) = shape.diameter > convert(typeof(shape.diameter), 3)
 
 function is_outbounds(shape::Union{Cross, HollowCross}, image::AbstractMatrix)
     position = shape.position
