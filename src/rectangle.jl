@@ -17,16 +17,18 @@ struct FilledRectangle{I <: Integer} <: AbstractShape
     width::I
 end
 
-function draw!(image::AbstractMatrix, shape::Rectangle{I}, color) where {I}
+#####
+##### Rectangle
+#####
+
+is_valid(shape::Union{Rectangle, FilledRectangle, ThickRectangle}) = shape.height > zero(shape.height) && shape.width > zero(shape.width)
+
+function is_outbounds(shape::Union{Rectangle, FilledRectangle, ThickRectangle}, image::AbstractMatrix)
     position = shape.position
     height = shape.height
     width = shape.width
 
-    one_value = one(I)
-
-    if height < one_value || width < one_value
-        return nothing
-    end
+    one_value = one(shape.height)
 
     i_min = position.i
     j_min = position.j
@@ -40,14 +42,56 @@ function draw!(image::AbstractMatrix, shape::Rectangle{I}, color) where {I}
     j_min_image = firstindex(image, 2)
     j_max_image = lastindex(image, 2)
 
-    if i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
+    return i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
+end
+
+function is_inbounds(shape::Union{Rectangle, FilledRectangle, ThickRectangle}, image::AbstractMatrix)
+    position = shape.position
+    height = shape.height
+    width = shape.width
+
+    one_value = one(shape.height)
+
+    i_min = position.i
+    j_min = position.j
+
+    i_max = i_min + height - one_value
+    j_max = j_min + width - one_value
+
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
+
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
+
+    return i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
+end
+
+function draw!(image::AbstractMatrix, shape::Rectangle{I}, color) where {I}
+    position = shape.position
+    height = shape.height
+    width = shape.width
+
+    one_value = one(I)
+
+    if !is_valid(shape)
         return nothing
     end
 
-    if i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
-        draw_unchecked!(image, shape, color)
+    if is_outbounds(shape, image)
         return nothing
     end
+
+    if is_inbounds(shape, image)
+        _draw!(image, shape, color)
+        return nothing
+    end
+
+    i_min = position.i
+    j_min = position.j
+
+    i_max = i_min + height - one_value
+    j_max = j_min + width - one_value
 
     j_min_plus_1 = j_min + one_value
     j_max_minus_1 = j_max - one_value
@@ -60,7 +104,7 @@ function draw!(image::AbstractMatrix, shape::Rectangle{I}, color) where {I}
     return nothing
 end
 
-function draw_unchecked!(image::AbstractMatrix, shape::Rectangle{I}, color) where {I}
+function _draw!(image::AbstractMatrix, shape::Rectangle{I}, color) where {I}
     position = shape.position
     height = shape.height
     width = shape.width
