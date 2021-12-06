@@ -25,12 +25,12 @@ function draw!(image::AbstractMatrix, shape::Polyline{I}, color) where {I}
     return nothing
 end
 
-function draw_unchecked!(image::AbstractMatrix, shape::Polyline, color)
+function _draw!(image::AbstractMatrix, shape::Polyline, color)
     points = shape.points
     num_points = length(points)
 
     for i in 1 : num_points - 1
-        draw_unchecked!(image, Line(points[i], points[i + 1]), color)
+        _draw!(image, Line(points[i], points[i + 1]), color)
     end
 
     return nothing
