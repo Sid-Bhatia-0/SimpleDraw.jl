@@ -143,7 +143,7 @@ function draw!(image::AbstractMatrix, shape::ThickLine{I}, color) where {I}
     one_value = one(I)
 
     if checkbounds(Bool, image, i1 - radius, j1 - radius) && checkbounds(Bool, image, i1 + radius - one_value, j1 + radius - one_value) && checkbounds(Bool, image, i2 - radius, j2 - radius) && checkbounds(Bool, image, i2 + radius - one_value, j2 + radius - one_value)
-        f = (image, i, j, color) -> draw_unchecked!(image, FilledCircle(Point(i - radius, j - radius), diameter), color)
+        f = (image, i, j, color) -> _draw!(image, FilledCircle(Point(i - radius, j - radius), diameter), color)
     else
         f = (image, i, j, color) -> draw!(image, FilledCircle(Point(i - radius, j - radius), diameter), color)
     end
