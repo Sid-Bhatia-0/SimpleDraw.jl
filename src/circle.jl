@@ -1,19 +1,3 @@
-struct Circle{I <: Integer} <: AbstractShape
-    position::Point{I}
-    diameter::I
-end
-
-struct FilledCircle{I <: Integer} <: AbstractShape
-    position::Point{I}
-    diameter::I
-end
-
-struct ThickCircle{I <: Integer} <: AbstractShape
-    position::Point{I}
-    diameter::I
-    thickness::I
-end
-
 struct EvenSymmetricPoints8{I <: Integer} <: AbstractShape
     center::Point{I}
     point::Point{I}
@@ -48,6 +32,26 @@ struct OddSymmetricLines8{I <: Integer} <: AbstractShape
     j_outer::I
 end
 
+struct Circle{I <: Integer} <: AbstractShape
+    position::Point{I}
+    diameter::I
+end
+
+struct FilledCircle{I <: Integer} <: AbstractShape
+    position::Point{I}
+    diameter::I
+end
+
+struct ThickCircle{I <: Integer} <: AbstractShape
+    position::Point{I}
+    diameter::I
+    thickness::I
+end
+
+#####
+##### EvenSymmetricPoints8
+#####
+
 function draw!(image::AbstractMatrix, shape::EvenSymmetricPoints8{I}, color) where {I}
     _draw!(put_pixel!, image, shape, color)
     return nothing
@@ -78,6 +82,10 @@ function _draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricPoints8{
     return nothing
 end
 
+#####
+##### OddSymmetricPoints8
+#####
+
 function draw!(image::AbstractMatrix, shape::OddSymmetricPoints8, color)
     _draw!(put_pixel!, image, shape, color)
     return nothing
@@ -105,6 +113,10 @@ function _draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricPoints8, 
 
     return nothing
 end
+
+#####
+##### EvenSymmetricVerticalLines4
+#####
 
 function draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4{I}, color) where {I}
     center = shape.center
@@ -144,6 +156,10 @@ function _draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4{I}, co
     return nothing
 end
 
+#####
+##### OddSymmetricVerticalLines4
+#####
+
 function draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color)
     center = shape.center
     point = shape.point
@@ -177,6 +193,10 @@ function _draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color)
 
     return nothing
 end
+
+#####
+##### EvenSymmetricLines8
+#####
 
 function draw!(image::AbstractMatrix, shape::EvenSymmetricLines8{I}, color) where {I}
     center = shape.center
@@ -224,6 +244,10 @@ function _draw!(image::AbstractMatrix, shape::EvenSymmetricLines8{I}, color) whe
     return nothing
 end
 
+#####
+##### OddSymmetricLines8
+#####
+
 function draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color)
     center = shape.center
     i = shape.i
@@ -265,6 +289,12 @@ function _draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color)
 
     return nothing
 end
+
+#####
+##### Circle
+#####
+
+get_bounding_box(shape::Circle) = Rectangle(shape.position, shape.diameter, shape.diameter)
 
 function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
     position = shape.position
@@ -393,6 +423,12 @@ function _draw!(f::Function, image::AbstractMatrix, shape::Circle{I}, color) whe
     return nothing
 end
 
+#####
+##### FilledCircle
+#####
+
+get_bounding_box(shape::FilledCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
+
 function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
     position = shape.position
     i_position = position.i
@@ -483,6 +519,12 @@ function _draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
 
     return nothing
 end
+
+#####
+##### ThickCircle
+#####
+
+get_bounding_box(shape::ThickCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
 
 function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
     position = shape.position
@@ -648,9 +690,3 @@ function _draw!(f::Function, image::AbstractMatrix, shape::ThickCircle{I}, color
 
     return nothing
 end
-
-get_bounding_box(shape::Circle) = Rectangle(shape.position, shape.diameter, shape.diameter)
-
-get_bounding_box(shape::ThickCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
-
-get_bounding_box(shape::FilledCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
