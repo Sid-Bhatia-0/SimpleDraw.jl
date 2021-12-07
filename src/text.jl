@@ -28,7 +28,7 @@ function draw!(image::AbstractMatrix, shape::TextLine{I}, color) where {I}
     return nothing
 end
 
-function draw_unchecked!(image::AbstractMatrix, shape::TextLine{I}, color) where {I}
+function _draw!(image::AbstractMatrix, shape::TextLine{I}, color) where {I}
     position = shape.position
     text = shape.text
     font = shape.font
@@ -43,10 +43,8 @@ function draw_unchecked!(image::AbstractMatrix, shape::TextLine{I}, color) where
     char_position = position
 
     for char in text
-        if isascii(char) && isprint(char)
-            draw_unchecked!(image, Character(char_position, char, font), color)
-            char_position = Point(char_position.i, char_position.j + width)
-        end
+        _draw!(image, Character(char_position, char, font), color)
+        char_position = Point(char_position.i, char_position.j + width)
     end
 
     return nothing
