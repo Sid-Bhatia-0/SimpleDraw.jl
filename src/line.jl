@@ -21,6 +21,48 @@ struct ThickLine{I <: Integer} <: AbstractShape
     diameter::I
 end
 
+#####
+##### VerticalLine
+#####
+
+is_valid(shape::VerticalLine) = shape.i_min <= shape.i_max
+
+function is_outbounds(shape::VerticalLine, image::AbstractMatrix)
+    i_min = shape.i_min
+    i_max = shape.i_max
+    j = shape.j
+
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
+
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
+
+    return i_max < i_min_image || i_min > i_max_image || j < j_min_image || j > j_max_image
+end
+
+function clip(shape::VerticalLine, image::AbstractMatrix)
+    i_min = shape.i_min
+    i_max = shape.i_max
+    j = shape.j
+
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
+
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
+
+    if i_min < i_min_image
+        i_min = i_min_image
+    end
+
+    if i_max > i_max_image
+        i_max = i_max_image
+    end
+
+    return VerticalLine(i_min, i_max, j)
+end
+
 function draw!(image::AbstractMatrix, shape::VerticalLine, color)
     if !is_valid(shape)
         return nothing
@@ -38,6 +80,50 @@ end
 @inline function _draw!(image::AbstractMatrix, shape::VerticalLine, color)
     @inbounds image[shape.i_min:shape.i_max, shape.j] .= color
     return nothing
+end
+
+get_bounding_box(shape::VerticalLine{I}) where {I} = Rectangle(Point(shape.i_min, shape.j), shape.i_max - shape.i_min + one(I), one(I))
+
+#####
+##### HorizontalLine
+#####
+
+is_valid(shape::HorizontalLine) = shape.j_min <= shape.j_max
+
+function is_outbounds(shape::HorizontalLine, image::AbstractMatrix)
+    i = shape.i
+    j_min = shape.j_min
+    j_max = shape.j_max
+
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
+
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
+
+    return i < i_min_image || i > i_max_image || j_max < j_min_image || j_min > j_max_image
+end
+
+function clip(shape::HorizontalLine, image::AbstractMatrix)
+    i = shape.i
+    j_min = shape.j_min
+    j_max = shape.j_max
+
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
+
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
+
+    if j_min < j_min_image
+        j_min = j_min_image
+    end
+
+    if j_max > j_max_image
+        j_max = j_max_image
+    end
+
+    return HorizontalLine(i, j_min, j_max)
 end
 
 function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
@@ -58,6 +144,12 @@ end
     @inbounds image[shape.i, shape.j_min:shape.j_max] .= color
     return nothing
 end
+
+get_bounding_box(shape::HorizontalLine{I}) where {I} = Rectangle(Point(shape.i, shape.j_min), one(I), shape.j_max - shape.j_min + one(I))
+
+#####
+##### Line
+#####
 
 """
 Draw a line. Ref: https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
@@ -130,33 +222,6 @@ function _draw!(f::Function, image::AbstractMatrix, shape::Line{I}, color) where
     return nothing
 end
 
-function draw!(image::AbstractMatrix, shape::ThickLine{I}, color) where {I}
-    point1 = shape.point1
-    point2 = shape.point2
-    diameter = shape.diameter
-    i1 = point1.i
-    j1 = point1.j
-    i2 = point2.i
-    j2 = point2.j
-    radius = diameter ÷ 2
-
-    one_value = one(I)
-
-    if checkbounds(Bool, image, i1 - radius, j1 - radius) && checkbounds(Bool, image, i1 + radius - one_value, j1 + radius - one_value) && checkbounds(Bool, image, i2 - radius, j2 - radius) && checkbounds(Bool, image, i2 + radius - one_value, j2 + radius - one_value)
-        f = (image, i, j, color) -> _draw!(image, FilledCircle(Point(i - radius, j - radius), diameter), color)
-    else
-        f = (image, i, j, color) -> draw!(image, FilledCircle(Point(i - radius, j - radius), diameter), color)
-    end
-
-    _draw!(f, image, Line(point1, point2), color)
-
-    return nothing
-end
-
-get_bounding_box(shape::VerticalLine{I}) where {I} = Rectangle(Point(shape.i_min, shape.j), shape.i_max - shape.i_min + one(I), one(I))
-
-get_bounding_box(shape::HorizontalLine{I}) where {I} = Rectangle(Point(shape.i, shape.j_min), one(I), shape.j_max - shape.j_min + one(I))
-
 function get_bounding_box(shape::Line{I}) where {I}
     point1 = shape.point1
     point2 = shape.point2
@@ -182,6 +247,33 @@ function get_bounding_box(shape::Line{I}) where {I}
     end
 
     return Rectangle(Point(i_min, j_min), height, width)
+end
+
+#####
+##### ThickLine
+#####
+
+function draw!(image::AbstractMatrix, shape::ThickLine{I}, color) where {I}
+    point1 = shape.point1
+    point2 = shape.point2
+    diameter = shape.diameter
+    i1 = point1.i
+    j1 = point1.j
+    i2 = point2.i
+    j2 = point2.j
+    radius = diameter ÷ 2
+
+    one_value = one(I)
+
+    if checkbounds(Bool, image, i1 - radius, j1 - radius) && checkbounds(Bool, image, i1 + radius - one_value, j1 + radius - one_value) && checkbounds(Bool, image, i2 - radius, j2 - radius) && checkbounds(Bool, image, i2 + radius - one_value, j2 + radius - one_value)
+        f = (image, i, j, color) -> _draw!(image, FilledCircle(Point(i - radius, j - radius), diameter), color)
+    else
+        f = (image, i, j, color) -> draw!(image, FilledCircle(Point(i - radius, j - radius), diameter), color)
+    end
+
+    _draw!(f, image, Line(point1, point2), color)
+
+    return nothing
 end
 
 function get_bounding_box(shape::ThickLine{I}) where {I}
@@ -214,88 +306,4 @@ function get_bounding_box(shape::ThickLine{I}) where {I}
     end
 
     return Rectangle(Point(i_min, j_min), i_diff + diameter, j_diff + diameter)
-end
-
-#####
-##### VerticalLine
-#####
-
-is_valid(shape::VerticalLine) = shape.i_min <= shape.i_max
-
-function is_outbounds(shape::VerticalLine, image::AbstractMatrix)
-    i_min = shape.i_min
-    i_max = shape.i_max
-    j = shape.j
-
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    return i_max < i_min_image || i_min > i_max_image || j < j_min_image || j > j_max_image
-end
-
-function clip(shape::VerticalLine, image::AbstractMatrix)
-    i_min = shape.i_min
-    i_max = shape.i_max
-    j = shape.j
-
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    if i_min < i_min_image
-        i_min = i_min_image
-    end
-
-    if i_max > i_max_image
-        i_max = i_max_image
-    end
-
-    return VerticalLine(i_min, i_max, j)
-end
-
-#####
-##### HorizontalLine
-#####
-
-is_valid(shape::HorizontalLine) = shape.j_min <= shape.j_max
-
-function is_outbounds(shape::HorizontalLine, image::AbstractMatrix)
-    i = shape.i
-    j_min = shape.j_min
-    j_max = shape.j_max
-
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    return i < i_min_image || i > i_max_image || j_max < j_min_image || j_min > j_max_image
-end
-
-function clip(shape::HorizontalLine, image::AbstractMatrix)
-    i = shape.i
-    j_min = shape.j_min
-    j_max = shape.j_max
-
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    if j_min < j_min_image
-        j_min = j_min_image
-    end
-
-    if j_max > j_max_image
-        j_max = j_max_image
-    end
-
-    return HorizontalLine(i, j_min, j_max)
 end
