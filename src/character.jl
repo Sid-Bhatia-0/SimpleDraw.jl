@@ -12,70 +12,44 @@ struct Character{I, C <: AbstractChar, F <: AbstractFont} <: AbstractShape
     font::F
 end
 
-function draw!(image::AbstractMatrix, shape::Character{I}, color) where {I}
+function draw!(image::AbstractMatrix, shape::Character, color)
     position = shape.position
     char = shape.char
     font = shape.font
-    position_i = position.i
-    position_j = position.j
+    i_position = position.i
+    j_position = position.j
     bitmap = font.bitmap
 
-    one_value = one(I)
+    codepoint_exclamation = codepoint('!')
+    k = codepoint(char) - codepoint_exclamation + one(codepoint_exclamation)
 
-    height, width, _ = size(bitmap)
-
-    k = codepoint(char) - codepoint('!') + 1
-
-    i_min = max(position_i, firstindex(image, 1))
-    i_max = min(position_i + height - one_value, lastindex(image, 1))
-
-    j_min = max(position_j, firstindex(image, 1))
-    j_max = min(position_j + width - one_value, lastindex(image, 2))
-
-    if k in axes(bitmap, 3)
-        for j in j_min:j_max
-            for i in i_min:i_max
-                i_bitmap = i - position_i + 1
-                j_bitmap = j - position_j + 1
-                if bitmap[i_bitmap, j_bitmap, k]
-                    put_pixel_unchecked!(image, i, j, color)
-                end
-            end
-        end
+    if !(k in axes(bitmap, 3))
+        return nothing
     end
+
+    bitmap_shape = Bitmap(position, @view bitmap[:, :, k])
+
+    if is_outbounds(bitmap_shape, image)
+        return nothing
+    end
+
+    _draw!(image, clip(bitmap_shape, image), color)
 
     return nothing
 end
 
-function draw_unchecked!(image::AbstractMatrix, shape::Character, color)
+function _draw!(image::AbstractMatrix, shape::Character, color)
     position = shape.position
     char = shape.char
     font = shape.font
-    position_i = position.i
-    position_j = position.j
     bitmap = font.bitmap
 
-    height, width, _ = size(bitmap)
+    codepoint_exclamation = codepoint('!')
+    k = codepoint(char) - codepoint_exclamation + one(codepoint_exclamation)
 
-    i_min = position_i
-    i_max = position_i + height - 1
+    bitmap_shape = Bitmap(position, @view bitmap[:, :, k])
 
-    j_min = position_j
-    j_max = position_j + width - 1
-
-    k = codepoint(char) - codepoint('!') + 1
-
-    if k in axes(bitmap, 3)
-        for j in j_min:j_max
-            for i in i_min:i_max
-                i_bitmap = i - position_i + 1
-                j_bitmap = j - position_j + 1
-                if bitmap[i_bitmap, j_bitmap, k]
-                    put_pixel_unchecked!(image, i, j, color)
-                end
-            end
-        end
-    end
+    _draw!(image, bitmap_shape, color)
 
     return nothing
 end
