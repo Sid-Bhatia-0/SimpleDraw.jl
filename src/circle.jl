@@ -52,14 +52,14 @@ end
 ##### EvenSymmetricPoints8
 #####
 
-function draw!(image::AbstractMatrix, shape::EvenSymmetricPoints8{I}, color) where {I}
+function draw!(image::AbstractMatrix, shape::EvenSymmetricPoints8, color)
     _draw!(put_pixel!, image, shape, color)
     return nothing
 end
 
 _draw!(image::AbstractMatrix, shape::EvenSymmetricPoints8, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
-function _draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricPoints8{I}, color) where {I}
+function _draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricPoints8, color)
     center = shape.center
     point = shape.point
 
@@ -68,6 +68,7 @@ function _draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricPoints8{
     i = point.i
     j = point.j
 
+    I = typeof(i_center)
     one_value = one(I)
 
     f(image, i_center - i, j_center - j, color)
@@ -118,7 +119,7 @@ end
 ##### EvenSymmetricVerticalLines4
 #####
 
-function draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4{I}, color) where {I}
+function draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color)
     center = shape.center
     point = shape.point
 
@@ -127,6 +128,7 @@ function draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4{I}, col
     i = point.i
     j = point.j
 
+    I = typeof(i_center)
     one_value = one(I)
 
     draw!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center - j), color)
@@ -137,7 +139,7 @@ function draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4{I}, col
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4{I}, color) where {I}
+function _draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color)
     center = shape.center
     point = shape.point
 
@@ -146,6 +148,7 @@ function _draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4{I}, co
     i = point.i
     j = point.j
 
+    I = typeof(i_center)
     one_value = one(I)
 
     _draw!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center - j), color)
@@ -198,7 +201,7 @@ end
 ##### EvenSymmetricLines8
 #####
 
-function draw!(image::AbstractMatrix, shape::EvenSymmetricLines8{I}, color) where {I}
+function draw!(image::AbstractMatrix, shape::EvenSymmetricLines8, color)
     center = shape.center
     i = shape.i
     j_inner = shape.j_inner
@@ -207,6 +210,7 @@ function draw!(image::AbstractMatrix, shape::EvenSymmetricLines8{I}, color) wher
     i_center = center.i
     j_center = center.j
 
+    I = typeof(i_center)
     one_value = one(I)
 
     draw!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
@@ -221,7 +225,7 @@ function draw!(image::AbstractMatrix, shape::EvenSymmetricLines8{I}, color) wher
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::EvenSymmetricLines8{I}, color) where {I}
+function _draw!(image::AbstractMatrix, shape::EvenSymmetricLines8, color)
     center = shape.center
     i = shape.i
     j_inner = shape.j_inner
@@ -230,6 +234,7 @@ function _draw!(image::AbstractMatrix, shape::EvenSymmetricLines8{I}, color) whe
     i_center = center.i
     j_center = center.j
 
+    I = typeof(i_center)
     one_value = one(I)
 
     _draw!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
@@ -296,12 +301,13 @@ end
 
 get_bounding_box(shape::Circle) = Rectangle(shape.position, shape.diameter, shape.diameter)
 
-function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
+function draw!(image::AbstractMatrix, shape::Circle, color)
     position = shape.position
     i_position = position.i
     j_position = position.j
     diameter = shape.diameter
 
+    I = typeof(i_position)
     zero_value = zero(I)
     one_value = one(I)
 
@@ -365,12 +371,13 @@ function draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
+function _draw!(image::AbstractMatrix, shape::Circle, color)
     position = shape.position
     i_position = position.i
     j_position = position.j
     diameter = shape.diameter
 
+    I = typeof(i_position)
     radius = diameter ÷ convert(I, 2)
     i_center = i_position + radius
     j_center = j_position + radius
@@ -387,12 +394,13 @@ function _draw!(image::AbstractMatrix, shape::Circle{I}, color) where {I}
     return nothing
 end
 
-function _draw!(f::Function, image::AbstractMatrix, shape::Circle{I}, color) where {I}
+function _draw!(f::Function, image::AbstractMatrix, shape::Circle, color)
     position = shape.position
     i_position = position.i
     j_position = position.j
     diameter = shape.diameter
 
+    I = typeof(i_position)
     zero_value = zero(I)
     one_value = one(I)
 
@@ -429,12 +437,13 @@ end
 
 get_bounding_box(shape::FilledCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
 
-function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
+function draw!(image::AbstractMatrix, shape::FilledCircle, color)
     position = shape.position
     i_position = position.i
     j_position = position.j
     diameter = shape.diameter
 
+    I = typeof(i_position)
     zero_value = zero(I)
     one_value = one(I)
 
@@ -498,12 +507,13 @@ function draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::FilledCircle{I}, color) where {I}
+function _draw!(image::AbstractMatrix, shape::FilledCircle, color)
     position = shape.position
     i_position = position.i
     j_position = position.j
     diameter = shape.diameter
 
+    I = typeof(i_position)
     radius = diameter ÷ convert(I, 2)
     i_center = i_position + radius
     j_center = j_position + radius
@@ -526,7 +536,7 @@ end
 
 get_bounding_box(shape::ThickCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
 
-function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
+function draw!(image::AbstractMatrix, shape::ThickCircle, color)
     position = shape.position
     i_position = position.i
     j_position = position.j
@@ -534,6 +544,7 @@ function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
     diameter_outer = diameter
     thickness = shape.thickness
 
+    I = typeof(i_position)
     zero_value = zero(I)
     one_value = one(I)
 
@@ -602,12 +613,13 @@ function draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
+function _draw!(image::AbstractMatrix, shape::ThickCircle, color)
     position = shape.position
     i_position = position.i
     j_position = position.j
     diameter = shape.diameter
 
+    I = typeof(i_position)
     radius = diameter ÷ convert(I, 2)
     i_center = i_position + radius
     j_center = j_position + radius
@@ -624,13 +636,14 @@ function _draw!(image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
     return nothing
 end
 
-function _draw!(f::Function, image::AbstractMatrix, shape::ThickCircle{I}, color) where {I}
+function _draw!(f::Function, image::AbstractMatrix, shape::ThickCircle, color)
     position = shape.position
     i_position = position.i
     j_position = position.j
     diameter = shape.diameter
     thickness = shape.thickness
 
+    I = typeof(i_position)
     zero_value = zero(I)
     one_value = one(I)
 

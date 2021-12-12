@@ -82,7 +82,7 @@ end
     return nothing
 end
 
-get_bounding_box(shape::VerticalLine{I}) where {I} = Rectangle(Point(shape.i_min, shape.j), shape.i_max - shape.i_min + one(I), one(I))
+get_bounding_box(shape::VerticalLine) = Rectangle(Point(shape.i_min, shape.j), shape.i_max - shape.i_min + one(shape.i_min), one(shape.i_min))
 
 #####
 ##### HorizontalLine
@@ -145,7 +145,7 @@ end
     return nothing
 end
 
-get_bounding_box(shape::HorizontalLine{I}) where {I} = Rectangle(Point(shape.i, shape.j_min), one(I), shape.j_max - shape.j_min + one(I))
+get_bounding_box(shape::HorizontalLine) = Rectangle(Point(shape.i, shape.j_min), one(shape.i), shape.j_max - shape.j_min + one(shape.i))
 
 #####
 ##### Line
@@ -185,12 +185,13 @@ end
 
 _draw!(image::AbstractMatrix, shape::Line, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
-function _draw!(f::Function, image::AbstractMatrix, shape::Line{I}, color) where {I}
+function _draw!(f::Function, image::AbstractMatrix, shape::Line, color)
     i1 = shape.point1.i
     j1 = shape.point1.j
     i2 = shape.point2.i
     j2 = shape.point2.j
 
+    I = typeof(i1)
     one_value = one(I)
 
     di = abs(i2 - i1)
@@ -222,13 +223,15 @@ function _draw!(f::Function, image::AbstractMatrix, shape::Line{I}, color) where
     return nothing
 end
 
-function get_bounding_box(shape::Line{I}) where {I}
+function get_bounding_box(shape::Line)
     point1 = shape.point1
     point2 = shape.point2
     i1 = point1.i
     j1 = point1.j
     i2 = point2.i
     j2 = point2.j
+
+    I = typeof(i1)
 
     if i1 < i2
         i_min = i1
@@ -253,7 +256,7 @@ end
 ##### ThickLine
 #####
 
-function draw!(image::AbstractMatrix, shape::ThickLine{I}, color) where {I}
+function draw!(image::AbstractMatrix, shape::ThickLine, color)
     point1 = shape.point1
     point2 = shape.point2
     diameter = shape.diameter
@@ -263,6 +266,7 @@ function draw!(image::AbstractMatrix, shape::ThickLine{I}, color) where {I}
     j2 = point2.j
     radius = diameter ÷ 2
 
+    I = typeof(i1)
     one_value = one(I)
 
     if checkbounds(Bool, image, i1 - radius, j1 - radius) && checkbounds(Bool, image, i1 + radius - one_value, j1 + radius - one_value) && checkbounds(Bool, image, i2 - radius, j2 - radius) && checkbounds(Bool, image, i2 + radius - one_value, j2 + radius - one_value)
@@ -276,18 +280,20 @@ function draw!(image::AbstractMatrix, shape::ThickLine{I}, color) where {I}
     return nothing
 end
 
-function get_bounding_box(shape::ThickLine{I}) where {I}
+function get_bounding_box(shape::ThickLine)
     point1 = shape.point1
     point2 = shape.point2
     diameter = shape.diameter
-    radius = diameter ÷ convert(I, 2)
-
-    one_value = one(I)
 
     i1 = point1.i
     j1 = point1.j
     i2 = point2.i
     j2 = point2.j
+
+    I = typeof(i1)
+    radius = diameter ÷ convert(I, 2)
+
+    one_value = one(I)
 
     if i1 < i2
         i_min = i1 - radius

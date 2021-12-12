@@ -4,7 +4,7 @@ struct TextLine{I, S, F <: AbstractFont} <: AbstractShape
     font::F
 end
 
-function draw!(image::AbstractMatrix, shape::TextLine{I}, color) where {I}
+function draw!(image::AbstractMatrix, shape::TextLine, color)
     position = shape.position
     text = shape.text
     font = shape.font
@@ -28,7 +28,7 @@ function draw!(image::AbstractMatrix, shape::TextLine{I}, color) where {I}
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::TextLine{I}, color) where {I}
+function _draw!(image::AbstractMatrix, shape::TextLine, color)
     position = shape.position
     text = shape.text
     font = shape.font
@@ -50,13 +50,14 @@ function _draw!(image::AbstractMatrix, shape::TextLine{I}, color) where {I}
     return nothing
 end
 
-function get_bounding_box(shape::TextLine{I}) where {I}
+function get_bounding_box(shape::TextLine)
     position = shape.position
     text = shape.text
     font = shape.font
 
     i_min = position.i
     j_min = position.j
+    I = typeof(i_min)
 
     height_character = size(font.bitmap, 1)
     width_character = size(font.bitmap, 2)

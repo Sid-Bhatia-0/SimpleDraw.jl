@@ -28,7 +28,8 @@ function is_outbounds(shape::Union{Rectangle, FilledRectangle, ThickRectangle}, 
     height = shape.height
     width = shape.width
 
-    one_value = one(shape.height)
+    I = typeof(height)
+    one_value = one(I)
 
     i_min = position.i
     j_min = position.j
@@ -50,7 +51,8 @@ function is_inbounds(shape::Union{Rectangle, FilledRectangle, ThickRectangle}, i
     height = shape.height
     width = shape.width
 
-    one_value = one(shape.height)
+    I = typeof(height)
+    one_value = one(I)
 
     i_min = position.i
     j_min = position.j
@@ -67,11 +69,12 @@ function is_inbounds(shape::Union{Rectangle, FilledRectangle, ThickRectangle}, i
     return i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
 end
 
-function draw!(image::AbstractMatrix, shape::Rectangle{I}, color) where {I}
+function draw!(image::AbstractMatrix, shape::Rectangle, color)
     position = shape.position
     height = shape.height
     width = shape.width
 
+    I = typeof(height)
     one_value = one(I)
 
     if !is_valid(shape)
@@ -104,11 +107,12 @@ function draw!(image::AbstractMatrix, shape::Rectangle{I}, color) where {I}
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::Rectangle{I}, color) where {I}
+function _draw!(image::AbstractMatrix, shape::Rectangle, color)
     position = shape.position
     height = shape.height
     width = shape.width
 
+    I = typeof(height)
     one_value = one(I)
 
     i_min = position.i
@@ -134,22 +138,24 @@ get_bounding_box(shape::Rectangle) = shape
 ##### ThickRectangle
 #####
 
-function is_valid(shape::ThickRectangle{I}) where {I}
+function is_valid(shape::ThickRectangle)
     height = shape.height
     width = shape.width
     thickness = shape.thickness
 
+    I = typeof(height)
     zero_value = zero(I)
 
     return height > zero_value && width > zero_value && thickness > zero_value && thickness <= min(height, width)
 end
 
-function draw!(image::AbstractMatrix, shape::ThickRectangle{I}, color) where {I}
+function draw!(image::AbstractMatrix, shape::ThickRectangle, color)
     position = shape.position
     height = shape.height
     width = shape.width
     thickness = shape.thickness
 
+    I = typeof(height)
     one_value = one(I)
 
     if !is_valid(shape)
@@ -182,12 +188,13 @@ function draw!(image::AbstractMatrix, shape::ThickRectangle{I}, color) where {I}
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::ThickRectangle{I}, color) where {I}
+function _draw!(image::AbstractMatrix, shape::ThickRectangle, color)
     position = shape.position
     height = shape.height
     width = shape.width
     thickness = shape.thickness
 
+    I = typeof(height)
     one_value = one(I)
 
     i_min = position.i
@@ -213,11 +220,12 @@ get_bounding_box(shape::ThickRectangle) = Rectangle(shape.position, shape.height
 ##### FilledRectangle
 #####
 
-function clip(shape::FilledRectangle{I}, image::AbstractMatrix) where {I}
+function clip(shape::FilledRectangle, image::AbstractMatrix)
     position = shape.position
     height = shape.height
     width = shape.width
 
+    I = typeof(height)
     one_value = one(I)
 
     i_min = position.i
@@ -251,11 +259,12 @@ function clip(shape::FilledRectangle{I}, image::AbstractMatrix) where {I}
     return FilledRectangle(Point(i_min, j_min), i_max - i_min + one_value, j_max - j_min + one_value)
 end
 
-function draw!(image::AbstractMatrix, shape::FilledRectangle{I}, color) where {I}
+function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
     position = shape.position
     height = shape.height
     width = shape.width
 
+    I = typeof(height)
     one_value = one(I)
 
     if !is_valid(shape)
@@ -271,11 +280,12 @@ function draw!(image::AbstractMatrix, shape::FilledRectangle{I}, color) where {I
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::FilledRectangle{I}, color) where {I}
+function _draw!(image::AbstractMatrix, shape::FilledRectangle, color)
     position = shape.position
     height = shape.height
     width = shape.width
 
+    I = typeof(height)
     one_value = one(I)
 
     i_min = position.i

@@ -9,7 +9,8 @@ function is_outbounds(shape::Bitmap, image::AbstractMatrix)
     j_position = position.j
     bitmap = shape.bitmap
 
-    one_value = one(i_position)
+    I = typeof(i_position)
+    one_value = one(I)
 
     height = size(bitmap, 1)
     width = size(bitmap, 2)
@@ -35,7 +36,8 @@ function clip(shape::Bitmap, image::AbstractMatrix)
     j_position = position.j
     bitmap = shape.bitmap
 
-    one_value = one(i_position)
+    I = typeof(i_position)
+    one_value = one(I)
 
     i_min = i_position
     j_min = j_position
@@ -77,7 +79,8 @@ function _draw!(f::Function, image::AbstractMatrix, shape::Bitmap, color)
     j_position = position.j
     bitmap = shape.bitmap
 
-    one_value = one(i_position)
+    I = typeof(i_position)
+    one_value = one(I)
 
     height = size(bitmap, 1)
     width = size(bitmap, 2)
