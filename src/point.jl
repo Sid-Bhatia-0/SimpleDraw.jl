@@ -13,4 +13,4 @@ end
     return nothing
 end
 
-get_bounding_box(shape::Point{I}) where {I} = Rectangle(shape, one(I), one(I))
+get_bounding_box(shape::Point) = Rectangle(shape, one(shape.i), one(shape.i))

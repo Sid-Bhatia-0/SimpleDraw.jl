@@ -18,7 +18,8 @@ function is_outbounds(shape::Union{Cross, HollowCross}, image::AbstractMatrix)
     position = shape.position
     diameter = shape.diameter
 
-    one_value = one(shape.diameter)
+    I = typeof(diameter)
+    one_value = one(I)
 
     i_min = position.i
     j_min = position.j
@@ -36,12 +37,13 @@ function is_outbounds(shape::Union{Cross, HollowCross}, image::AbstractMatrix)
     return i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
 end
 
-function draw!(image::AbstractMatrix, shape::Cross{I}, color) where {I}
+function draw!(image::AbstractMatrix, shape::Cross, color)
     position = shape.position
     i_position = position.i
     j_position = position.j
     diameter = shape.diameter
 
+    I = typeof(i_position)
     zero_value = zero(I)
     one_value = one(I)
 
@@ -65,7 +67,7 @@ function draw!(image::AbstractMatrix, shape::Cross{I}, color) where {I}
     i_max = i_position + diameter_minus_1
     j_max = j_position + diameter_minus_1
 
-    radius = diameter ÷ 2
+    radius = diameter ÷ convert(I, 2)
     i_center = i_position + radius
     j_center = j_position + radius
 
@@ -81,7 +83,8 @@ function _draw!(image::AbstractMatrix, shape::Cross, color)
     j_position = position.j
     diameter = shape.diameter
 
-    radius = diameter ÷ 2
+    I = typeof(i_position)
+    radius = diameter ÷ convert(I, 2)
     i_center = i_position + radius
     j_center = j_position + radius
 
@@ -97,12 +100,13 @@ get_bounding_box(shape::Union{Cross, HollowCross}) = Rectangle(shape.position, s
 ##### HollowCross
 #####
 
-function draw!(image::AbstractMatrix, shape::HollowCross{I}, color) where {I}
+function draw!(image::AbstractMatrix, shape::HollowCross, color)
     position = shape.position
     i_position = position.i
     j_position = position.j
     diameter = shape.diameter
 
+    I = typeof(i_position)
     zero_value = zero(I)
     one_value = one(I)
 
@@ -121,7 +125,7 @@ function draw!(image::AbstractMatrix, shape::HollowCross{I}, color) where {I}
     i_max = i_min + diameter_minus_1
     j_max = j_min + diameter_minus_1
 
-    radius = diameter ÷ 2
+    radius = diameter ÷ convert(I, 2)
     i_center = i_min + radius
     j_center = j_min + radius
 
@@ -133,13 +137,14 @@ function draw!(image::AbstractMatrix, shape::HollowCross{I}, color) where {I}
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::HollowCross{I}, color) where {I}
+function _draw!(image::AbstractMatrix, shape::HollowCross, color)
     position = shape.position
     i_position = position.i
     j_position = position.j
     diameter = shape.diameter
 
-    radius = diameter ÷ 2
+    I = typeof(i_position)
+    radius = diameter ÷ convert(I, 2)
     i_center = i_position + radius
     j_center = j_position + radius
 
