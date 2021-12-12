@@ -299,8 +299,6 @@ end
 ##### Circle
 #####
 
-get_bounding_box(shape::Circle) = Rectangle(shape.position, shape.diameter, shape.diameter)
-
 function draw!(image::AbstractMatrix, shape::Circle, color)
     position = shape.position
     i_position = position.i
@@ -431,11 +429,11 @@ function _draw!(f::Function, image::AbstractMatrix, shape::Circle, color)
     return nothing
 end
 
+get_bounding_box(shape::Circle) = Rectangle(shape.position, shape.diameter, shape.diameter)
+
 #####
 ##### FilledCircle
 #####
-
-get_bounding_box(shape::FilledCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
 
 function draw!(image::AbstractMatrix, shape::FilledCircle, color)
     position = shape.position
@@ -530,11 +528,11 @@ function _draw!(image::AbstractMatrix, shape::FilledCircle, color)
     return nothing
 end
 
+get_bounding_box(shape::FilledCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
+
 #####
 ##### ThickCircle
 #####
-
-get_bounding_box(shape::ThickCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
 
 function draw!(image::AbstractMatrix, shape::ThickCircle, color)
     position = shape.position
@@ -703,3 +701,5 @@ function _draw!(f::Function, image::AbstractMatrix, shape::ThickCircle, color)
 
     return nothing
 end
+
+get_bounding_box(shape::ThickCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
