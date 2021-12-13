@@ -299,6 +299,8 @@ end
 ##### Circle
 #####
 
+is_valid(shape::Union{Circle, FilledCircle}) = shape.diameter > zero(shape.diameter)
+
 function draw!(image::AbstractMatrix, shape::Circle, color)
     position = shape.position
     i_position = position.i
@@ -309,7 +311,7 @@ function draw!(image::AbstractMatrix, shape::Circle, color)
     zero_value = zero(I)
     one_value = one(I)
 
-    if diameter < one_value
+    if !is_valid(shape)
         return nothing
     end
 
@@ -445,7 +447,7 @@ function draw!(image::AbstractMatrix, shape::FilledCircle, color)
     zero_value = zero(I)
     one_value = one(I)
 
-    if diameter < one_value
+    if !is_valid(shape)
         return nothing
     end
 
@@ -534,6 +536,20 @@ get_bounding_box(shape::FilledCircle) = get_bounding_box(Circle(shape.position, 
 ##### ThickCircle
 #####
 
+function is_valid(shape::ThickCircle)
+    diameter = shape.diameter
+    thickness = shape.thickness
+
+    I = typeof(shape.diameter)
+    radius = diameter ÷ convert(I, 2)
+
+    if iseven(diameter)
+        return diameter > zero(I) && thickness > zero(I) && thickness <= radius
+    else
+        return diameter > zero(I) && thickness > zero(I) && thickness <= radius + one(I)
+    end
+end
+
 function draw!(image::AbstractMatrix, shape::ThickCircle, color)
     position = shape.position
     i_position = position.i
@@ -546,7 +562,7 @@ function draw!(image::AbstractMatrix, shape::ThickCircle, color)
     zero_value = zero(I)
     one_value = one(I)
 
-    if diameter < one_value || thickness < one_value || convert(I, 2) * thickness + one_value > diameter
+    if !is_valid(shape)
         return nothing
     end
 
