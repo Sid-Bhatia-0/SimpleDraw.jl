@@ -47,9 +47,7 @@ function draw!(image::AbstractMatrix, shape::Cross, color)
     zero_value = zero(I)
     one_value = one(I)
 
-    if !is_valid(shape)
-        return nothing
-    end
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_outbounds(shape, image)
         return nothing
@@ -110,9 +108,7 @@ function draw!(image::AbstractMatrix, shape::HollowCross, color)
     zero_value = zero(I)
     one_value = one(I)
 
-    if !is_valid(shape)
-        return nothing
-    end
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_outbounds(shape, image)
         return nothing

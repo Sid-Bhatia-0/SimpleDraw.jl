@@ -311,9 +311,7 @@ function draw!(image::AbstractMatrix, shape::Circle, color)
     zero_value = zero(I)
     one_value = one(I)
 
-    if !is_valid(shape)
-        return nothing
-    end
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     i_min = i_position
     j_min = j_position
@@ -447,9 +445,7 @@ function draw!(image::AbstractMatrix, shape::FilledCircle, color)
     zero_value = zero(I)
     one_value = one(I)
 
-    if !is_valid(shape)
-        return nothing
-    end
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     i_min = i_position
     j_min = j_position
@@ -562,9 +558,7 @@ function draw!(image::AbstractMatrix, shape::ThickCircle, color)
     zero_value = zero(I)
     one_value = one(I)
 
-    if !is_valid(shape)
-        return nothing
-    end
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     i_min = i_position
     j_min = j_position
