@@ -77,9 +77,7 @@ function draw!(image::AbstractMatrix, shape::Rectangle, color)
     I = typeof(height)
     one_value = one(I)
 
-    if !is_valid(shape)
-        return nothing
-    end
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_outbounds(shape, image)
         return nothing
@@ -158,9 +156,7 @@ function draw!(image::AbstractMatrix, shape::ThickRectangle, color)
     I = typeof(height)
     one_value = one(I)
 
-    if !is_valid(shape)
-        return nothing
-    end
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_outbounds(shape, image)
         return nothing
@@ -267,9 +263,7 @@ function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
     I = typeof(height)
     one_value = one(I)
 
-    if !is_valid(shape)
-        return nothing
-    end
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_outbounds(shape, image)
         return nothing

@@ -64,9 +64,7 @@ function clip(shape::VerticalLine, image::AbstractMatrix)
 end
 
 function draw!(image::AbstractMatrix, shape::VerticalLine, color)
-    if !is_valid(shape)
-        return nothing
-    end
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_outbounds(shape, image)
         return nothing
@@ -127,9 +125,7 @@ function clip(shape::HorizontalLine, image::AbstractMatrix)
 end
 
 function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
-    if !is_valid(shape)
-        return nothing
-    end
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_outbounds(shape, image)
         return nothing
@@ -259,9 +255,7 @@ end
 is_valid(shape::ThickLine) = shape.diameter > zero(shape.diameter)
 
 function draw!(image::AbstractMatrix, shape::ThickLine, color)
-    if !is_valid(shape)
-        return nothing
-    end
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     point1 = shape.point1
     point2 = shape.point2
