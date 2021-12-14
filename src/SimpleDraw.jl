@@ -15,6 +15,8 @@ end
     return nothing
 end
 
+is_valid(::AbstractShape) = true
+
 include("point.jl")
 include("background.jl")
 include("line.jl")
