@@ -256,7 +256,13 @@ end
 ##### ThickLine
 #####
 
+is_valid(shape::ThickLine) = shape.diameter > zero(shape.diameter)
+
 function draw!(image::AbstractMatrix, shape::ThickLine, color)
+    if !is_valid(shape)
+        return nothing
+    end
+
     point1 = shape.point1
     point2 = shape.point2
     diameter = shape.diameter
