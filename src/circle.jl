@@ -1,3 +1,5 @@
+abstract type AbstractCircle <: AbstractShape end
+
 struct EvenSymmetricPoints8{I <: Integer} <: AbstractShape
     center::Point{I}
     point::Point{I}
@@ -32,27 +34,27 @@ struct OddSymmetricLines8{I <: Integer} <: AbstractShape
     j_outer::I
 end
 
-struct Circle{I <: Integer} <: AbstractShape
+struct Circle{I <: Integer} <: AbstractCircle
     position::Point{I}
     diameter::I
 end
 
-struct OddCircle{I <: Integer} <: AbstractShape
+struct OddCircle{I <: Integer} <: AbstractCircle
     position::Point{I}
     diameter::I
 end
 
-struct EvenCircle{I <: Integer} <: AbstractShape
+struct EvenCircle{I <: Integer} <: AbstractCircle
     position::Point{I}
     diameter::I
 end
 
-struct FilledCircle{I <: Integer} <: AbstractShape
+struct FilledCircle{I <: Integer} <: AbstractCircle
     position::Point{I}
     diameter::I
 end
 
-struct ThickCircle{I <: Integer} <: AbstractShape
+struct ThickCircle{I <: Integer} <: AbstractCircle
     position::Point{I}
     diameter::I
     thickness::I
@@ -306,10 +308,60 @@ function _draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color)
 end
 
 #####
-##### Circle
+##### AbstractCircle
 #####
 
-is_valid(shape::Union{Circle, FilledCircle}) = shape.diameter > zero(shape.diameter)
+is_valid(shape::AbstractCircle) = shape.diameter > zero(shape.diameter)
+
+function is_outbounds(shape::AbstractCircle, image::AbstractMatrix)
+    position = shape.position
+    diameter = shape.diameter
+
+    I = typeof(diameter)
+
+    i_min = position.i
+    j_min = position.j
+
+    diameter_minus_1 = diameter - one(I)
+    i_max = i_min + diameter_minus_1
+    j_max = j_min + diameter_minus_1
+
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
+
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
+
+    return i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
+end
+
+function is_inbounds(shape::AbstractCircle, image::AbstractMatrix)
+    position = shape.position
+    diameter = shape.diameter
+
+    I = typeof(diameter)
+
+    i_min = position.i
+    j_min = position.j
+
+    diameter_minus_1 = diameter - one(I)
+    i_max = i_min + diameter_minus_1
+    j_max = j_min + diameter_minus_1
+
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
+
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
+
+    return i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
+end
+
+get_bounding_box(shape::AbstractCircle) = Rectangle(shape.position, shape.diameter, shape.diameter)
+
+#####
+##### Circle
+#####
 
 function draw!(image::AbstractMatrix, shape::Circle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
@@ -347,57 +399,11 @@ function _draw!(image::AbstractMatrix, shape::Circle, color)
     return nothing
 end
 
-get_bounding_box(shape::Circle) = Rectangle(shape.position, shape.diameter, shape.diameter)
-
 #####
 ##### OddCircle
 #####
 
 is_valid(shape::OddCircle) = isodd(shape.diameter) && shape.diameter > zero(shape.diameter)
-
-function is_outbounds(shape::Union{OddCircle, EvenCircle}, image::AbstractMatrix)
-    position = shape.position
-    diameter = shape.diameter
-
-    I = typeof(diameter)
-
-    i_min = position.i
-    j_min = position.j
-
-    diameter_minus_1 = diameter - one(I)
-    i_max = i_min + diameter_minus_1
-    j_max = j_min + diameter_minus_1
-
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    return i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
-end
-
-function is_inbounds(shape::Union{OddCircle, EvenCircle}, image::AbstractMatrix)
-    position = shape.position
-    diameter = shape.diameter
-
-    I = typeof(diameter)
-
-    i_min = position.i
-    j_min = position.j
-
-    diameter_minus_1 = diameter - one(I)
-    i_max = i_min + diameter_minus_1
-    j_max = j_min + diameter_minus_1
-
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    return i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
-end
 
 function draw!(image::AbstractMatrix, shape::OddCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
@@ -481,8 +487,6 @@ function _draw!(f::Function, image::AbstractMatrix, shape::OddCircle, color)
 
     return nothing
 end
-
-get_bounding_box(shape::OddCircle) = Rectangle(shape.position, shape.diameter, shape.diameter)
 
 #####
 ##### EvenCircle
@@ -573,8 +577,6 @@ function _draw!(f::Function, image::AbstractMatrix, shape::EvenCircle, color)
 
     return nothing
 end
-
-get_bounding_box(shape::EvenCircle) = Rectangle(shape.position, shape.diameter, shape.diameter)
 
 #####
 ##### FilledCircle
@@ -670,8 +672,6 @@ function _draw!(image::AbstractMatrix, shape::FilledCircle, color)
 
     return nothing
 end
-
-get_bounding_box(shape::FilledCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
 
 #####
 ##### ThickCircle
@@ -856,5 +856,3 @@ function _draw!(f::Function, image::AbstractMatrix, shape::ThickCircle, color)
 
     return nothing
 end
-
-get_bounding_box(shape::ThickCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
