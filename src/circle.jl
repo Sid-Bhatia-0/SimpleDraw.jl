@@ -1,3 +1,5 @@
+abstract type AbstractCircle <: AbstractShape end
+
 struct EvenSymmetricPoints8{I <: Integer} <: AbstractShape
     center::Point{I}
     point::Point{I}
@@ -32,17 +34,49 @@ struct OddSymmetricLines8{I <: Integer} <: AbstractShape
     j_outer::I
 end
 
-struct Circle{I <: Integer} <: AbstractShape
+struct Circle{I <: Integer} <: AbstractCircle
     position::Point{I}
     diameter::I
 end
 
-struct FilledCircle{I <: Integer} <: AbstractShape
+struct OddCircle{I <: Integer} <: AbstractCircle
     position::Point{I}
     diameter::I
 end
 
-struct ThickCircle{I <: Integer} <: AbstractShape
+struct EvenCircle{I <: Integer} <: AbstractCircle
+    position::Point{I}
+    diameter::I
+end
+
+struct FilledCircle{I <: Integer} <: AbstractCircle
+    position::Point{I}
+    diameter::I
+end
+
+struct OddFilledCircle{I <: Integer} <: AbstractCircle
+    position::Point{I}
+    diameter::I
+end
+
+struct EvenFilledCircle{I <: Integer} <: AbstractCircle
+    position::Point{I}
+    diameter::I
+end
+
+struct ThickCircle{I <: Integer} <: AbstractCircle
+    position::Point{I}
+    diameter::I
+    thickness::I
+end
+
+struct OddThickCircle{I <: Integer} <: AbstractCircle
+    position::Point{I}
+    diameter::I
+    thickness::I
+end
+
+struct EvenThickCircle{I <: Integer} <: AbstractCircle
     position::Point{I}
     diameter::I
     thickness::I
@@ -296,29 +330,39 @@ function _draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color)
 end
 
 #####
-##### Circle
+##### AbstractCircle
 #####
 
-is_valid(shape::Union{Circle, FilledCircle}) = shape.diameter > zero(shape.diameter)
+get_radius(shape::AbstractCircle) = shape.diameter ÷ oftype(shape.diameter, 2)
 
-function draw!(image::AbstractMatrix, shape::Circle, color)
+function get_center(shape::AbstractCircle, radius)
+    i_position = shape.position.i
+    j_position = shape.position.j
+    return Point(i_position + radius, j_position + radius)
+end
+
+get_center(shape::AbstractCircle) = get_center(shape, get_radius(shape))
+
+function get_center_radius(shape::AbstractCircle)
+    radius = get_radius(shape)
+    center = get_center(shape, radius)
+    return (center, radius)
+end
+
+is_valid(shape::AbstractCircle) = shape.diameter > zero(shape.diameter)
+
+function is_outbounds(shape::AbstractCircle, image::AbstractMatrix)
     position = shape.position
-    i_position = position.i
-    j_position = position.j
     diameter = shape.diameter
 
-    I = typeof(i_position)
-    zero_value = zero(I)
-    one_value = one(I)
+    I = typeof(diameter)
 
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+    i_min = position.i
+    j_min = position.j
 
-    i_min = i_position
-    j_min = j_position
-
-    diameter_minus_1 = diameter - one_value
-    i_max = i_position + diameter_minus_1
-    j_max = j_position + diameter_minus_1
+    diameter_minus_1 = diameter - one(I)
+    i_max = i_min + diameter_minus_1
+    j_max = j_min + diameter_minus_1
 
     i_min_image = firstindex(image, 1)
     i_max_image = lastindex(image, 1)
@@ -326,88 +370,122 @@ function draw!(image::AbstractMatrix, shape::Circle, color)
     j_min_image = firstindex(image, 2)
     j_max_image = lastindex(image, 2)
 
-    if i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
-        return nothing
-    end
+    return i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
+end
 
-    if diameter == one_value
-        draw!(image, position, color)
-        return nothing
-    end
+function is_inbounds(shape::AbstractCircle, image::AbstractMatrix)
+    position = shape.position
+    diameter = shape.diameter
 
-    if diameter == convert(I, 2)
-        i_position_plus_1 = i_position + one_value
-        j_position_plus_1 = j_position + one_value
-        draw!(image, position, color)
-        draw!(image, Point(i_position_plus_1, j_position), color)
-        draw!(image, Point(i_position, j_position_plus_1), color)
-        draw!(image, Point(i_position_plus_1, j_position_plus_1), color)
-        return nothing
-    end
+    I = typeof(diameter)
 
-    radius = diameter ÷ convert(I, 2)
-    i_center = i_position + radius
-    j_center = j_position + radius
-    center = Point(i_center, j_center)
+    i_min = position.i
+    j_min = position.j
 
-    if i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
-        if iseven(diameter)
-            f = (image, i, j, color) -> _draw!(image, EvenSymmetricPoints8(center, Point(i, j)), color)
-        else
-            f = (image, i, j, color) -> _draw!(image, OddSymmetricPoints8(center, Point(i, j)), color)
-        end
+    diameter_minus_1 = diameter - one(I)
+    i_max = i_min + diameter_minus_1
+    j_max = j_min + diameter_minus_1
+
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
+
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
+
+    return i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
+end
+
+get_bounding_box(shape::AbstractCircle) = Rectangle(shape.position, shape.diameter, shape.diameter)
+
+#####
+##### Circle
+#####
+
+function draw!(image::AbstractMatrix, shape::Circle, color)
+    position = shape.position
+    diameter = shape.diameter
+
+    if iseven(diameter)
+        draw!(image, EvenCircle(position, diameter), color)
     else
-        if iseven(diameter)
-            f = (image, i, j, color) -> draw!(image, EvenSymmetricPoints8(center, Point(i, j)), color)
-        else
-            f = (image, i, j, color) -> draw!(image, OddSymmetricPoints8(center, Point(i, j)), color)
-        end
+        draw!(image, OddCircle(position, diameter), color)
     end
-
-    _draw!(f, image, shape, color)
 
     return nothing
 end
 
 function _draw!(image::AbstractMatrix, shape::Circle, color)
     position = shape.position
-    i_position = position.i
-    j_position = position.j
     diameter = shape.diameter
 
-    I = typeof(i_position)
-    radius = diameter ÷ convert(I, 2)
-    i_center = i_position + radius
-    j_center = j_position + radius
-    center = Point(i_center, j_center)
-
     if iseven(diameter)
-        f = (image, i, j, color) -> _draw!(image, EvenSymmetricPoints8(center, Point(i, j)), color)
+        _draw!(image, EvenCircle(position, diameter), color)
     else
-        f = (image, i, j, color) -> _draw!(image, OddSymmetricPoints8(center, Point(i, j)), color)
+        _draw!(image, OddCircle(position, diameter), color)
     end
-
-    _draw!(f, image, shape, color)
 
     return nothing
 end
 
-function _draw!(f::Function, image::AbstractMatrix, shape::Circle, color)
+#####
+##### OddCircle
+#####
+
+is_valid(shape::OddCircle) = isodd(shape.diameter) && shape.diameter > zero(shape.diameter)
+
+function draw!(image::AbstractMatrix, shape::OddCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
+    if is_outbounds(shape, image)
+        return nothing
+    end
+
     position = shape.position
-    i_position = position.i
-    j_position = position.j
     diameter = shape.diameter
 
-    I = typeof(i_position)
-    zero_value = zero(I)
-    one_value = one(I)
+    I = typeof(diameter)
+
+    if diameter == one(I)
+        draw!(image, position, color)
+        return nothing
+    end
+
+    center = get_center(shape)
+
+    if is_inbounds(shape, image)
+        _draw!(image, shape, color) do image, i, j, color
+            _draw!(image, OddSymmetricPoints8(center, Point(i, j)), color)
+        end
+    else
+        _draw!(image, shape, color) do image, i, j, color
+            draw!(image, OddSymmetricPoints8(center, Point(i, j)), color)
+        end
+    end
+
+    return nothing
+end
+
+function _draw!(image::AbstractMatrix, shape::OddCircle, color)
+    position = shape.position
+    diameter = shape.diameter
+
+    center = get_center(shape)
+
+    _draw!(image, OddCircle(position, diameter), color) do image, i, j, color
+        _draw!(image, OddSymmetricPoints8(center, Point(i, j)), color)
+    end
+
+    return nothing
+end
+
+function _draw!(f::Function, image::AbstractMatrix, shape::OddCircle, color)
+    diameter = shape.diameter
+
+    I = typeof(diameter)
 
     radius = diameter ÷ convert(I, 2)
-    i_center = i_position + radius
-    j_center = j_position + radius
-    center = Point(i_center, j_center)
 
-    i = zero_value
+    i = zero(I)
     j = radius
 
     f(image, i, j, color)
@@ -417,10 +495,10 @@ function _draw!(f::Function, image::AbstractMatrix, shape::Circle, color)
     while j >= i
         d = convert(I, 2) * j * j + convert(I, 2) * i * i + convert(I, 4) * i - convert(I, 2) * j + constant
 
-        i += one_value
+        i += one(I)
 
-        if d > zero_value
-            j -= one_value
+        if d > zero(I)
+            j -= one(I)
         end
 
         f(image, i, j, color)
@@ -429,7 +507,83 @@ function _draw!(f::Function, image::AbstractMatrix, shape::Circle, color)
     return nothing
 end
 
-get_bounding_box(shape::Circle) = Rectangle(shape.position, shape.diameter, shape.diameter)
+#####
+##### EvenCircle
+#####
+
+is_valid(shape::EvenCircle) = iseven(shape.diameter) && shape.diameter > zero(shape.diameter)
+
+function draw!(image::AbstractMatrix, shape::EvenCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
+    if is_outbounds(shape, image)
+        return nothing
+    end
+
+    position = shape.position
+    diameter = shape.diameter
+
+    I = typeof(diameter)
+
+    if diameter == convert(I, 2)
+        FilledRectangle(position, convert(I, 2), convert(I, 2))
+        return nothing
+    end
+
+    center = get_center(shape)
+
+    if is_inbounds(shape, image)
+        _draw!(image, shape, color) do image, i, j, color
+            _draw!(image, EvenSymmetricPoints8(center, Point(i, j)), color)
+        end
+    else
+        _draw!(image, shape, color) do image, i, j, color
+            draw!(image, EvenSymmetricPoints8(center, Point(i, j)), color)
+        end
+    end
+
+    return nothing
+end
+
+function _draw!(image::AbstractMatrix, shape::EvenCircle, color)
+    position = shape.position
+    diameter = shape.diameter
+
+    center = get_center(shape)
+
+    _draw!(image, shape, color) do image, i, j, color
+        _draw!(image, EvenSymmetricPoints8(center, Point(i, j)), color)
+    end
+
+    return nothing
+end
+
+function _draw!(f::Function, image::AbstractMatrix, shape::EvenCircle, color)
+    diameter = shape.diameter
+
+    I = typeof(diameter)
+
+    radius = diameter ÷ convert(I, 2)
+
+    i = zero(I)
+    j = radius
+
+    constant = convert(I, 3) - convert(I, 2) * radius * radius
+
+    while j >= i
+        d = convert(I, 2) * j * j + convert(I, 2) * i * i + convert(I, 4) * i - convert(I, 2) * j + constant
+
+        i += one(I)
+
+        if d > zero(I)
+            j -= one(I)
+        end
+
+        f(image, i, j, color)
+    end
+
+    return nothing
+end
 
 #####
 ##### FilledCircle
@@ -437,239 +591,262 @@ get_bounding_box(shape::Circle) = Rectangle(shape.position, shape.diameter, shap
 
 function draw!(image::AbstractMatrix, shape::FilledCircle, color)
     position = shape.position
-    i_position = position.i
-    j_position = position.j
     diameter = shape.diameter
 
-    I = typeof(i_position)
-    zero_value = zero(I)
-    one_value = one(I)
-
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    i_min = i_position
-    j_min = j_position
-
-    diameter_minus_1 = diameter - one_value
-    i_max = i_position + diameter_minus_1
-    j_max = j_position + diameter_minus_1
-
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    if i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
-        return nothing
-    end
-
-    if diameter == one_value
-        draw!(image, position, color)
-        return nothing
-    end
-
-    if diameter == convert(I, 2)
-        i_position_plus_1 = i_position + one_value
-        j_position_plus_1 = j_position + one_value
-        draw!(image, position, color)
-        draw!(image, Point(i_position_plus_1, j_position), color)
-        draw!(image, Point(i_position, j_position_plus_1), color)
-        draw!(image, Point(i_position_plus_1, j_position_plus_1), color)
-        return nothing
-    end
-
-    radius = diameter ÷ convert(I, 2)
-    i_center = i_position + radius
-    j_center = j_position + radius
-    center = Point(i_center, j_center)
-
-    if i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
-        if iseven(diameter)
-            f = (image, i, j, color) -> _draw!(image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
-        else
-            f = (image, i, j, color) -> _draw!(image, OddSymmetricVerticalLines4(center, Point(i, j)), color)
-        end
+    if iseven(diameter)
+        draw!(image, EvenFilledCircle(position, diameter), color)
     else
-        if iseven(diameter)
-            f = (image, i, j, color) -> draw!(image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
-        else
-            f = (image, i, j, color) -> draw!(image, OddSymmetricVerticalLines4(center, Point(i, j)), color)
-        end
+        draw!(image, OddFilledCircle(position, diameter), color)
     end
-
-    _draw!(f, image, Circle(position, diameter), color)
 
     return nothing
 end
 
 function _draw!(image::AbstractMatrix, shape::FilledCircle, color)
     position = shape.position
-    i_position = position.i
-    j_position = position.j
     diameter = shape.diameter
 
-    I = typeof(i_position)
-    radius = diameter ÷ convert(I, 2)
-    i_center = i_position + radius
-    j_center = j_position + radius
-    center = Point(i_center, j_center)
-
     if iseven(diameter)
-        f = (image, i, j, color) -> _draw!(image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
+        _draw!(image, EvenFilledCircle(position, diameter), color)
     else
-        f = (image, i, j, color) -> _draw!(image, OddSymmetricVerticalLines4(center, Point(i, j)), color)
+        _draw!(image, OddFilledCircle(position, diameter), color)
     end
-
-    _draw!(f, image, Circle(position, diameter), color)
 
     return nothing
 end
 
-get_bounding_box(shape::FilledCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
+#####
+##### OddFilledCircle
+#####
+
+is_valid(shape::OddFilledCircle) = is_valid(OddCircle(shape.position, shape.diameter))
+
+function draw!(image::AbstractMatrix, shape::OddFilledCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
+    position = shape.position
+    diameter = shape.diameter
+
+    I = typeof(diameter)
+
+    if diameter == one(I)
+        draw!(image, position, color)
+        return nothing
+    end
+
+    center = get_center(shape)
+
+    if is_inbounds(shape, image)
+        _draw!(image, OddCircle(position, diameter), color) do image, i, j, color
+            _draw!(image, OddSymmetricVerticalLines4(center, Point(i, j)), color)
+        end
+    else
+        _draw!(image, OddCircle(position, diameter), color) do image, i, j, color
+            draw!(image, OddSymmetricVerticalLines4(center, Point(i, j)), color)
+        end
+    end
+
+    return nothing
+end
+
+function _draw!(image::AbstractMatrix, shape::OddFilledCircle, color)
+    position = shape.position
+    diameter = shape.diameter
+
+    center = get_center(shape)
+
+    _draw!(image, OddCircle(position, diameter), color) do image, i, j, color
+        _draw!(image, OddSymmetricVerticalLines4(center, Point(i, j)), color)
+    end
+
+    return nothing
+end
+
+#####
+##### EvenFilledCircle
+#####
+
+is_valid(shape::EvenFilledCircle) = is_valid(EvenCircle(shape.position, shape.diameter))
+
+function draw!(image::AbstractMatrix, shape::EvenFilledCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
+    position = shape.position
+    diameter = shape.diameter
+
+    I = typeof(diameter)
+
+    if diameter == convert(I, 2)
+        draw!(image, FilledRectangle(position, convert(I, 2), convert(I, 2)), color)
+        return nothing
+    end
+
+    center = get_center(shape)
+
+    if is_inbounds(shape, image)
+        _draw!(image, EvenCircle(position, diameter), color) do image, i, j, color
+            _draw!(image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
+        end
+    else
+        _draw!(image, EvenCircle(position, diameter), color) do image, i, j, color
+            draw!(image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
+        end
+    end
+
+    return nothing
+end
+
+function _draw!(image::AbstractMatrix, shape::EvenFilledCircle, color)
+    position = shape.position
+    diameter = shape.diameter
+
+    center = get_center(shape)
+
+    _draw!(image, EvenCircle(position, diameter), color) do image, i, j, color
+        _draw!(image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
+    end
+
+    return nothing
+end
 
 #####
 ##### ThickCircle
 #####
 
 function is_valid(shape::ThickCircle)
+    position = shape.position
     diameter = shape.diameter
     thickness = shape.thickness
 
-    I = typeof(shape.diameter)
-    radius = diameter ÷ convert(I, 2)
-
     if iseven(diameter)
-        return diameter > zero(I) && thickness > zero(I) && thickness <= radius
+        return is_valid(EvenThickCircle(position, diameter, thickness))
     else
-        return diameter > zero(I) && thickness > zero(I) && thickness <= radius + one(I)
+        return is_valid(OddThickCircle(position, diameter, thickness))
     end
 end
 
 function draw!(image::AbstractMatrix, shape::ThickCircle, color)
     position = shape.position
-    i_position = position.i
-    j_position = position.j
     diameter = shape.diameter
-    diameter_outer = diameter
     thickness = shape.thickness
 
-    I = typeof(i_position)
-    zero_value = zero(I)
-    one_value = one(I)
-
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    i_min = i_position
-    j_min = j_position
-
-    diameter_minus_1 = diameter - one_value
-    i_max = i_position + diameter_minus_1
-    j_max = j_position + diameter_minus_1
-
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    if i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
-        return nothing
-    end
-
-    if diameter == one_value
-        draw!(image, position, color)
-        return nothing
-    end
-
-    if thickness == one_value
-        draw!(image, Circle(position, diameter), color)
-        return nothing
-    end
-
-    if diameter == convert(I, 2)
-        i_position_plus_1 = i_position + one_value
-        j_position_plus_1 = j_position + one_value
-        draw!(image, position, color)
-        draw!(image, Point(i_position_plus_1, j_position), color)
-        draw!(image, Point(i_position, j_position_plus_1), color)
-        draw!(image, Point(i_position_plus_1, j_position_plus_1), color)
-        return nothing
-    end
-
-    if convert(I, 2) * thickness + one_value == diameter
-        draw!(image, FilledCircle(position, diameter), color)
-        return nothing
-    end
-
-    if i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
-        if iseven(diameter)
-            f = (image, i_center, j_center, i, j_inner, j_outer, color) -> _draw!(image, EvenSymmetricLines8(Point(i_center, j_center), i, j_inner, j_outer), color)
-        else
-            f = (image, i_center, j_center, i, j_inner, j_outer, color) -> _draw!(image, OddSymmetricLines8(Point(i_center, j_center), i, j_inner, j_outer), color)
-        end
+    if iseven(diameter)
+        draw!(image, EvenThickCircle(position, diameter, thickness), color)
     else
-        if iseven(diameter)
-            f = (image, i_center, j_center, i, j_inner, j_outer, color) -> draw!(image, EvenSymmetricLines8(Point(i_center, j_center), i, j_inner, j_outer), color)
-        else
-            f = (image, i_center, j_center, i, j_inner, j_outer, color) -> draw!(image, OddSymmetricLines8(Point(i_center, j_center), i, j_inner, j_outer), color)
-        end
+        draw!(image, OddThickCircle(position, diameter, thickness), color)
     end
-
-    _draw!(f, image, shape, color)
 
     return nothing
 end
 
 function _draw!(image::AbstractMatrix, shape::ThickCircle, color)
     position = shape.position
-    i_position = position.i
-    j_position = position.j
     diameter = shape.diameter
-
-    I = typeof(i_position)
-    radius = diameter ÷ convert(I, 2)
-    i_center = i_position + radius
-    j_center = j_position + radius
-    center = Point(i_center, j_center)
+    thickness = shape.thickness
 
     if iseven(diameter)
-        f = (image, _, _, i, j_inner, j_outer, color) -> _draw!(image, EvenSymmetricLines8(center, i, j_inner, j_outer), color)
+        _draw!(image, EvenThickCircle(position, diameter, thickness), color)
     else
-        f = (image, _, _, i, j_inner, j_outer, color) -> _draw!(image, OddSymmetricLines8(center, i, j_inner, j_outer), color)
+        _draw!(image, OddThickCircle(position, diameter, thickness), color)
     end
-
-    _draw!(f, image, shape, color)
 
     return nothing
 end
 
-function _draw!(f::Function, image::AbstractMatrix, shape::ThickCircle, color)
-    position = shape.position
-    i_position = position.i
-    j_position = position.j
+#####
+##### OddThickCircle
+#####
+
+function is_valid(shape::OddThickCircle)
     diameter = shape.diameter
     thickness = shape.thickness
 
-    I = typeof(i_position)
-    zero_value = zero(I)
-    one_value = one(I)
+    I = typeof(shape.diameter)
 
-    radius = diameter ÷ 2
+    return isodd(diameter) && diameter > zero(I) && thickness > zero(I) && convert(I, 2) * thickness <= diameter + one(I)
+end
+
+function draw!(image::AbstractMatrix, shape::OddThickCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
+    if is_outbounds(shape, image)
+        return nothing
+    end
+
+    position = shape.position
+    diameter = shape.diameter
+    thickness = shape.thickness
+
+    I = typeof(diameter)
+
+    if diameter == one(I)
+        draw!(image, position, color)
+        return nothing
+    end
+
+    if thickness == one(I)
+        draw!(image, OddCircle(position, diameter), color)
+        return nothing
+    end
+
+    if convert(I, 2) * thickness + one(I) >= diameter
+        draw!(image, OddFilledCircle(position, diameter), color)
+        return nothing
+    end
+
+    if is_inbounds(shape, image)
+        _draw!(image, shape, color) do image, i_center, j_center, i, j_inner, j_outer, color
+             _draw!(image, OddSymmetricLines8(Point(i_center, j_center), i, j_inner, j_outer), color)
+        end
+    else
+        _draw!(image, shape, color) do image, i_center, j_center, i, j_inner, j_outer, color
+             draw!(image, OddSymmetricLines8(Point(i_center, j_center), i, j_inner, j_outer), color)
+        end
+    end
+
+    return nothing
+end
+
+function _draw!(image::AbstractMatrix, shape::OddThickCircle, color)
+    position = shape.position
+    diameter = shape.diameter
+
+    center = get_center(shape)
+
+    _draw!(image, shape, color) do image, _, _, i, j_inner, j_outer, color
+        _draw!(image, OddSymmetricLines8(center, i, j_inner, j_outer), color)
+    end
+
+    return nothing
+end
+
+function _draw!(f::Function, image::AbstractMatrix, shape::OddThickCircle, color)
+    position = shape.position
+    diameter = shape.diameter
+    thickness = shape.thickness
+
+    I = typeof(diameter)
+
+    i_position = position.i
+    j_position = position.j
+
+    radius = diameter ÷ convert(I, 2)
+
     i_center = i_position + radius
     j_center = j_position + radius
     center = Point(i_center, j_center)
 
-    i_position_inner = i_position + thickness - one_value
-    j_position_inner = j_position + thickness - one_value
-    diameter_inner = diameter - convert(I, 2) * (thickness - one_value)
-    radius_outer = radius
-    radius_inner = diameter_inner ÷ 2
+    i_position_inner = i_position + thickness - one(I)
+    j_position_inner = j_position + thickness - one(I)
 
-    i_inner = zero_value
+    diameter_inner = diameter - convert(I, 2) * (thickness - one(I))
+    radius_outer = radius
+    radius_inner = diameter_inner ÷ convert(I, 2)
+
+    i_inner = zero(I)
     j_inner = radius_inner
 
-    i_outer = zero_value
+    i_outer = zero(I)
     j_outer = radius_outer
 
     f(image, i_center, j_center, i_outer, j_inner, j_outer, color)
@@ -681,15 +858,15 @@ function _draw!(f::Function, image::AbstractMatrix, shape::ThickCircle, color)
         d_inner = convert(I, 2) * j_inner * j_inner + convert(I, 2) * i_inner * i_inner + convert(I, 4) * i_inner - convert(I, 2) * j_inner + constant_inner
         d_outer = convert(I, 2) * j_outer * j_outer + convert(I, 2) * i_outer * i_outer + convert(I, 4) * i_outer - convert(I, 2) * j_outer + constant_outer
 
-        i_inner += one_value
-        i_outer += one_value
+        i_inner += one(I)
+        i_outer += one(I)
 
-        if d_inner > zero_value
-            j_inner -= one_value
+        if d_inner > zero(I)
+            j_inner -= one(I)
         end
 
-        if d_outer > zero_value
-            j_outer -= one_value
+        if d_outer > zero(I)
+            j_outer -= one(I)
         end
 
         f(image, i_center, j_center, i_outer, j_inner, j_outer, color)
@@ -698,13 +875,11 @@ function _draw!(f::Function, image::AbstractMatrix, shape::ThickCircle, color)
     while j_outer >= i_outer
         d_outer = convert(I, 2) * j_outer * j_outer + convert(I, 2) * i_outer * i_outer + convert(I, 4) * i_outer - convert(I, 2) * j_outer + constant_outer
 
-        i_outer += one_value
+        i_outer += one(I)
 
-        if d_outer > zero_value
-            j_outer -= one_value
+        if d_outer > zero(I)
+            j_outer -= one(I)
         end
-
-        i = min(i_outer, j_outer)
 
         f(image, i_center, j_center, i_outer, j_inner, j_outer, color)
     end
@@ -712,4 +887,142 @@ function _draw!(f::Function, image::AbstractMatrix, shape::ThickCircle, color)
     return nothing
 end
 
-get_bounding_box(shape::ThickCircle) = get_bounding_box(Circle(shape.position, shape.diameter))
+#####
+##### EvenThickCircle
+#####
+
+function is_valid(shape::EvenThickCircle)
+    diameter = shape.diameter
+    thickness = shape.thickness
+
+    I = typeof(shape.diameter)
+
+    return iseven(diameter) && diameter > zero(I) && thickness > zero(I) && convert(I, 2) * thickness <= diameter
+end
+
+function draw!(image::AbstractMatrix, shape::EvenThickCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
+    if is_outbounds(shape, image)
+        return nothing
+    end
+
+    position = shape.position
+    diameter = shape.diameter
+    thickness = shape.thickness
+
+    I = typeof(diameter)
+
+    if diameter == convert(I, 2)
+        draw!(image, FilledRectangle(position, convert(I, 2), convert(I, 2)), color)
+        return nothing
+    end
+
+    if thickness == one(I)
+        draw!(image, EvenCircle(position, diameter), color)
+        return nothing
+    end
+
+    if convert(I, 2) * thickness == diameter
+        draw!(image, EvenFilledCircle(position, diameter), color)
+        return nothing
+    end
+
+    if is_inbounds(shape, image)
+        _draw!(image, shape, color) do image, i_center, j_center, i, j_inner, j_outer, color
+             _draw!(image, EvenSymmetricLines8(Point(i_center, j_center), i, j_inner, j_outer), color)
+        end
+    else
+        _draw!(image, shape, color) do image, i_center, j_center, i, j_inner, j_outer, color
+             draw!(image, EvenSymmetricLines8(Point(i_center, j_center), i, j_inner, j_outer), color)
+        end
+    end
+
+    return nothing
+end
+
+function _draw!(image::AbstractMatrix, shape::EvenThickCircle, color)
+    position = shape.position
+    diameter = shape.diameter
+
+    I = typeof(diameter)
+
+    i_position = position.i
+    j_position = position.j
+
+    radius = diameter ÷ convert(I, 2)
+    center = Point(i_position + radius, j_position + radius)
+
+    _draw!(image, shape, color) do image, _, _, i, j_inner, j_outer, color
+        _draw!(image, EvenSymmetricLines8(center, i, j_inner, j_outer), color)
+    end
+
+    return nothing
+end
+
+function _draw!(f::Function, image::AbstractMatrix, shape::EvenThickCircle, color)
+    position = shape.position
+    diameter = shape.diameter
+    thickness = shape.thickness
+
+    I = typeof(diameter)
+
+    i_position = position.i
+    j_position = position.j
+
+    radius = diameter ÷ convert(I, 2)
+
+    i_center = i_position + radius
+    j_center = j_position + radius
+    center = Point(i_center, j_center)
+
+    i_position_inner = i_position + thickness - one(I)
+    j_position_inner = j_position + thickness - one(I)
+
+    diameter_inner = diameter - convert(I, 2) * (thickness - one(I))
+    radius_outer = radius
+    radius_inner = diameter_inner ÷ convert(I, 2)
+
+    i_inner = zero(I)
+    j_inner = radius_inner
+
+    i_outer = zero(I)
+    j_outer = radius_outer
+
+    f(image, i_center, j_center, i_outer, j_inner, j_outer, color)
+
+    constant_inner = convert(I, 3) - convert(I, 2) * radius_inner * radius_inner
+    constant_outer = convert(I, 3) - convert(I, 2) * radius_outer * radius_outer
+
+    while j_inner >= i_inner
+        d_inner = convert(I, 2) * j_inner * j_inner + convert(I, 2) * i_inner * i_inner + convert(I, 4) * i_inner - convert(I, 2) * j_inner + constant_inner
+        d_outer = convert(I, 2) * j_outer * j_outer + convert(I, 2) * i_outer * i_outer + convert(I, 4) * i_outer - convert(I, 2) * j_outer + constant_outer
+
+        i_inner += one(I)
+        i_outer += one(I)
+
+        if d_inner > zero(I)
+            j_inner -= one(I)
+        end
+
+        if d_outer > zero(I)
+            j_outer -= one(I)
+        end
+
+        f(image, i_center, j_center, i_outer, j_inner, j_outer, color)
+    end
+
+    while j_outer >= i_outer
+        d_outer = convert(I, 2) * j_outer * j_outer + convert(I, 2) * i_outer * i_outer + convert(I, 4) * i_outer - convert(I, 2) * j_outer + constant_outer
+
+        i_outer += one(I)
+
+        if d_outer > zero(I)
+            j_outer -= one(I)
+        end
+
+        f(image, i_center, j_center, i_outer, j_inner, j_outer, color)
+    end
+
+    return nothing
+end
