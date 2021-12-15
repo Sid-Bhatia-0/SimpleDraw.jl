@@ -54,6 +54,16 @@ struct FilledCircle{I <: Integer} <: AbstractCircle
     diameter::I
 end
 
+struct OddFilledCircle{I <: Integer} <: AbstractCircle
+    position::Point{I}
+    diameter::I
+end
+
+struct EvenFilledCircle{I <: Integer} <: AbstractCircle
+    position::Point{I}
+    diameter::I
+end
+
 struct ThickCircle{I <: Integer} <: AbstractCircle
     position::Point{I}
     diameter::I
@@ -669,6 +679,125 @@ function _draw!(image::AbstractMatrix, shape::FilledCircle, color)
     end
 
     _draw!(f, image, Circle(position, diameter), color)
+
+    return nothing
+end
+
+#####
+##### OddFilledCircle
+#####
+
+is_valid(shape::OddFilledCircle) = is_valid(OddCircle(shape.position, shape.diameter))
+
+function draw!(image::AbstractMatrix, shape::OddFilledCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
+    position = shape.position
+    diameter = shape.diameter
+
+    I = typeof(diameter)
+
+    if diameter == one(I)
+        draw!(image, position, color)
+        return nothing
+    end
+
+    i_position = position.i
+    j_position = position.j
+
+    radius = diameter ÷ convert(I, 2)
+    center = Point(i_position + radius, j_position + radius)
+
+    if is_inbounds(shape, image)
+        _draw!(image, OddCircle(position, diameter), color) do image, i, j, color
+            _draw!(image, OddSymmetricVerticalLines4(center, Point(i, j)), color)
+        end
+    else
+        _draw!(image, OddCircle(position, diameter), color) do image, i, j, color
+            draw!(image, OddSymmetricVerticalLines4(center, Point(i, j)), color)
+        end
+    end
+
+    return nothing
+end
+
+function _draw!(image::AbstractMatrix, shape::OddFilledCircle, color)
+    position = shape.position
+    diameter = shape.diameter
+
+    I = typeof(i_position)
+
+    i_position = position.i
+    j_position = position.j
+
+    radius = diameter ÷ convert(I, 2)
+    center = Point(i_position + radius, j_position + radius)
+
+    _draw!(image, OddCircle(position, diameter), color) do image, i, j, color
+        _draw!(image, OddSymmetricVerticalLines4(center, Point(i, j)), color)
+    end
+
+    return nothing
+end
+
+#####
+##### EvenFilledCircle
+#####
+
+is_valid(shape::EvenFilledCircle) = is_valid(EvenCircle(shape.position, shape.diameter))
+
+function draw!(image::AbstractMatrix, shape::EvenFilledCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
+    position = shape.position
+    diameter = shape.diameter
+
+    I = typeof(diameter)
+
+    i_position = position.i
+    j_position = position.j
+
+    if diameter == convert(I, 2)
+        i_position_plus_1 = i_position + one_value
+        j_position_plus_1 = j_position + one_value
+        draw!(image, position, color)
+        draw!(image, Point(i_position_plus_1, j_position), color)
+        draw!(image, Point(i_position, j_position_plus_1), color)
+        draw!(image, Point(i_position_plus_1, j_position_plus_1), color)
+        return nothing
+    end
+
+    radius = diameter ÷ convert(I, 2)
+    center = Point(i_position + radius, j_position + radius)
+
+    if is_inbounds(shape, image)
+        _draw!(image, EvenCircle(position, diameter), color) do image, i, j, color
+            _draw!(image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
+        end
+    else
+        _draw!(image, EvenCircle(position, diameter), color) do image, i, j, color
+            draw!(image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
+        end
+    end
+
+    return nothing
+end
+
+function _draw!(image::AbstractMatrix, shape::EvenFilledCircle, color)
+    position = shape.position
+    diameter = shape.diameter
+
+    I = typeof(i_position)
+
+    i_position = position.i
+    j_position = position.j
+
+    radius = diameter ÷ convert(I, 2)
+    center = Point(i_position + radius, j_position + radius)
+
+    _draw!(image, EvenCircle(position, diameter), color) do image, i, j, color
+        _draw!(image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
+    end
 
     return nothing
 end
