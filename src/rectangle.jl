@@ -1,41 +1,42 @@
-struct Rectangle{I <: Integer} <: AbstractShape
+abstract type AbstractRectangle <: AbstractShape end
+
+struct Rectangle{I <: Integer} <: AbstractRectangle
     position::Point{I}
     height::I
     width::I
 end
 
-struct ThickRectangle{I <: Integer} <: AbstractShape
+struct ThickRectangle{I <: Integer} <: AbstractRectangle
     position::Point{I}
     height::I
     width::I
     thickness::I
 end
 
-struct FilledRectangle{I <: Integer} <: AbstractShape
+struct FilledRectangle{I <: Integer} <: AbstractRectangle
     position::Point{I}
     height::I
     width::I
 end
 
 #####
-##### Rectangle
+##### AbstractRectangle
 #####
 
-is_valid(shape::Union{Rectangle, FilledRectangle}) = shape.height > zero(shape.height) && shape.width > zero(shape.width)
+is_valid(shape::AbstractRectangle) = shape.height > zero(shape.height) && shape.width > zero(shape.width)
 
-function is_outbounds(shape::Union{Rectangle, FilledRectangle, ThickRectangle}, image::AbstractMatrix)
+function is_outbounds(shape::AbstractRectangle, image::AbstractMatrix)
     position = shape.position
     height = shape.height
     width = shape.width
 
     I = typeof(height)
-    one_value = one(I)
 
     i_min = position.i
     j_min = position.j
 
-    i_max = i_min + height - one_value
-    j_max = j_min + width - one_value
+    i_max = i_min + height - one(I)
+    j_max = j_min + width - one(I)
 
     i_min_image = firstindex(image, 1)
     i_max_image = lastindex(image, 1)
@@ -46,19 +47,18 @@ function is_outbounds(shape::Union{Rectangle, FilledRectangle, ThickRectangle}, 
     return i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
 end
 
-function is_inbounds(shape::Union{Rectangle, FilledRectangle, ThickRectangle}, image::AbstractMatrix)
+function is_inbounds(shape::AbstractRectangle, image::AbstractMatrix)
     position = shape.position
     height = shape.height
     width = shape.width
 
     I = typeof(height)
-    one_value = one(I)
 
     i_min = position.i
     j_min = position.j
 
-    i_max = i_min + height - one_value
-    j_max = j_min + width - one_value
+    i_max = i_min + height - one(I)
+    j_max = j_min + width - one(I)
 
     i_min_image = firstindex(image, 1)
     i_max_image = lastindex(image, 1)
@@ -68,6 +68,12 @@ function is_inbounds(shape::Union{Rectangle, FilledRectangle, ThickRectangle}, i
 
     return i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
 end
+
+get_bounding_box(shape::AbstractRectangle) = Rectangle(shape.position, shape.height, shape.width)
+
+#####
+##### Rectangle
+#####
 
 function draw!(image::AbstractMatrix, shape::Rectangle, color)
     position = shape.position
@@ -129,8 +135,6 @@ function _draw!(image::AbstractMatrix, shape::Rectangle, color)
 
     return nothing
 end
-
-get_bounding_box(shape::Rectangle) = shape
 
 #####
 ##### ThickRectangle
@@ -209,8 +213,6 @@ function _draw!(image::AbstractMatrix, shape::ThickRectangle, color)
 
     return nothing
 end
-
-get_bounding_box(shape::ThickRectangle) = Rectangle(shape.position, shape.height, shape.width)
 
 #####
 ##### FilledRectangle
@@ -292,5 +294,3 @@ function _draw!(image::AbstractMatrix, shape::FilledRectangle, color)
 
     return nothing
 end
-
-get_bounding_box(shape::FilledRectangle) = Rectangle(shape.position, shape.height, shape.width)
