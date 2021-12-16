@@ -21,8 +21,8 @@ This is a lightweight package that provides exact and efficient (for the most pa
 1. [`Line`](#line)
 1. [`ThickLine`](#thickline)
 1. [`Circle`](#circle)
-1. [`ThickCircle`](#thickcircle)
 1. [`FilledCircle`](#filledcircle)
+1. [`ThickCircle`](#thickcircle)
 1. [`Rectangle`](#rectangle)
 1. [`ThickRectangle`](#thickrectangle)
 1. [`FilledRectangle`](#filledrectangle)
@@ -254,6 +254,18 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 
     <img src="https://user-images.githubusercontent.com/32610387/139564833-cc6e8445-01da-4f6e-83a2-512e69d402dc.png">
 
+1. ### `FilledRectangle`
+
+    ```julia
+    struct FilledRectangle{I <: Integer} <: AbstractShape
+        position::Point{I}
+        height::I
+        width::I
+    end
+    ```
+
+    <img src="https://user-images.githubusercontent.com/32610387/139564859-bd027f70-857d-47eb-a42d-30e402aaf6d6.png">
+
 1. ### `ThickRectangle`
 
     ```julia
@@ -266,18 +278,6 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     ```
 
     <img src="https://user-images.githubusercontent.com/32610387/139564844-fb07ea5d-1ed5-422c-a2a5-067f1fb5c216.png">
-
-1. ### `FilledRectangle`
-
-    ```julia
-    struct FilledRectangle{I <: Integer} <: AbstractShape
-        position::Point{I}
-        height::I
-        width::I
-    end
-    ```
-
-    <img src="https://user-images.githubusercontent.com/32610387/139564859-bd027f70-857d-47eb-a42d-30e402aaf6d6.png">
 
 1. ### `Cross`
 
