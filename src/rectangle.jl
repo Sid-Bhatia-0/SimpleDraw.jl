@@ -6,17 +6,17 @@ struct Rectangle{I <: Integer} <: AbstractRectangle
     width::I
 end
 
+struct FilledRectangle{I <: Integer} <: AbstractRectangle
+    position::Point{I}
+    height::I
+    width::I
+end
+
 struct ThickRectangle{I <: Integer} <: AbstractRectangle
     position::Point{I}
     height::I
     width::I
     thickness::I
-end
-
-struct FilledRectangle{I <: Integer} <: AbstractRectangle
-    position::Point{I}
-    height::I
-    width::I
 end
 
 #####
@@ -137,6 +137,78 @@ end
 get_bounding_box(shape::Rectangle) = shape
 
 #####
+##### FilledRectangle
+#####
+
+function clip(shape::FilledRectangle, image::AbstractMatrix)
+    position = shape.position
+    height = shape.height
+    width = shape.width
+
+    I = typeof(height)
+
+    i_min = position.i
+    j_min = position.j
+
+    i_max = i_min + height - one(I)
+    j_max = j_min + width - one(I)
+
+    i_min_image = firstindex(image, 1)
+    i_max_image = lastindex(image, 1)
+
+    j_min_image = firstindex(image, 2)
+    j_max_image = lastindex(image, 2)
+
+    if i_min < i_min_image
+        i_min = i_min_image
+    end
+
+    if i_max > i_max_image
+        i_max = i_max_image
+    end
+
+    if j_min < j_min_image
+        j_min = j_min_image
+    end
+
+    if j_max > j_max_image
+        j_max = j_max_image
+    end
+
+    return FilledRectangle(Point(i_min, j_min), i_max - i_min + one(I), j_max - j_min + one(I))
+end
+
+function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
+    if is_outbounds(shape, image)
+        return nothing
+    end
+
+    _draw!(image, clip(shape, image), color)
+
+    return nothing
+end
+
+function _draw!(image::AbstractMatrix, shape::FilledRectangle, color)
+    position = shape.position
+    height = shape.height
+    width = shape.width
+
+    I = typeof(height)
+
+    i_min = position.i
+    j_min = position.j
+
+    i_max = i_min + height - one(I)
+    j_max = j_min + width - one(I)
+
+    @inbounds image[i_min:i_max, j_min:j_max] .= color
+
+    return nothing
+end
+
+#####
 ##### ThickRectangle
 #####
 
@@ -207,78 +279,6 @@ function _draw!(image::AbstractMatrix, shape::ThickRectangle, color)
     _draw!(image, FilledRectangle(Point(i_min, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
     _draw!(image, FilledRectangle(Point(i_min + height - thickness, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
     _draw!(image, FilledRectangle(Point(i_min, j_min + width - thickness), height, thickness), color)
-
-    return nothing
-end
-
-#####
-##### FilledRectangle
-#####
-
-function clip(shape::FilledRectangle, image::AbstractMatrix)
-    position = shape.position
-    height = shape.height
-    width = shape.width
-
-    I = typeof(height)
-
-    i_min = position.i
-    j_min = position.j
-
-    i_max = i_min + height - one(I)
-    j_max = j_min + width - one(I)
-
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    if i_min < i_min_image
-        i_min = i_min_image
-    end
-
-    if i_max > i_max_image
-        i_max = i_max_image
-    end
-
-    if j_min < j_min_image
-        j_min = j_min_image
-    end
-
-    if j_max > j_max_image
-        j_max = j_max_image
-    end
-
-    return FilledRectangle(Point(i_min, j_min), i_max - i_min + one(I), j_max - j_min + one(I))
-end
-
-function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    if is_outbounds(shape, image)
-        return nothing
-    end
-
-    _draw!(image, clip(shape, image), color)
-
-    return nothing
-end
-
-function _draw!(image::AbstractMatrix, shape::FilledRectangle, color)
-    position = shape.position
-    height = shape.height
-    width = shape.width
-
-    I = typeof(height)
-
-    i_min = position.i
-    j_min = position.j
-
-    i_max = i_min + height - one(I)
-    j_max = j_min + width - one(I)
-
-    @inbounds image[i_min:i_max, j_min:j_max] .= color
 
     return nothing
 end
