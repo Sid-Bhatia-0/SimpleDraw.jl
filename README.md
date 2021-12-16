@@ -282,9 +282,9 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 1. ### `Cross`
 
     ```julia
-    struct Cross{I <: Integer} <: AbstractShape
-        center::Point{I}
-        radius::I
+    struct Cross{I <: Integer} <: AbstractCross
+        position::Point{I}
+        diameter::I
     end
     ```
 
@@ -293,9 +293,9 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 1. ### `HollowCross`
 
     ```julia
-    struct HollowCross{I <: Integer} <: AbstractShape
-        center::Point{I}
-        radius::I
+    struct HollowCross{I <: Integer} <: AbstractCross
+        position::Point{I}
+        diameter::I
     end
     ```
 
