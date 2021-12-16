@@ -136,6 +136,8 @@ function _draw!(image::AbstractMatrix, shape::Rectangle, color)
     return nothing
 end
 
+get_bounding_box(shape::Rectangle) = shape
+
 #####
 ##### ThickRectangle
 #####
