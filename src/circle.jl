@@ -789,7 +789,7 @@ function draw!(image::AbstractMatrix, shape::OddThickCircle, color)
         return nothing
     end
 
-    if convert(I, 2) * thickness + one(I) >= diameter
+    if convert(I, 2) * thickness >= diameter
         draw!(image, OddFilledCircle(position, diameter), color)
         return nothing
     end
