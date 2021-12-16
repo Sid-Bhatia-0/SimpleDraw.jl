@@ -26,9 +26,6 @@ This is a lightweight package that provides exact and efficient (for the most pa
 1. [`Rectangle`](#rectangle)
 1. [`ThickRectangle`](#thickrectangle)
 1. [`FilledRectangle`](#filledrectangle)
-1. [`Cross`](#cross)
-1. [`HollowCross`](#hollowcross)
-1. [`Polyline`](#polyline)
 1. [`Bitmap`](#bitmap)
 1. [`Character`](#character)
 1. [`TextLine`](#textline)
@@ -278,38 +275,6 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     ```
 
     <img src="https://user-images.githubusercontent.com/32610387/139564844-fb07ea5d-1ed5-422c-a2a5-067f1fb5c216.png">
-
-1. ### `Cross`
-
-    ```julia
-    struct Cross{I <: Integer} <: AbstractCross
-        position::Point{I}
-        diameter::I
-    end
-    ```
-
-    <img src="https://user-images.githubusercontent.com/32610387/139564870-27070ecc-e5b2-4c4e-a52e-a7b56bcd80d4.png">
-
-1. ### `HollowCross`
-
-    ```julia
-    struct HollowCross{I <: Integer} <: AbstractCross
-        position::Point{I}
-        diameter::I
-    end
-    ```
-
-    <img src="https://user-images.githubusercontent.com/32610387/139565013-ec55945c-eacd-441b-933d-91a6782ded1b.png">
-
-1. ### `Polyline`
-
-    ```julia
-    struct Polyline{I <: Integer} <: AbstractShape
-        points::Vector{Point{I}}
-    end
-    ```
-
-    <img src="https://user-images.githubusercontent.com/32610387/139564892-28b1874f-62eb-43d4-81a9-6fd893bd1fa7.png">
 
 1. ### `Bitmap`
 
