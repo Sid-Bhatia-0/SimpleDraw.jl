@@ -257,7 +257,9 @@ function draw!(image::AbstractMatrix, shape::EvenSymmetricLines8, color)
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::EvenSymmetricLines8, color)
+_draw!(image::AbstractMatrix, shape::EvenSymmetricLines8, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricLines8, color)
     center = shape.center
     i = shape.i
     j_inner = shape.j_inner
@@ -269,14 +271,14 @@ function _draw!(image::AbstractMatrix, shape::EvenSymmetricLines8, color)
     I = typeof(i_center)
     one_value = one(I)
 
-    _draw!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
-    _draw!(image, HorizontalLine(i_center + i - one_value, j_center - j_outer, j_center - j_inner), color)
-    _draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
-    _draw!(image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center - i), color)
-    _draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center + i - one_value), color)
-    _draw!(image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center + i - one_value), color)
-    _draw!(image, HorizontalLine(i_center - i, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
-    _draw!(image, HorizontalLine(i_center + i - one_value, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
+    _draw!(f, image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
+    _draw!(f, image, HorizontalLine(i_center + i - one_value, j_center - j_outer, j_center - j_inner), color)
+    _draw!(f, image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
+    _draw!(f, image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center - i), color)
+    _draw!(f, image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center + i - one_value), color)
+    _draw!(f, image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center + i - one_value), color)
+    _draw!(f, image, HorizontalLine(i_center - i, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
+    _draw!(f, image, HorizontalLine(i_center + i - one_value, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
 
     return nothing
 end
@@ -306,7 +308,9 @@ function draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color)
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color)
+_draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricLines8, color)
     center = shape.center
     i = shape.i
     j_inner = shape.j_inner
@@ -315,14 +319,14 @@ function _draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color)
     i_center = center.i
     j_center = center.j
 
-    _draw!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
-    _draw!(image, HorizontalLine(i_center + i, j_center - j_outer, j_center - j_inner), color)
-    _draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
-    _draw!(image, VerticalLine(i_center + j_inner, i_center + j_outer, j_center - i), color)
-    _draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center + i), color)
-    _draw!(image, VerticalLine(i_center + j_inner, i_center + j_outer, j_center + i), color)
-    _draw!(image, HorizontalLine(i_center - i, j_center + j_inner, j_center + j_outer), color)
-    _draw!(image, HorizontalLine(i_center + i, j_center + j_inner, j_center + j_outer), color)
+    _draw!(f, image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
+    _draw!(f, image, HorizontalLine(i_center + i, j_center - j_outer, j_center - j_inner), color)
+    _draw!(f, image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
+    _draw!(f, image, VerticalLine(i_center + j_inner, i_center + j_outer, j_center - i), color)
+    _draw!(f, image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center + i), color)
+    _draw!(f, image, VerticalLine(i_center + j_inner, i_center + j_outer, j_center + i), color)
+    _draw!(f, image, HorizontalLine(i_center - i, j_center + j_inner, j_center + j_outer), color)
+    _draw!(f, image, HorizontalLine(i_center + i, j_center + j_inner, j_center + j_outer), color)
 
     return nothing
 end
