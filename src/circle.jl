@@ -167,7 +167,9 @@ function draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color)
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color)
+_draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color)
     center = shape.center
     point = shape.point
 
@@ -179,10 +181,10 @@ function _draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color
     I = typeof(i_center)
     one_value = one(I)
 
-    _draw!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center - j), color)
-    _draw!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center - i), color)
-    _draw!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center + i - one_value), color)
-    _draw!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center + j - one_value), color)
+    _draw!(f, image, VerticalLine(i_center - i, i_center + i - one_value, j_center - j), color)
+    _draw!(f, image, VerticalLine(i_center - j, i_center + j - one_value, j_center - i), color)
+    _draw!(f, image, VerticalLine(i_center - j, i_center + j - one_value, j_center + i - one_value), color)
+    _draw!(f, image, VerticalLine(i_center - i, i_center + i - one_value, j_center + j - one_value), color)
 
     return nothing
 end
@@ -208,7 +210,9 @@ function draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color)
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color)
+_draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color)
     center = shape.center
     point = shape.point
 
@@ -217,10 +221,10 @@ function _draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color)
     i = point.i
     j = point.j
 
-    _draw!(image, VerticalLine(i_center - i, i_center + i, j_center - j), color)
-    _draw!(image, VerticalLine(i_center - j, i_center + j, j_center - i), color)
-    _draw!(image, VerticalLine(i_center - j, i_center + j, j_center + i), color)
-    _draw!(image, VerticalLine(i_center - i, i_center + i, j_center + j), color)
+    _draw!(f, image, VerticalLine(i_center - i, i_center + i, j_center - j), color)
+    _draw!(f, image, VerticalLine(i_center - j, i_center + j, j_center - i), color)
+    _draw!(f, image, VerticalLine(i_center - j, i_center + j, j_center + i), color)
+    _draw!(f, image, VerticalLine(i_center - i, i_center + i, j_center + j), color)
 
     return nothing
 end
