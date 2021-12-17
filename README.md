@@ -208,7 +208,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 1. ### `Circle`
 
     ```julia
-    struct Circle{I <: Integer} <: AbstractShape
+    struct Circle{I <: Integer} <: AbstractCircle
         position::Point{I}
         diameter::I
     end
@@ -219,7 +219,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 1. ### `ThickCircle`
 
     ```julia
-    struct ThickCircle{I <: Integer} <: AbstractShape
+    struct ThickCircle{I <: Integer} <: AbstractCircle
         position::Point{I}
         diameter::I
         thickness::I
@@ -231,7 +231,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 1. ### `FilledCircle`
 
     ```julia
-    struct FilledCircle{I <: Integer} <: AbstractShape
+    struct FilledCircle{I <: Integer} <: AbstractCircle
         position::Point{I}
         diameter::I
     end
@@ -242,7 +242,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 1. ### `Rectangle`
 
     ```julia
-    struct Rectangle{I <: Integer} <: AbstractShape
+    struct Rectangle{I <: Integer} <: AbstractRectangle
         position::Point{I}
         height::I
         width::I
@@ -254,7 +254,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 1. ### `FilledRectangle`
 
     ```julia
-    struct FilledRectangle{I <: Integer} <: AbstractShape
+    struct FilledRectangle{I <: Integer} <: AbstractRectangle
         position::Point{I}
         height::I
         width::I
@@ -266,7 +266,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 1. ### `ThickRectangle`
 
     ```julia
-    struct ThickRectangle{I <: Integer} <: AbstractShape
+    struct ThickRectangle{I <: Integer} <: AbstractRectangle
         position::Point{I}
         height::I
         width::I
