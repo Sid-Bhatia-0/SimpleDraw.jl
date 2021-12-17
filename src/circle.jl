@@ -147,25 +147,7 @@ end
 ##### EvenSymmetricVerticalLines4
 #####
 
-function draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color)
-    center = shape.center
-    point = shape.point
-
-    i_center = center.i
-    j_center = center.j
-    i = point.i
-    j = point.j
-
-    I = typeof(i_center)
-    one_value = one(I)
-
-    draw!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center - j), color)
-    draw!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center - i), color)
-    draw!(image, VerticalLine(i_center - j, i_center + j - one_value, j_center + i - one_value), color)
-    draw!(image, VerticalLine(i_center - i, i_center + i - one_value, j_center + j - one_value), color)
-
-    return nothing
-end
+draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color) = _draw!(put_pixel!, image, shape, color)
 
 _draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
@@ -193,22 +175,7 @@ end
 ##### OddSymmetricVerticalLines4
 #####
 
-function draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color)
-    center = shape.center
-    point = shape.point
-
-    i_center = center.i
-    j_center = center.j
-    i = point.i
-    j = point.j
-
-    draw!(image, VerticalLine(i_center - i, i_center + i, j_center - j), color)
-    draw!(image, VerticalLine(i_center - j, i_center + j, j_center - i), color)
-    draw!(image, VerticalLine(i_center - j, i_center + j, j_center + i), color)
-    draw!(image, VerticalLine(i_center - i, i_center + i, j_center + j), color)
-
-    return nothing
-end
+draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color) = _draw!(put_pixel!, image, shape, color)
 
 _draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
@@ -233,29 +200,7 @@ end
 ##### EvenSymmetricLines8
 #####
 
-function draw!(image::AbstractMatrix, shape::EvenSymmetricLines8, color)
-    center = shape.center
-    i = shape.i
-    j_inner = shape.j_inner
-    j_outer = shape.j_outer
-
-    i_center = center.i
-    j_center = center.j
-
-    I = typeof(i_center)
-    one_value = one(I)
-
-    draw!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
-    draw!(image, HorizontalLine(i_center + i - one_value, j_center - j_outer, j_center - j_inner), color)
-    draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
-    draw!(image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center - i), color)
-    draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center + i - one_value), color)
-    draw!(image, VerticalLine(i_center + j_inner - one_value, i_center + j_outer - one_value, j_center + i - one_value), color)
-    draw!(image, HorizontalLine(i_center - i, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
-    draw!(image, HorizontalLine(i_center + i - one_value, j_center + j_inner - one_value, j_center + j_outer - one_value), color)
-
-    return nothing
-end
+draw!(image::AbstractMatrix, shape::EvenSymmetricLines8, color) = _draw!(put_pixel!, image, shape, color)
 
 _draw!(image::AbstractMatrix, shape::EvenSymmetricLines8, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
@@ -287,26 +232,7 @@ end
 ##### OddSymmetricLines8
 #####
 
-function draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color)
-    center = shape.center
-    i = shape.i
-    j_inner = shape.j_inner
-    j_outer = shape.j_outer
-
-    i_center = center.i
-    j_center = center.j
-
-    draw!(image, HorizontalLine(i_center - i, j_center - j_outer, j_center - j_inner), color)
-    draw!(image, HorizontalLine(i_center + i, j_center - j_outer, j_center - j_inner), color)
-    draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center - i), color)
-    draw!(image, VerticalLine(i_center + j_inner, i_center + j_outer, j_center - i), color)
-    draw!(image, VerticalLine(i_center - j_outer, i_center - j_inner, j_center + i), color)
-    draw!(image, VerticalLine(i_center + j_inner, i_center + j_outer, j_center + i), color)
-    draw!(image, HorizontalLine(i_center - i, j_center + j_inner, j_center + j_outer), color)
-    draw!(image, HorizontalLine(i_center + i, j_center + j_inner, j_center + j_outer), color)
-
-    return nothing
-end
+draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color) = _draw!(put_pixel!, image, shape, color)
 
 _draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
