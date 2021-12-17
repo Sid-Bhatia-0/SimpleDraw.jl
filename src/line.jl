@@ -1,21 +1,23 @@
-struct VerticalLine{I <: Integer} <: AbstractShape
+abstract type AbstractLine <: AbstractShape end
+
+struct VerticalLine{I <: Integer} <: AbstractLine
     i_min::I
     i_max::I
     j::I
 end
 
-struct HorizontalLine{I <: Integer} <: AbstractShape
+struct HorizontalLine{I <: Integer} <: AbstractLine
     i::I
     j_min::I
     j_max::I
 end
 
-struct Line{I <: Integer} <: AbstractShape
+struct Line{I <: Integer} <: AbstractLine
     point1::Point{I}
     point2::Point{I}
 end
 
-struct ThickLine{I <: Integer} <: AbstractShape
+struct ThickLine{I <: Integer} <: AbstractLine
     point1::Point{I}
     point2::Point{I}
     diameter::I
