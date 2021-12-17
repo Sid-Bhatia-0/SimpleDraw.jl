@@ -77,8 +77,17 @@ function draw!(image::AbstractMatrix, shape::VerticalLine, color)
     return nothing
 end
 
-@inline function _draw!(image::AbstractMatrix, shape::VerticalLine, color)
-    @inbounds image[shape.i_min:shape.i_max, shape.j] .= color
+_draw!(image::AbstractMatrix, shape::VerticalLine, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::VerticalLine, color)
+    i_min = shape.i_min
+    i_max = shape.i_max
+    j = shape.j
+
+    for i in i_min:i_max
+        f(image, i, j, color)
+    end
+
     return nothing
 end
 
@@ -138,8 +147,17 @@ function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
     return nothing
 end
 
-@inline function _draw!(image::AbstractMatrix, shape::HorizontalLine, color)
-    @inbounds image[shape.i, shape.j_min:shape.j_max] .= color
+_draw!(image::AbstractMatrix, shape::HorizontalLine, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::HorizontalLine, color)
+    i = shape.i
+    j_min = shape.j_min
+    j_max = shape.j_max
+
+    for j in j_min:j_max
+        f(image, i, j, color)
+    end
+
     return nothing
 end
 
