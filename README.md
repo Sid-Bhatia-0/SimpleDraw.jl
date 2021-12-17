@@ -161,7 +161,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 1. ### `VerticalLine`
 
     ```julia
-    struct VerticalLine{I <: Integer} <: AbstractShape
+    struct VerticalLine{I <: Integer} <: AbstractLine
         i_min::I
         i_max::I
         j::I
@@ -173,7 +173,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 1. ### `HorizontalLine`
 
     ```julia
-    struct HorizontalLine{I <: Integer} <: AbstractShape
+    struct HorizontalLine{I <: Integer} <: AbstractLine
         i::I
         j_min::I
         j_max::I
@@ -185,7 +185,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 1. ### `Line`
 
     ```julia
-    struct Line{I <: Integer} <: AbstractShape
+    struct Line{I <: Integer} <: AbstractLine
         point1::Point{I}
         point2::Point{I}
     end
@@ -196,7 +196,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
 1. ### `ThickLine`
 
     ```julia
-    struct ThickLine{I <: Integer} <: AbstractShape
+    struct ThickLine{I <: Integer} <: AbstractLine
         point1::Point{I}
         point2::Point{I}
         diameter::I
