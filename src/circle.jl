@@ -86,10 +86,7 @@ end
 ##### EvenSymmetricPoints8
 #####
 
-function draw!(image::AbstractMatrix, shape::EvenSymmetricPoints8, color)
-    _draw!(put_pixel!, image, shape, color)
-    return nothing
-end
+draw!(image::AbstractMatrix, shape::EvenSymmetricPoints8, color) = _draw!(put_pixel!, image, shape, color)
 
 _draw!(image::AbstractMatrix, shape::EvenSymmetricPoints8, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
@@ -121,10 +118,7 @@ end
 ##### OddSymmetricPoints8
 #####
 
-function draw!(image::AbstractMatrix, shape::OddSymmetricPoints8, color)
-    _draw!(put_pixel!, image, shape, color)
-    return nothing
-end
+draw!(image::AbstractMatrix, shape::OddSymmetricPoints8, color) = _draw!(put_pixel!, image, shape, color)
 
 _draw!(image::AbstractMatrix, shape::OddSymmetricPoints8, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
