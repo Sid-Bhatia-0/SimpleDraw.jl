@@ -15,8 +15,6 @@ const SHAPES = [
                 SD.Rectangle,
                 SD.ThickRectangle,
                 SD.FilledRectangle,
-                SD.Cross,
-                SD.HollowCross,
                ]
 
 const SIZES = [64, 256, 1024]
@@ -33,8 +31,6 @@ get_shape(::Type{SD.FilledCircle}, n) = SD.FilledCircle(SD.Point(2, 2), n - 2)
 get_shape(::Type{SD.Rectangle}, n) = SD.Rectangle(SD.Point(2, 2), n - 1, n - 1)
 get_shape(::Type{SD.ThickRectangle}, n) = SD.ThickRectangle(SD.Point(2, 2), n - 1, n - 1, n ÷ 4)
 get_shape(::Type{SD.FilledRectangle}, n) = SD.FilledRectangle(SD.Point(2, 2), n - 1, n - 1)
-get_shape(::Type{SD.Cross}, n) = SD.Cross(SD.Point(2, 2), n - 2)
-get_shape(::Type{SD.HollowCross}, n) = SD.HollowCross(SD.Point(2, 2), n - 2)
 
 function get_benchmarks(shape_types, sizes)
     benchmarks = Dict()
