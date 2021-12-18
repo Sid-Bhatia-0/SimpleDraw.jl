@@ -34,6 +34,11 @@ struct OddSymmetricLines8{I <: Integer} <: AbstractShape
     j_outer::I
 end
 
+struct StandardCircleOctant{I <: Integer} <: AbstractShape
+    center::Point{I}
+    radius::I
+end
+
 struct Circle{I <: Integer} <: AbstractCircle
     position::Point{I}
     diameter::I
@@ -350,6 +355,45 @@ function _draw!(image::AbstractMatrix, shape::Circle, color)
         _draw!(image, EvenCircle(position, diameter), color)
     else
         _draw!(image, OddCircle(position, diameter), color)
+    end
+
+    return nothing
+end
+
+#####
+##### StandardCircleOctant
+#####
+
+draw!(image::AbstractMatrix, shape::StandardCircleOctant, color) = _draw!(put_pixel!, image, shape, color)
+
+_draw!(image::AbstractMatrix, shape::StandardCircleOctant, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::StandardCircleOctant, color)
+    center = shape.center
+    radius = shape.radius
+
+    I = typeof(radius)
+
+    i_center = center.i
+    j_center = center.j
+
+    i = radius
+    j = zero(I)
+
+    f(image, i_center + i, j_center + j, color)
+
+    constant = convert(I, 3) - convert(I, 2) * radius * radius
+
+    while i > j + one(I)
+        d = convert(I, 2) * i * i + convert(I, 2) * j * j + convert(I, 4) * j - convert(I, 2) * i + constant
+
+        j += one(I)
+
+        if d > zero(I)
+            i -= one(I)
+        end
+
+        f(image, i_center + i, j_center + j, color)
     end
 
     return nothing
