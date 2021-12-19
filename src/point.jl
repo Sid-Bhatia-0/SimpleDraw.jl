@@ -3,13 +3,12 @@ struct Point{I <: Integer} <: AbstractShape
     j::I
 end
 
-@inline function draw!(image::AbstractMatrix, shape::Point, color)
-    put_pixel!(image, shape.i, shape.j, color)
-    return nothing
-end
+draw!(image::AbstractMatrix, shape::Point, color) = _draw!(put_pixel!, image, shape, color)
 
-@inline function _draw!(image::AbstractMatrix, shape::Point, color)
-    put_pixel_unchecked!(image, shape.i, shape.j, color)
+_draw!(image::AbstractMatrix, shape::Point, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::Point, color)
+    f(image, shape.i, shape.j, color)
     return nothing
 end
 
