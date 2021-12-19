@@ -97,9 +97,9 @@ end
 ##### OddSymmetricPoints8
 #####
 
-draw!(image::AbstractMatrix, shape::OddSymmetricPoints8, color) = _draw!(put_pixel!, image, shape, color)
+draw!(image::AbstractMatrix, shape::OddSymmetricPoints8, color) = draw!(put_pixel!, image, shape, color)
 
-function _draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricPoints8, color)
+function draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricPoints8, color)
     center = shape.center
     point = shape.point
 
@@ -127,9 +127,9 @@ end
 ##### EvenSymmetricPoints8
 #####
 
-draw!(image::AbstractMatrix, shape::EvenSymmetricPoints8, color) = _draw!(put_pixel!, image, shape, color)
+draw!(image::AbstractMatrix, shape::EvenSymmetricPoints8, color) = draw!(put_pixel!, image, shape, color)
 
-function _draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricPoints8, color)
+function draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricPoints8, color)
     center = shape.center
     point = shape.point
 
@@ -158,9 +158,9 @@ end
 ##### OddSymmetricVerticalLines4
 #####
 
-draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color) = _draw!(put_pixel!, image, shape, color)
+draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color) = draw!(put_pixel!, image, shape, color)
 
-function _draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color)
+function draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color)
     center = shape.center
     point = shape.point
 
@@ -172,10 +172,10 @@ function _draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricVerticalL
     i_diff = i - i_center
     j_diff = j - j_center
 
-    _draw!(f, image, VerticalLine(i_center - j_diff, i_center + j_diff, j_center - i_diff), color)
-    _draw!(f, image, VerticalLine(i_center - i_diff, i_center + i_diff, j_center - j_diff), color)
-    _draw!(f, image, VerticalLine(i_center - i_diff, i_center + i_diff, j_center + j_diff), color)
-    _draw!(f, image, VerticalLine(i_center - j_diff, i_center + j_diff, j_center + i_diff), color)
+    draw!(f, image, VerticalLine(i_center - j_diff, i_center + j_diff, j_center - i_diff), color)
+    draw!(f, image, VerticalLine(i_center - i_diff, i_center + i_diff, j_center - j_diff), color)
+    draw!(f, image, VerticalLine(i_center - i_diff, i_center + i_diff, j_center + j_diff), color)
+    draw!(f, image, VerticalLine(i_center - j_diff, i_center + j_diff, j_center + i_diff), color)
 
     return nothing
 end
@@ -184,9 +184,9 @@ end
 ##### EvenSymmetricVerticalLines4
 #####
 
-draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color) = _draw!(put_pixel!, image, shape, color)
+draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color) = draw!(put_pixel!, image, shape, color)
 
-function _draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color)
+function draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color)
     center = shape.center
     point = shape.point
 
@@ -200,10 +200,10 @@ function _draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricVertical
     i_diff = i - i_center
     j_diff = j - j_center
 
-    _draw!(f, image, VerticalLine(i_center - j_diff, i_center + j_diff - one(I), j_center - i_diff), color)
-    _draw!(f, image, VerticalLine(i_center - i_diff, i_center + i_diff - one(I), j_center - j_diff), color)
-    _draw!(f, image, VerticalLine(i_center - i_diff, i_center + i_diff - one(I), j_center + j_diff - one(I)), color)
-    _draw!(f, image, VerticalLine(i_center - j_diff, i_center + j_diff - one(I), j_center + i_diff - one(I)), color)
+    draw!(f, image, VerticalLine(i_center - j_diff, i_center + j_diff - one(I), j_center - i_diff), color)
+    draw!(f, image, VerticalLine(i_center - i_diff, i_center + i_diff - one(I), j_center - j_diff), color)
+    draw!(f, image, VerticalLine(i_center - i_diff, i_center + i_diff - one(I), j_center + j_diff - one(I)), color)
+    draw!(f, image, VerticalLine(i_center - j_diff, i_center + j_diff - one(I), j_center + i_diff - one(I)), color)
 
     return nothing
 end
@@ -212,9 +212,9 @@ end
 ##### OddSymmetricLines8
 #####
 
-draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color) = _draw!(put_pixel!, image, shape, color)
+draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color) = draw!(put_pixel!, image, shape, color)
 
-function _draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricLines8, color)
+function draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricLines8, color)
     center = shape.center
     i_inner = shape.i_inner
     i_outer = shape.i_outer
@@ -227,14 +227,14 @@ function _draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricLines8, c
     i_outer_relative = i_outer - i_center
     j_relative = j - j_center
 
-    _draw!(f, image, HorizontalLine(i_center - j_relative, j_center - i_outer_relative, j_center - i_inner_relative), color)
-    _draw!(f, image, HorizontalLine(i_center + j_relative, j_center - i_outer_relative, j_center - i_inner_relative), color)
-    _draw!(f, image, VerticalLine(i_center - i_outer_relative, i_center - i_inner_relative, j_center - j_relative), color)
-    _draw!(f, image, VerticalLine(i_center + i_inner_relative, i_center + i_outer_relative, j_center - j_relative), color)
-    _draw!(f, image, VerticalLine(i_center - i_outer_relative, i_center - i_inner_relative, j_center + j_relative), color)
-    _draw!(f, image, VerticalLine(i_center + i_inner_relative, i_center + i_outer_relative, j_center + j_relative), color)
-    _draw!(f, image, HorizontalLine(i_center - j_relative, j_center + i_inner_relative, j_center + i_outer_relative), color)
-    _draw!(f, image, HorizontalLine(i_center + j_relative, j_center + i_inner_relative, j_center + i_outer_relative), color)
+    draw!(f, image, HorizontalLine(i_center - j_relative, j_center - i_outer_relative, j_center - i_inner_relative), color)
+    draw!(f, image, HorizontalLine(i_center + j_relative, j_center - i_outer_relative, j_center - i_inner_relative), color)
+    draw!(f, image, VerticalLine(i_center - i_outer_relative, i_center - i_inner_relative, j_center - j_relative), color)
+    draw!(f, image, VerticalLine(i_center + i_inner_relative, i_center + i_outer_relative, j_center - j_relative), color)
+    draw!(f, image, VerticalLine(i_center - i_outer_relative, i_center - i_inner_relative, j_center + j_relative), color)
+    draw!(f, image, VerticalLine(i_center + i_inner_relative, i_center + i_outer_relative, j_center + j_relative), color)
+    draw!(f, image, HorizontalLine(i_center - j_relative, j_center + i_inner_relative, j_center + i_outer_relative), color)
+    draw!(f, image, HorizontalLine(i_center + j_relative, j_center + i_inner_relative, j_center + i_outer_relative), color)
 
     return nothing
 end
@@ -243,9 +243,9 @@ end
 ##### EvenSymmetricLines8
 #####
 
-draw!(image::AbstractMatrix, shape::EvenSymmetricLines8, color) = _draw!(put_pixel!, image, shape, color)
+draw!(image::AbstractMatrix, shape::EvenSymmetricLines8, color) = draw!(put_pixel!, image, shape, color)
 
-function _draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricLines8, color)
+function draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricLines8, color)
     center = shape.center
     i_inner = shape.i_inner
     i_outer = shape.i_outer
@@ -260,14 +260,14 @@ function _draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricLines8, 
     i_outer_relative = i_outer - i_center
     j_relative = j - j_center
 
-    _draw!(f, image, HorizontalLine(i_center - j_relative, j_center - i_outer_relative, j_center - i_inner_relative), color)
-    _draw!(f, image, HorizontalLine(i_center + j_relative - one(I), j_center - i_outer_relative, j_center - i_inner_relative), color)
-    _draw!(f, image, VerticalLine(i_center - i_outer_relative, i_center - i_inner_relative, j_center - j_relative), color)
-    _draw!(f, image, VerticalLine(i_center + i_inner_relative - one(I), i_center + i_outer_relative - one(I), j_center - j_relative), color)
-    _draw!(f, image, VerticalLine(i_center - i_outer_relative, i_center - i_inner_relative, j_center + j_relative - one(I)), color)
-    _draw!(f, image, VerticalLine(i_center + i_inner_relative - one(I), i_center + i_outer_relative - one(I), j_center + j_relative - one(I)), color)
-    _draw!(f, image, HorizontalLine(i_center - j_relative, j_center + i_inner_relative - one(I), j_center + i_outer_relative - one(I)), color)
-    _draw!(f, image, HorizontalLine(i_center + j_relative - one(I), j_center + i_inner_relative - one(I), j_center + i_outer_relative - one(I)), color)
+    draw!(f, image, HorizontalLine(i_center - j_relative, j_center - i_outer_relative, j_center - i_inner_relative), color)
+    draw!(f, image, HorizontalLine(i_center + j_relative - one(I), j_center - i_outer_relative, j_center - i_inner_relative), color)
+    draw!(f, image, VerticalLine(i_center - i_outer_relative, i_center - i_inner_relative, j_center - j_relative), color)
+    draw!(f, image, VerticalLine(i_center + i_inner_relative - one(I), i_center + i_outer_relative - one(I), j_center - j_relative), color)
+    draw!(f, image, VerticalLine(i_center - i_outer_relative, i_center - i_inner_relative, j_center + j_relative - one(I)), color)
+    draw!(f, image, VerticalLine(i_center + i_inner_relative - one(I), i_center + i_outer_relative - one(I), j_center + j_relative - one(I)), color)
+    draw!(f, image, HorizontalLine(i_center - j_relative, j_center + i_inner_relative - one(I), j_center + i_outer_relative - one(I)), color)
+    draw!(f, image, HorizontalLine(i_center + j_relative - one(I), j_center + i_inner_relative - one(I), j_center + i_outer_relative - one(I)), color)
 
     return nothing
 end
@@ -344,9 +344,9 @@ get_bounding_box(shape::AbstractCircle) = Rectangle(shape.position, shape.diamet
 ##### CircleOctant
 #####
 
-draw!(image::AbstractMatrix, shape::CircleOctant, color) = _draw!(put_pixel!, image, shape, color)
+draw!(image::AbstractMatrix, shape::CircleOctant, color) = draw!(put_pixel!, image, shape, color)
 
-function _draw!(f::Function, image::AbstractMatrix, shape::CircleOctant, color)
+function draw!(f::Function, image::AbstractMatrix, shape::CircleOctant, color)
     center = shape.center
     radius = shape.radius
 
@@ -387,15 +387,15 @@ function draw!(image::AbstractMatrix, shape::OddCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_inbounds(shape, image)
-        _draw!(put_pixel_unchecked!, image, shape, color)
+        draw!(put_pixel_unchecked!, image, shape, color)
     else
-        _draw!(put_pixel!, image, shape, color)
+        draw!(put_pixel!, image, shape, color)
     end
 
     return nothing
 end
 
-function _draw!(f::Function, image::AbstractMatrix, shape::OddCircle, color)
+function draw!(f::Function, image::AbstractMatrix, shape::OddCircle, color)
     position = shape.position
     diameter = shape.diameter
 
@@ -403,8 +403,8 @@ function _draw!(f::Function, image::AbstractMatrix, shape::OddCircle, color)
 
     center, radius = get_center_radius(shape)
 
-    _draw!(image, CircleOctant(center, radius), color) do image, i, j, color
-        _draw!(f, image, OddSymmetricPoints8(center, Point(i, j)), color)
+    draw!(image, CircleOctant(center, radius), color) do image, i, j, color
+        draw!(f, image, OddSymmetricPoints8(center, Point(i, j)), color)
     end
 
     return nothing
@@ -420,15 +420,15 @@ function draw!(image::AbstractMatrix, shape::EvenCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_inbounds(shape, image)
-        _draw!(put_pixel_unchecked!, image, shape, color)
+        draw!(put_pixel_unchecked!, image, shape, color)
     else
-        _draw!(put_pixel!, image, shape, color)
+        draw!(put_pixel!, image, shape, color)
     end
 
     return nothing
 end
 
-function _draw!(f::Function, image::AbstractMatrix, shape::EvenCircle, color)
+function draw!(f::Function, image::AbstractMatrix, shape::EvenCircle, color)
     position = shape.position
     diameter = shape.diameter
 
@@ -436,8 +436,8 @@ function _draw!(f::Function, image::AbstractMatrix, shape::EvenCircle, color)
 
     center, radius = get_center_radius(shape)
 
-    _draw!(image, CircleOctant(center, radius), color) do image, i, j, color
-        _draw!(f, image, EvenSymmetricPoints8(center, Point(i, j)), color)
+    draw!(image, CircleOctant(center, radius), color) do image, i, j, color
+        draw!(f, image, EvenSymmetricPoints8(center, Point(i, j)), color)
     end
 
     return nothing
@@ -460,14 +460,14 @@ function draw!(image::AbstractMatrix, shape::Circle, color)
     return nothing
 end
 
-function _draw!(f::Function, image::AbstractMatrix, shape::Circle, color)
+function draw!(f::Function, image::AbstractMatrix, shape::Circle, color)
     position = shape.position
     diameter = shape.diameter
 
     if iseven(diameter)
-        _draw!(f, image, EvenCircle(position, diameter), color)
+        draw!(f, image, EvenCircle(position, diameter), color)
     else
-        _draw!(f, image, OddCircle(position, diameter), color)
+        draw!(f, image, OddCircle(position, diameter), color)
     end
 
     return nothing
@@ -483,22 +483,22 @@ function draw!(image::AbstractMatrix, shape::OddFilledCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_inbounds(shape, image)
-        _draw!(put_pixel_unchecked!, image, shape, color)
+        draw!(put_pixel_unchecked!, image, shape, color)
     else
-        _draw!(put_pixel!, image, shape, color)
+        draw!(put_pixel!, image, shape, color)
     end
 
     return nothing
 end
 
-function _draw!(f::Function, image::AbstractMatrix, shape::OddFilledCircle, color)
+function draw!(f::Function, image::AbstractMatrix, shape::OddFilledCircle, color)
     position = shape.position
     diameter = shape.diameter
 
     center, radius = get_center_radius(shape)
 
-    _draw!(image, CircleOctant(center, radius), color) do image, i, j, color
-        _draw!(f, image, OddSymmetricVerticalLines4(center, Point(i, j)), color)
+    draw!(image, CircleOctant(center, radius), color) do image, i, j, color
+        draw!(f, image, OddSymmetricVerticalLines4(center, Point(i, j)), color)
     end
 
     return nothing
@@ -514,22 +514,22 @@ function draw!(image::AbstractMatrix, shape::EvenFilledCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_inbounds(shape, image)
-        _draw!(put_pixel_unchecked!, image, shape, color)
+        draw!(put_pixel_unchecked!, image, shape, color)
     else
-        _draw!(put_pixel!, image, shape, color)
+        draw!(put_pixel!, image, shape, color)
     end
 
     return nothing
 end
 
-function _draw!(f::Function, image::AbstractMatrix, shape::EvenFilledCircle, color)
+function draw!(f::Function, image::AbstractMatrix, shape::EvenFilledCircle, color)
     position = shape.position
     diameter = shape.diameter
 
     center, radius = get_center_radius(shape)
 
-    _draw!(image, CircleOctant(center, radius), color) do image, i, j, color
-        _draw!(f, image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
+    draw!(image, CircleOctant(center, radius), color) do image, i, j, color
+        draw!(f, image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
     end
 
     return nothing
@@ -552,14 +552,14 @@ function draw!(image::AbstractMatrix, shape::FilledCircle, color)
     return nothing
 end
 
-function _draw!(f::Function, image::AbstractMatrix, shape::FilledCircle, color)
+function draw!(f::Function, image::AbstractMatrix, shape::FilledCircle, color)
     position = shape.position
     diameter = shape.diameter
 
     if iseven(diameter)
-        _draw!(f, image, EvenFilledCircle(position, diameter), color)
+        draw!(f, image, EvenFilledCircle(position, diameter), color)
     else
-        _draw!(f, image, OddFilledCircle(position, diameter), color)
+        draw!(f, image, OddFilledCircle(position, diameter), color)
     end
 
     return nothing
@@ -583,15 +583,15 @@ function draw!(image::AbstractMatrix, shape::ThickCircleOctant, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_inbounds(shape, image)
-        _draw!(put_pixel_unchecked!, image, shape, color)
+        draw!(put_pixel_unchecked!, image, shape, color)
     else
-        _draw!(put_pixel!, image, shape, color)
+        draw!(put_pixel!, image, shape, color)
     end
 
     return nothing
 end
 
-function _draw!(f::Function, image::AbstractMatrix, shape::ThickCircleOctant, color)
+function draw!(f::Function, image::AbstractMatrix, shape::ThickCircleOctant, color)
     center = shape.center
     radius = shape.radius
     thickness = shape.thickness
@@ -665,15 +665,15 @@ function draw!(image::AbstractMatrix, shape::OddThickCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_inbounds(shape, image)
-        _draw!(put_pixel_unchecked!, image, shape, color)
+        draw!(put_pixel_unchecked!, image, shape, color)
     else
-        _draw!(put_pixel!, image, shape, color)
+        draw!(put_pixel!, image, shape, color)
     end
 
     return nothing
 end
 
-function _draw!(f::Function, image::AbstractMatrix, shape::OddThickCircle, color)
+function draw!(f::Function, image::AbstractMatrix, shape::OddThickCircle, color)
     position = shape.position
     diameter = shape.diameter
     thickness = shape.thickness
@@ -682,8 +682,8 @@ function _draw!(f::Function, image::AbstractMatrix, shape::OddThickCircle, color
 
     center, radius = get_center_radius(shape)
 
-    _draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
-        _draw!(f, image, OddSymmetricLines8(center, i1, i2, j1), color)
+    draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
+        draw!(f, image, OddSymmetricLines8(center, i1, i2, j1), color)
     end
 
     return nothing
@@ -706,15 +706,15 @@ function draw!(image::AbstractMatrix, shape::EvenThickCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_inbounds(shape, image)
-        _draw!(put_pixel_unchecked!, image, shape, color)
+        draw!(put_pixel_unchecked!, image, shape, color)
     else
-        _draw!(put_pixel!, image, shape, color)
+        draw!(put_pixel!, image, shape, color)
     end
 
     return nothing
 end
 
-function _draw!(f::Function, image::AbstractMatrix, shape::EvenThickCircle, color)
+function draw!(f::Function, image::AbstractMatrix, shape::EvenThickCircle, color)
     position = shape.position
     diameter = shape.diameter
     thickness = shape.thickness
@@ -723,8 +723,8 @@ function _draw!(f::Function, image::AbstractMatrix, shape::EvenThickCircle, colo
 
     center, radius = get_center_radius(shape)
 
-    _draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
-        _draw!(f, image, EvenSymmetricLines8(center, i1, i2, j1), color)
+    draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
+        draw!(f, image, EvenSymmetricLines8(center, i1, i2, j1), color)
     end
 
     return nothing
@@ -760,15 +760,15 @@ function draw!(image::AbstractMatrix, shape::ThickCircle, color)
     return nothing
 end
 
-function _draw!(f::Function, image::AbstractMatrix, shape::ThickCircle, color)
+function draw!(f::Function, image::AbstractMatrix, shape::ThickCircle, color)
     position = shape.position
     diameter = shape.diameter
     thickness = shape.thickness
 
     if iseven(diameter)
-        _draw!(f, image, EvenThickCircle(position, diameter, thickness), color)
+        draw!(f, image, EvenThickCircle(position, diameter, thickness), color)
     else
-        _draw!(f, image, OddThickCircle(position, diameter, thickness), color)
+        draw!(f, image, OddThickCircle(position, diameter, thickness), color)
     end
 
     return nothing

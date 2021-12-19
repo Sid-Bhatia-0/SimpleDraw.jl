@@ -28,7 +28,7 @@ function draw!(image::AbstractMatrix, shape::TextLine, color)
     return nothing
 end
 
-function _draw!(f::Function, image::AbstractMatrix, shape::TextLine, color)
+function draw!(f::Function, image::AbstractMatrix, shape::TextLine, color)
     position = shape.position
     text = shape.text
     font = shape.font
@@ -43,7 +43,7 @@ function _draw!(f::Function, image::AbstractMatrix, shape::TextLine, color)
     char_position = position
 
     for char in text
-        _draw!(f, image, Character(char_position, char, font), color)
+        draw!(f, image, Character(char_position, char, font), color)
         char_position = Point(char_position.i, char_position.j + width)
     end
 

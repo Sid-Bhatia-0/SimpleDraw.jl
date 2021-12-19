@@ -66,12 +66,12 @@ function draw!(image::AbstractMatrix, shape::Bitmap, color)
         return nothing
     end
 
-    _draw!(put_pixel_unchecked!, image, clip(shape, image), color)
+    draw!(put_pixel_unchecked!, image, clip(shape, image), color)
 
     return nothing
 end
 
-function _draw!(f::Function, image::AbstractMatrix, shape::Bitmap, color)
+function draw!(f::Function, image::AbstractMatrix, shape::Bitmap, color)
     position = shape.position
     i_position = position.i
     j_position = position.j
