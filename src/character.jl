@@ -38,7 +38,9 @@ function draw!(image::AbstractMatrix, shape::Character, color)
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::Character, color)
+_draw!(image::AbstractMatrix, shape::Character, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::Character, color)
     position = shape.position
     char = shape.char
     font = shape.font
@@ -49,7 +51,7 @@ function _draw!(image::AbstractMatrix, shape::Character, color)
 
     bitmap_shape = Bitmap(position, @view bitmap[:, :, k])
 
-    _draw!(image, bitmap_shape, color)
+    _draw!(f, image, bitmap_shape, color)
 
     return nothing
 end
