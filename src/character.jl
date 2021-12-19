@@ -33,12 +33,10 @@ function draw!(image::AbstractMatrix, shape::Character, color)
         return nothing
     end
 
-    _draw!(image, clip(bitmap_shape, image), color)
+    _draw!(put_pixel_unchecked!, image, clip(bitmap_shape, image), color)
 
     return nothing
 end
-
-_draw!(image::AbstractMatrix, shape::Character, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
 function _draw!(f::Function, image::AbstractMatrix, shape::Character, color)
     position = shape.position

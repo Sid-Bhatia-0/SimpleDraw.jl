@@ -99,8 +99,6 @@ end
 
 draw!(image::AbstractMatrix, shape::OddSymmetricPoints8, color) = _draw!(put_pixel!, image, shape, color)
 
-_draw!(image::AbstractMatrix, shape::OddSymmetricPoints8, color) = _draw!(put_pixel_unchecked!, image, shape, color)
-
 function _draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricPoints8, color)
     center = shape.center
     point = shape.point
@@ -130,8 +128,6 @@ end
 #####
 
 draw!(image::AbstractMatrix, shape::EvenSymmetricPoints8, color) = _draw!(put_pixel!, image, shape, color)
-
-_draw!(image::AbstractMatrix, shape::EvenSymmetricPoints8, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
 function _draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricPoints8, color)
     center = shape.center
@@ -164,8 +160,6 @@ end
 
 draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color) = _draw!(put_pixel!, image, shape, color)
 
-_draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color) = _draw!(put_pixel_unchecked!, image, shape, color)
-
 function _draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color)
     center = shape.center
     point = shape.point
@@ -191,8 +185,6 @@ end
 #####
 
 draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color) = _draw!(put_pixel!, image, shape, color)
-
-_draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
 function _draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color)
     center = shape.center
@@ -221,8 +213,6 @@ end
 #####
 
 draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color) = _draw!(put_pixel!, image, shape, color)
-
-_draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
 function _draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricLines8, color)
     center = shape.center
@@ -254,8 +244,6 @@ end
 #####
 
 draw!(image::AbstractMatrix, shape::EvenSymmetricLines8, color) = _draw!(put_pixel!, image, shape, color)
-
-_draw!(image::AbstractMatrix, shape::EvenSymmetricLines8, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
 function _draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricLines8, color)
     center = shape.center
@@ -358,8 +346,6 @@ get_bounding_box(shape::AbstractCircle) = Rectangle(shape.position, shape.diamet
 
 draw!(image::AbstractMatrix, shape::CircleOctant, color) = _draw!(put_pixel!, image, shape, color)
 
-_draw!(image::AbstractMatrix, shape::CircleOctant, color) = _draw!(put_pixel_unchecked!, image, shape, color)
-
 function _draw!(f::Function, image::AbstractMatrix, shape::CircleOctant, color)
     center = shape.center
     radius = shape.radius
@@ -409,8 +395,6 @@ function draw!(image::AbstractMatrix, shape::OddCircle, color)
     return nothing
 end
 
-_draw!(image::AbstractMatrix, shape::OddCircle, color) = _draw!(put_pixel_unchecked!, image, shape, color)
-
 function _draw!(f::Function, image::AbstractMatrix, shape::OddCircle, color)
     position = shape.position
     diameter = shape.diameter
@@ -444,8 +428,6 @@ function draw!(image::AbstractMatrix, shape::EvenCircle, color)
     return nothing
 end
 
-_draw!(image::AbstractMatrix, shape::EvenCircle, color) = _draw(put_pixel_unchecked!, image, shape, color)
-
 function _draw!(f::Function, image::AbstractMatrix, shape::EvenCircle, color)
     position = shape.position
     diameter = shape.diameter
@@ -478,8 +460,6 @@ function draw!(image::AbstractMatrix, shape::Circle, color)
     return nothing
 end
 
-_draw!(image::AbstractMatrix, shape::Circle, color) = _draw!(put_pixel_unchecked!, image, shape, color)
-
 function _draw!(f::Function, image::AbstractMatrix, shape::Circle, color)
     position = shape.position
     diameter = shape.diameter
@@ -510,8 +490,6 @@ function draw!(image::AbstractMatrix, shape::OddFilledCircle, color)
 
     return nothing
 end
-
-_draw!(image::AbstractMatrix, shape::OddFilledCircle, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
 function _draw!(f::Function, image::AbstractMatrix, shape::OddFilledCircle, color)
     position = shape.position
@@ -544,8 +522,6 @@ function draw!(image::AbstractMatrix, shape::EvenFilledCircle, color)
     return nothing
 end
 
-_draw!(image::AbstractMatrix, shape::EvenFilledCircle, color) = _draw!(put_pixel_unchecked!, image, shape, color)
-
 function _draw!(f::Function, image::AbstractMatrix, shape::EvenFilledCircle, color)
     position = shape.position
     diameter = shape.diameter
@@ -575,8 +551,6 @@ function draw!(image::AbstractMatrix, shape::FilledCircle, color)
 
     return nothing
 end
-
-_draw!(image::AbstractMatrix, shape::FilledCircle, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
 function _draw!(f::Function, image::AbstractMatrix, shape::FilledCircle, color)
     position = shape.position
@@ -616,8 +590,6 @@ function draw!(image::AbstractMatrix, shape::ThickCircleOctant, color)
 
     return nothing
 end
-
-_draw!(image::AbstractMatrix, shape::ThickCircleOctant, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
 function _draw!(f::Function, image::AbstractMatrix, shape::ThickCircleOctant, color)
     center = shape.center
@@ -701,8 +673,6 @@ function draw!(image::AbstractMatrix, shape::OddThickCircle, color)
     return nothing
 end
 
-_draw!(image::AbstractMatrix, shape::OddThickCircle, color) = _draw!(put_pixel_unchecked!, image, shape, color)
-
 function _draw!(f::Function, image::AbstractMatrix, shape::OddThickCircle, color)
     position = shape.position
     diameter = shape.diameter
@@ -743,8 +713,6 @@ function draw!(image::AbstractMatrix, shape::EvenThickCircle, color)
 
     return nothing
 end
-
-_draw!(image::AbstractMatrix, shape::EvenThickCircle, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
 function _draw!(f::Function, image::AbstractMatrix, shape::EvenThickCircle, color)
     position = shape.position
@@ -791,8 +759,6 @@ function draw!(image::AbstractMatrix, shape::ThickCircle, color)
 
     return nothing
 end
-
-_draw!(image::AbstractMatrix, shape::ThickCircle, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
 function _draw!(f::Function, image::AbstractMatrix, shape::ThickCircle, color)
     position = shape.position

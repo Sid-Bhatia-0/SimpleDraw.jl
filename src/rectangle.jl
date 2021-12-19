@@ -87,8 +87,6 @@ function draw!(image::AbstractMatrix, shape::Rectangle, color)
     return nothing
 end
 
-_draw!(image::AbstractMatrix, shape::Rectangle, color) = _draw!(put_pixel_unchecked!, image, shape, color)
-
 function _draw!(f::Function, image::AbstractMatrix, shape::Rectangle, color)
     position = shape.position
     height = shape.height
@@ -164,12 +162,10 @@ function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
         return nothing
     end
 
-    _draw!(image, clip(shape, image), color)
+    _draw!(put_pixel_unchecked!, image, clip(shape, image), color)
 
     return nothing
 end
-
-_draw!(image::AbstractMatrix, shape::FilledRectangle, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
 function _draw!(f::Function, image::AbstractMatrix, shape::FilledRectangle, color)
     position = shape.position
@@ -218,8 +214,6 @@ function draw!(image::AbstractMatrix, shape::ThickRectangle, color)
 
     return nothing
 end
-
-_draw!(image::AbstractMatrix, shape::ThickRectangle, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
 function _draw!(f::Function, image::AbstractMatrix, shape::ThickRectangle, color)
     position = shape.position

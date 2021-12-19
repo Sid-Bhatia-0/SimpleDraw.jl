@@ -72,12 +72,10 @@ function draw!(image::AbstractMatrix, shape::VerticalLine, color)
         return nothing
     end
 
-    _draw!(image, clip(shape, image), color)
+    _draw!(put_pixel_unchecked!, image, clip(shape, image), color)
 
     return nothing
 end
-
-_draw!(image::AbstractMatrix, shape::VerticalLine, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
 function _draw!(f::Function, image::AbstractMatrix, shape::VerticalLine, color)
     i_min = shape.i_min
@@ -142,12 +140,10 @@ function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
         return nothing
     end
 
-    _draw!(image, clip(shape, image), color)
+    _draw!(put_pixel_unchecked!, image, clip(shape, image), color)
 
     return nothing
 end
-
-_draw!(image::AbstractMatrix, shape::HorizontalLine, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
 function _draw!(f::Function, image::AbstractMatrix, shape::HorizontalLine, color)
     i = shape.i
@@ -220,8 +216,6 @@ function draw!(image::AbstractMatrix, shape::Line, color)
 
     return nothing
 end
-
-_draw!(image::AbstractMatrix, shape::Line, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
 function _draw!(f::Function, image::AbstractMatrix, shape::Line, color)
     point1 = shape.point1
@@ -329,8 +323,6 @@ function draw!(image::AbstractMatrix, shape::ThickLine, color)
 
     return nothing
 end
-
-_draw!(image::AbstractMatrix, shape::ThickLine, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
 function _draw!(f::Function, image::AbstractMatrix, shape::ThickLine, color)
     point1 = shape.point1

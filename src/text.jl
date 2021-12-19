@@ -28,8 +28,6 @@ function draw!(image::AbstractMatrix, shape::TextLine, color)
     return nothing
 end
 
-_draw!(image::AbstractMatrix, shape::TextLine, color) = _draw!(put_pixel_unchecked!, image, shape, color)
-
 function _draw!(f::Function, image::AbstractMatrix, shape::TextLine, color)
     position = shape.position
     text = shape.text
