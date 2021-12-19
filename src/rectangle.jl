@@ -78,39 +78,18 @@ get_bounding_box(shape::AbstractRectangle) = Rectangle(shape.position, shape.hei
 function draw!(image::AbstractMatrix, shape::Rectangle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
-    if is_outbounds(shape, image)
-        return nothing
-    end
-
     if is_inbounds(shape, image)
-        _draw!(image, shape, color)
-        return nothing
+        _draw!(put_pixel_unchecked!, image, shape, color)
+    else
+        _draw!(put_pixel!, image, shape, color)
     end
-
-    position = shape.position
-    height = shape.height
-    width = shape.width
-
-    I = typeof(height)
-
-    i_min = position.i
-    j_min = position.j
-
-    i_max = i_min + height - one(I)
-    j_max = j_min + width - one(I)
-
-    j_min_plus_1 = j_min + one(I)
-    j_max_minus_1 = j_max - one(I)
-
-    draw!(image, VerticalLine(i_min, i_max, j_min), color)
-    draw!(image, HorizontalLine(i_min, j_min_plus_1, j_max_minus_1), color)
-    draw!(image, HorizontalLine(i_max, j_min_plus_1, j_max_minus_1), color)
-    draw!(image, VerticalLine(i_min, i_max, j_max), color)
 
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::Rectangle, color)
+_draw!(image::AbstractMatrix, shape::Rectangle, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::Rectangle, color)
     position = shape.position
     height = shape.height
     width = shape.width
@@ -126,10 +105,10 @@ function _draw!(image::AbstractMatrix, shape::Rectangle, color)
     j_min_plus_1 = j_min + one(I)
     j_max_minus_1 = j_max - one(I)
 
-    _draw!(image, VerticalLine(i_min, i_max, j_min), color)
-    _draw!(image, HorizontalLine(i_min, j_min_plus_1, j_max_minus_1), color)
-    _draw!(image, HorizontalLine(i_max, j_min_plus_1, j_max_minus_1), color)
-    _draw!(image, VerticalLine(i_min, i_max, j_max), color)
+    _draw!(f, image, VerticalLine(i_min, i_max, j_min), color)
+    _draw!(f, image, HorizontalLine(i_min, j_min_plus_1, j_max_minus_1), color)
+    _draw!(f, image, HorizontalLine(i_max, j_min_plus_1, j_max_minus_1), color)
+    _draw!(f, image, VerticalLine(i_min, i_max, j_max), color)
 
     return nothing
 end
@@ -190,7 +169,9 @@ function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::FilledRectangle, color)
+_draw!(image::AbstractMatrix, shape::FilledRectangle, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::FilledRectangle, color)
     position = shape.position
     height = shape.height
     width = shape.width
@@ -203,7 +184,11 @@ function _draw!(image::AbstractMatrix, shape::FilledRectangle, color)
     i_max = i_min + height - one(I)
     j_max = j_min + width - one(I)
 
-    @inbounds image[i_min:i_max, j_min:j_max] .= color
+    for j in j_min:j_max
+        for i in i_min:i_max
+            f(image, i, j, color)
+        end
+    end
 
     return nothing
 end
@@ -225,40 +210,18 @@ end
 function draw!(image::AbstractMatrix, shape::ThickRectangle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
-    if is_outbounds(shape, image)
-        return nothing
-    end
-
     if is_inbounds(shape, image)
-        _draw!(image, shape, color)
-        return nothing
+        _draw!(put_pixel_unchecked!, image, shape, color)
+    else
+        _draw!(put_pixel!, image, shape, color)
     end
-
-    position = shape.position
-    height = shape.height
-    width = shape.width
-    thickness = shape.thickness
-
-    I = typeof(height)
-
-    i_min = position.i
-    j_min = position.j
-
-    i_max = i_min + height - one(I)
-    j_max = j_min + width - one(I)
-
-    j_min_plus_thickness = j_min + thickness
-    width_minus_twice_thickness = width - convert(I, 2) * thickness
-
-    draw!(image, FilledRectangle(position, height, thickness), color)
-    draw!(image, FilledRectangle(Point(i_min, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
-    draw!(image, FilledRectangle(Point(i_min + height - thickness, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
-    draw!(image, FilledRectangle(Point(i_min, j_min + width - thickness), height, thickness), color)
 
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::ThickRectangle, color)
+_draw!(image::AbstractMatrix, shape::ThickRectangle, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::ThickRectangle, color)
     position = shape.position
     height = shape.height
     width = shape.width
@@ -275,10 +238,10 @@ function _draw!(image::AbstractMatrix, shape::ThickRectangle, color)
     j_min_plus_thickness = j_min + thickness
     width_minus_twice_thickness = width - convert(I, 2) * thickness
 
-    _draw!(image, FilledRectangle(position, height, thickness), color)
-    _draw!(image, FilledRectangle(Point(i_min, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
-    _draw!(image, FilledRectangle(Point(i_min + height - thickness, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
-    _draw!(image, FilledRectangle(Point(i_min, j_min + width - thickness), height, thickness), color)
+    _draw!(f, image, FilledRectangle(position, height, thickness), color)
+    _draw!(f, image, FilledRectangle(Point(i_min, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
+    _draw!(f, image, FilledRectangle(Point(i_min + height - thickness, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
+    _draw!(f, image, FilledRectangle(Point(i_min, j_min + width - thickness), height, thickness), color)
 
     return nothing
 end

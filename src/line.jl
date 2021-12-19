@@ -77,8 +77,17 @@ function draw!(image::AbstractMatrix, shape::VerticalLine, color)
     return nothing
 end
 
-@inline function _draw!(image::AbstractMatrix, shape::VerticalLine, color)
-    @inbounds image[shape.i_min:shape.i_max, shape.j] .= color
+_draw!(image::AbstractMatrix, shape::VerticalLine, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::VerticalLine, color)
+    i_min = shape.i_min
+    i_max = shape.i_max
+    j = shape.j
+
+    for i in i_min:i_max
+        f(image, i, j, color)
+    end
+
     return nothing
 end
 
@@ -138,8 +147,17 @@ function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
     return nothing
 end
 
-@inline function _draw!(image::AbstractMatrix, shape::HorizontalLine, color)
-    @inbounds image[shape.i, shape.j_min:shape.j_max] .= color
+_draw!(image::AbstractMatrix, shape::HorizontalLine, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::HorizontalLine, color)
+    i = shape.i
+    j_min = shape.j_min
+    j_max = shape.j_max
+
+    for j in j_min:j_max
+        f(image, i, j, color)
+    end
+
     return nothing
 end
 
@@ -303,28 +321,18 @@ end
 function draw!(image::AbstractMatrix, shape::ThickLine, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
-    point1 = shape.point1
-    point2 = shape.point2
-    diameter = shape.diameter
-
-    I = typeof(diameter)
-
-    radius = diameter ÷ convert(I, 2)
-
     if is_inbounds(shape, image)
-        _draw!(image, Line(point1, point2), color) do image, i, j, color
-            _draw!(image, FilledCircle(Point(i - radius, j - radius), diameter), color)
-        end
+        _draw!(put_pixel_unchecked!, image, shape, color)
     else
-        _draw!(image, Line(point1, point2), color) do image, i, j, color
-            draw!(image, FilledCircle(Point(i - radius, j - radius), diameter), color)
-        end
+        _draw!(put_pixel!, image, shape, color)
     end
 
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::ThickLine, color)
+_draw!(image::AbstractMatrix, shape::ThickLine, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::ThickLine, color)
     point1 = shape.point1
     point2 = shape.point2
     diameter = shape.diameter
@@ -334,7 +342,7 @@ function _draw!(image::AbstractMatrix, shape::ThickLine, color)
     radius = diameter ÷ convert(I, 2)
 
     _draw!(image, Line(point1, point2), color) do image, i, j, color
-        _draw!(image, FilledCircle(Point(i - radius, j - radius), diameter), color)
+        _draw!(f, image, FilledCircle(Point(i - radius, j - radius), diameter), color)
     end
 
     return nothing
