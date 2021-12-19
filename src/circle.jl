@@ -478,14 +478,16 @@ function draw!(image::AbstractMatrix, shape::Circle, color)
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::Circle, color)
+_draw!(image::AbstractMatrix, shape::Circle, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::Circle, color)
     position = shape.position
     diameter = shape.diameter
 
     if iseven(diameter)
-        _draw!(image, EvenCircle(position, diameter), color)
+        _draw!(f, image, EvenCircle(position, diameter), color)
     else
-        _draw!(image, OddCircle(position, diameter), color)
+        _draw!(f, image, OddCircle(position, diameter), color)
     end
 
     return nothing
@@ -790,15 +792,17 @@ function draw!(image::AbstractMatrix, shape::ThickCircle, color)
     return nothing
 end
 
-function _draw!(image::AbstractMatrix, shape::ThickCircle, color)
+_draw!(image::AbstractMatrix, shape::ThickCircle, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+
+function _draw!(f::Function, image::AbstractMatrix, shape::ThickCircle, color)
     position = shape.position
     diameter = shape.diameter
     thickness = shape.thickness
 
     if iseven(diameter)
-        _draw!(image, EvenThickCircle(position, diameter, thickness), color)
+        _draw!(f, image, EvenThickCircle(position, diameter, thickness), color)
     else
-        _draw!(image, OddThickCircle(position, diameter, thickness), color)
+        _draw!(f, image, OddThickCircle(position, diameter, thickness), color)
     end
 
     return nothing
