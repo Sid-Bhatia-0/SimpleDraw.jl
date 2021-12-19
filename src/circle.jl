@@ -34,7 +34,7 @@ struct EvenSymmetricLines8{I <: Integer} <: AbstractShape
     j::I
 end
 
-struct StandardCircleOctant{I <: Integer} <: AbstractShape
+struct CircleOctant{I <: Integer} <: AbstractShape
     center::Point{I}
     radius::I
 end
@@ -353,14 +353,14 @@ end
 get_bounding_box(shape::AbstractCircle) = Rectangle(shape.position, shape.diameter, shape.diameter)
 
 #####
-##### StandardCircleOctant
+##### CircleOctant
 #####
 
-draw!(image::AbstractMatrix, shape::StandardCircleOctant, color) = _draw!(put_pixel!, image, shape, color)
+draw!(image::AbstractMatrix, shape::CircleOctant, color) = _draw!(put_pixel!, image, shape, color)
 
-_draw!(image::AbstractMatrix, shape::StandardCircleOctant, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+_draw!(image::AbstractMatrix, shape::CircleOctant, color) = _draw!(put_pixel_unchecked!, image, shape, color)
 
-function _draw!(f::Function, image::AbstractMatrix, shape::StandardCircleOctant, color)
+function _draw!(f::Function, image::AbstractMatrix, shape::CircleOctant, color)
     center = shape.center
     radius = shape.radius
 
@@ -419,7 +419,7 @@ function _draw!(f::Function, image::AbstractMatrix, shape::OddCircle, color)
 
     center, radius = get_center_radius(shape)
 
-    _draw!(image, StandardCircleOctant(center, radius), color) do image, i, j, color
+    _draw!(image, CircleOctant(center, radius), color) do image, i, j, color
         _draw!(f, image, OddSymmetricPoints8(center, Point(i, j)), color)
     end
 
@@ -454,7 +454,7 @@ function _draw!(f::Function, image::AbstractMatrix, shape::EvenCircle, color)
 
     center, radius = get_center_radius(shape)
 
-    _draw!(image, StandardCircleOctant(center, radius), color) do image, i, j, color
+    _draw!(image, CircleOctant(center, radius), color) do image, i, j, color
         _draw!(f, image, EvenSymmetricPoints8(center, Point(i, j)), color)
     end
 
@@ -517,7 +517,7 @@ function _draw!(f::Function, image::AbstractMatrix, shape::OddFilledCircle, colo
 
     center, radius = get_center_radius(shape)
 
-    _draw!(image, StandardCircleOctant(center, radius), color) do image, i, j, color
+    _draw!(image, CircleOctant(center, radius), color) do image, i, j, color
         _draw!(f, image, OddSymmetricVerticalLines4(center, Point(i, j)), color)
     end
 
@@ -550,7 +550,7 @@ function _draw!(f::Function, image::AbstractMatrix, shape::EvenFilledCircle, col
 
     center, radius = get_center_radius(shape)
 
-    _draw!(image, StandardCircleOctant(center, radius), color) do image, i, j, color
+    _draw!(image, CircleOctant(center, radius), color) do image, i, j, color
         _draw!(f, image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
     end
 
