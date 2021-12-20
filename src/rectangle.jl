@@ -88,6 +88,8 @@ function draw!(image::AbstractMatrix, shape::Rectangle, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::Rectangle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     height = shape.height
     width = shape.width
@@ -168,6 +170,8 @@ function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::FilledRectangle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     height = shape.height
     width = shape.width
@@ -216,6 +220,8 @@ function draw!(image::AbstractMatrix, shape::ThickRectangle, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::ThickRectangle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     height = shape.height
     width = shape.width
