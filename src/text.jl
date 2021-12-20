@@ -4,7 +4,11 @@ struct TextLine{I, S, F <: AbstractFont} <: AbstractShape
     font::F
 end
 
+is_valid(shape::TextLine) = all(x -> has_char(shape.font, x), shape.text)
+
 function draw!(image::AbstractMatrix, shape::TextLine, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     text = shape.text
     font = shape.font
@@ -28,9 +32,9 @@ function draw!(image::AbstractMatrix, shape::TextLine, color)
     return nothing
 end
 
-_draw!(image::AbstractMatrix, shape::TextLine, color) = _draw!(put_pixel_unchecked!, image, shape, color)
+function draw!(f::Function, image::AbstractMatrix, shape::TextLine, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
-function _draw!(f::Function, image::AbstractMatrix, shape::TextLine, color)
     position = shape.position
     text = shape.text
     font = shape.font
@@ -45,7 +49,7 @@ function _draw!(f::Function, image::AbstractMatrix, shape::TextLine, color)
     char_position = position
 
     for char in text
-        _draw!(f, image, Character(char_position, char, font), color)
+        draw!(f, image, Character(char_position, char, font), color)
         char_position = Point(char_position.i, char_position.j + width)
     end
 
