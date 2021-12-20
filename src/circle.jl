@@ -1,40 +1,42 @@
+abstract type AbstractOctantSymmetry <: AbstractShape end
+abstract type AbstractOctant <: AbstractShape end
 abstract type AbstractCircle <: AbstractShape end
 
-struct OddSymmetricPoints8{I <: Integer} <: AbstractShape
+struct OddSymmetricPoints8{I <: Integer} <: AbstractOctantSymmetry
     center::Point{I}
     point::Point{I}
 end
 
-struct EvenSymmetricPoints8{I <: Integer} <: AbstractShape
+struct EvenSymmetricPoints8{I <: Integer} <: AbstractOctantSymmetry
     center::Point{I}
     point::Point{I}
 end
 
-struct OddSymmetricVerticalLines4{I <: Integer} <: AbstractShape
+struct OddSymmetricVerticalLines4{I <: Integer} <: AbstractOctantSymmetry
     center::Point{I}
     point::Point{I}
 end
 
-struct EvenSymmetricVerticalLines4{I <: Integer} <: AbstractShape
+struct EvenSymmetricVerticalLines4{I <: Integer} <: AbstractOctantSymmetry
     center::Point{I}
     point::Point{I}
 end
 
-struct OddSymmetricLines8{I <: Integer} <: AbstractShape
+struct OddSymmetricLines8{I <: Integer} <: AbstractOctantSymmetry
     center::Point{I}
     i_inner::I
     i_outer::I
     j::I
 end
 
-struct EvenSymmetricLines8{I <: Integer} <: AbstractShape
+struct EvenSymmetricLines8{I <: Integer} <: AbstractOctantSymmetry
     center::Point{I}
     i_inner::I
     i_outer::I
     j::I
 end
 
-struct CircleOctant{I <: Integer} <: AbstractShape
+struct CircleOctant{I <: Integer} <: AbstractOctant
     center::Point{I}
     radius::I
 end
@@ -69,7 +71,7 @@ struct FilledCircle{I <: Integer} <: AbstractCircle
     diameter::I
 end
 
-struct ThickCircleOctant{I <: Integer} <: AbstractShape
+struct ThickCircleOctant{I <: Integer} <: AbstractOctant
     center::Point{I}
     radius::I
     thickness::I
@@ -94,12 +96,26 @@ struct ThickCircle{I <: Integer} <: AbstractCircle
 end
 
 #####
+##### AbstractOctantSymmetry
+#####
+
+is_valid(shape::AbstractOctantSymmetry) = (shape.point.i >= shape.center.i) && (shape.point.j >= shape.center.j) && (shape.point.i >= shape.point.j)
+
+#####
+##### AbstractOctant
+#####
+
+is_valid(shape::AbstractOctant) = shape.radius >= zero(shape.radius)
+
+#####
 ##### OddSymmetricPoints8
 #####
 
 draw!(image::AbstractMatrix, shape::OddSymmetricPoints8, color) = draw!(put_pixel!, image, shape, color)
 
 function draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricPoints8, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     center = shape.center
     point = shape.point
 
@@ -130,6 +146,8 @@ end
 draw!(image::AbstractMatrix, shape::EvenSymmetricPoints8, color) = draw!(put_pixel!, image, shape, color)
 
 function draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricPoints8, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     center = shape.center
     point = shape.point
 
@@ -161,6 +179,8 @@ end
 draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color) = draw!(put_pixel!, image, shape, color)
 
 function draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     center = shape.center
     point = shape.point
 
@@ -187,6 +207,8 @@ end
 draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color) = draw!(put_pixel!, image, shape, color)
 
 function draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     center = shape.center
     point = shape.point
 
@@ -212,9 +234,13 @@ end
 ##### OddSymmetricLines8
 #####
 
+is_valid(shape::OddSymmetricLines8) = (shape.i_inner >= shape.center.i) && (shape.i_outer >= shape.center.i) && (shape.j >= shape.center.j) && (shape.i_outer >= shape.i_inner)
+
 draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color) = draw!(put_pixel!, image, shape, color)
 
 function draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricLines8, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     center = shape.center
     i_inner = shape.i_inner
     i_outer = shape.i_outer
@@ -243,9 +269,13 @@ end
 ##### EvenSymmetricLines8
 #####
 
+is_valid(shape::EvenSymmetricLines8) = (shape.i_inner >= shape.center.i) && (shape.i_outer >= shape.center.i) && (shape.j >= shape.center.j) && (shape.i_outer >= shape.i_inner)
+
 draw!(image::AbstractMatrix, shape::EvenSymmetricLines8, color) = draw!(put_pixel!, image, shape, color)
 
 function draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricLines8, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     center = shape.center
     i_inner = shape.i_inner
     i_outer = shape.i_outer
@@ -344,9 +374,13 @@ get_bounding_box(shape::AbstractCircle) = Rectangle(shape.position, shape.diamet
 ##### CircleOctant
 #####
 
+is_valid(shape::CircleOctant) = shape.radius >= zero(shape.radius)
+
 draw!(image::AbstractMatrix, shape::CircleOctant, color) = draw!(put_pixel!, image, shape, color)
 
 function draw!(f::Function, image::AbstractMatrix, shape::CircleOctant, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     center = shape.center
     radius = shape.radius
 
@@ -396,6 +430,8 @@ function draw!(image::AbstractMatrix, shape::OddCircle, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::OddCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     diameter = shape.diameter
 
@@ -429,6 +465,8 @@ function draw!(image::AbstractMatrix, shape::EvenCircle, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::EvenCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     diameter = shape.diameter
 
@@ -461,6 +499,8 @@ function draw!(image::AbstractMatrix, shape::Circle, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::Circle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     diameter = shape.diameter
 
@@ -492,6 +532,8 @@ function draw!(image::AbstractMatrix, shape::OddFilledCircle, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::OddFilledCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     diameter = shape.diameter
 
@@ -523,6 +565,8 @@ function draw!(image::AbstractMatrix, shape::EvenFilledCircle, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::EvenFilledCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     diameter = shape.diameter
 
@@ -553,6 +597,8 @@ function draw!(image::AbstractMatrix, shape::FilledCircle, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::FilledCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     diameter = shape.diameter
 
@@ -568,6 +614,8 @@ end
 #####
 ##### ThickCircleOctant
 #####
+
+is_valid(shape::ThickCircleOctant) = (shape.radius >= zero(shape.radius)) && (shape.thickness >= zero(thickness) && (shape.thickness <= shape.radius + one(shape.radius)))
 
 function is_valid(shape::ThickCircleOctant)
     center = shape.center
@@ -592,6 +640,8 @@ function draw!(image::AbstractMatrix, shape::ThickCircleOctant, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::ThickCircleOctant, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     center = shape.center
     radius = shape.radius
     thickness = shape.thickness
@@ -674,6 +724,8 @@ function draw!(image::AbstractMatrix, shape::OddThickCircle, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::OddThickCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     diameter = shape.diameter
     thickness = shape.thickness
@@ -715,6 +767,8 @@ function draw!(image::AbstractMatrix, shape::EvenThickCircle, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::EvenThickCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     diameter = shape.diameter
     thickness = shape.thickness
@@ -761,6 +815,8 @@ function draw!(image::AbstractMatrix, shape::ThickCircle, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::ThickCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     diameter = shape.diameter
     thickness = shape.thickness
