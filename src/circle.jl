@@ -1,35 +1,38 @@
 abstract type AbstractOctantSymmetry <: AbstractShape end
+abstract type AbstractOddOctantSymmetry <: AbstractOctantSymmetry end
+abstract type AbstractEvenOctantSymmetry <: AbstractOctantSymmetry end
+
 abstract type AbstractOctant <: AbstractShape end
 abstract type AbstractCircle <: AbstractShape end
 
-struct OddSymmetricPoints8{I <: Integer} <: AbstractOctantSymmetry
+struct OddSymmetricPoints8{I <: Integer} <: AbstractOddOctantSymmetry
     center::Point{I}
     point::Point{I}
 end
 
-struct EvenSymmetricPoints8{I <: Integer} <: AbstractOctantSymmetry
+struct EvenSymmetricPoints8{I <: Integer} <: AbstractEvenOctantSymmetry
     center::Point{I}
     point::Point{I}
 end
 
-struct OddSymmetricVerticalLines4{I <: Integer} <: AbstractOctantSymmetry
+struct OddSymmetricVerticalLines4{I <: Integer} <: AbstractOddOctantSymmetry
     center::Point{I}
     point::Point{I}
 end
 
-struct EvenSymmetricVerticalLines4{I <: Integer} <: AbstractOctantSymmetry
+struct EvenSymmetricVerticalLines4{I <: Integer} <: AbstractEvenOctantSymmetry
     center::Point{I}
     point::Point{I}
 end
 
-struct OddSymmetricLines8{I <: Integer} <: AbstractOctantSymmetry
+struct OddSymmetricLines8{I <: Integer} <: AbstractOddOctantSymmetry
     center::Point{I}
     i_inner::I
     i_outer::I
     j::I
 end
 
-struct EvenSymmetricLines8{I <: Integer} <: AbstractOctantSymmetry
+struct EvenSymmetricLines8{I <: Integer} <: AbstractEvenOctantSymmetry
     center::Point{I}
     i_inner::I
     i_outer::I
@@ -96,10 +99,38 @@ struct ThickCircle{I <: Integer} <: AbstractCircle
 end
 
 #####
-##### AbstractOctantSymmetry
+##### AbstractOddOctantSymmetry
 #####
 
-is_valid(shape::AbstractOctantSymmetry) = (shape.point.i >= shape.center.i) && (shape.point.j >= shape.center.j) && (shape.point.i >= shape.point.j)
+function is_valid(shape::AbstractOddOctantSymmetry)
+    center = shape.center
+    point = shape.point
+
+    i_center = center.i
+    j_center = center.j
+
+    i_point = point.i
+    j_point = point.j
+
+    return (i_point >= i_center) && (j_point >= j_center) && (i_point - i_center >= j_point - j_center)
+end
+
+#####
+##### AbstractEvenOctantSymmetry
+#####
+
+function is_valid(shape::AbstractEvenOctantSymmetry)
+    center = shape.center
+    point = shape.point
+
+    i_center = center.i
+    j_center = center.j
+
+    i_point = point.i
+    j_point = point.j
+
+    return (i_point > i_center) && (j_point > j_center) && (i_point - i_center >= j_point - j_center)
+end
 
 #####
 ##### AbstractOctant
@@ -475,7 +506,11 @@ function draw!(f::Function, image::AbstractMatrix, shape::EvenCircle, color)
     center, radius = get_center_radius(shape)
 
     draw!(image, CircleOctant(center, radius), color) do image, i, j, color
-        draw!(f, image, EvenSymmetricPoints8(center, Point(i, j)), color)
+        if i > center.i && j > center.j
+            draw!(f, image, EvenSymmetricPoints8(center, Point(i, j)), color)
+        else
+            return nothing
+        end
     end
 
     return nothing
@@ -573,7 +608,11 @@ function draw!(f::Function, image::AbstractMatrix, shape::EvenFilledCircle, colo
     center, radius = get_center_radius(shape)
 
     draw!(image, CircleOctant(center, radius), color) do image, i, j, color
-        draw!(f, image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
+        if i > center.i && j > center.j
+            draw!(f, image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
+        else
+            return nothing
+        end
     end
 
     return nothing
@@ -778,7 +817,11 @@ function draw!(f::Function, image::AbstractMatrix, shape::EvenThickCircle, color
     center, radius = get_center_radius(shape)
 
     draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
-        draw!(f, image, EvenSymmetricLines8(center, i1, i2, j1), color)
+        if i1 > center.i && j1 > center.j
+            draw!(f, image, EvenSymmetricLines8(center, i1, i2, j1), color)
+        else
+            return nothing
+        end
     end
 
     return nothing
