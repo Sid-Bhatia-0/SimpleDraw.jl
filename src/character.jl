@@ -18,7 +18,7 @@ function has_char(font::Terminus_32_16, char::Char)
     codepoint_exclamation = codepoint('!')
     k = codepoint(char) - codepoint_exclamation + one(codepoint_exclamation)
 
-    return k in axes(bitmap, 3)
+    return (k in axes(bitmap, 3) || char == ' ')
 end
 
 function get_bitmap(font::Terminus_32_16, char::Char)
@@ -34,30 +34,36 @@ end
 
 is_valid(shape::Character) = has_char(shape.font, shape.char)
 
-function draw!(image::AbstractMatrix, shape::Character, color)
+function draw!(image::AbstractMatrix, shape::Character{I, C, Terminus_32_16}, color) where {I, C}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position
     char = shape.char
     font = shape.font
 
-    bitmap_shape = Bitmap(position, get_bitmap(font, char))
-
-    draw!(put_pixel_unchecked!, image, clip(bitmap_shape, image), color)
+    if char == ' '
+        return nothing
+    else
+        bitmap_shape = Bitmap(position, get_bitmap(font, char))
+        draw!(put_pixel_unchecked!, image, clip(bitmap_shape, image), color)
+    end
 
     return nothing
 end
 
-function draw!(f::Function, image::AbstractMatrix, shape::Character, color)
+function draw!(f::Function, image::AbstractMatrix, shape::Character{I, C, Terminus_32_16}, color) where {I, C}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position
     char = shape.char
     font = shape.font
 
-    bitmap_shape = Bitmap(position, get_bitmap(font, char))
-
-    draw!(f, image, bitmap_shape, color)
+    if char == ' '
+        return nothing
+    else
+        bitmap_shape = Bitmap(position, get_bitmap(font, char))
+        draw!(f, image, bitmap_shape, color)
+    end
 
     return nothing
 end
