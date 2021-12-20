@@ -4,7 +4,11 @@ struct TextLine{I, S, F <: AbstractFont} <: AbstractShape
     font::F
 end
 
+is_valid(shape::TextLine) = all(x -> has_char(shape.font, x), shape.text)
+
 function draw!(image::AbstractMatrix, shape::TextLine, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     text = shape.text
     font = shape.font
@@ -29,6 +33,8 @@ function draw!(image::AbstractMatrix, shape::TextLine, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::TextLine, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     text = shape.text
     font = shape.font
