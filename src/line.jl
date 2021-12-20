@@ -78,6 +78,8 @@ function draw!(image::AbstractMatrix, shape::VerticalLine, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::VerticalLine, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     i_min = shape.i_min
     i_max = shape.i_max
     j = shape.j
@@ -146,6 +148,8 @@ function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::HorizontalLine, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     i = shape.i
     j_min = shape.j_min
     j_max = shape.j_max
@@ -325,6 +329,8 @@ function draw!(image::AbstractMatrix, shape::ThickLine, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::ThickLine, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     point1 = shape.point1
     point2 = shape.point2
     diameter = shape.diameter
