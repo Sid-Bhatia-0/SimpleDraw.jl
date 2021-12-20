@@ -12,26 +12,36 @@ struct Character{I, C <: AbstractChar, F <: AbstractFont} <: AbstractShape
     font::F
 end
 
-function draw!(image::AbstractMatrix, shape::Character, color)
-    position = shape.position
-    char = shape.char
-    font = shape.font
-    i_position = position.i
-    j_position = position.j
+function has_char(font::Terminus_32_16, char::Char)
     bitmap = font.bitmap
 
     codepoint_exclamation = codepoint('!')
     k = codepoint(char) - codepoint_exclamation + one(codepoint_exclamation)
 
-    if !(k in axes(bitmap, 3))
-        return nothing
-    end
+    return k in axes(bitmap, 3)
+end
 
-    bitmap_shape = Bitmap(position, @view bitmap[:, :, k])
+function get_bitmap(font::Terminus_32_16, char::Char)
+    bitmap = font.bitmap
 
-    if is_outbounds(bitmap_shape, image)
-        return nothing
-    end
+    codepoint_exclamation = codepoint('!')
+    k = codepoint(char) - codepoint_exclamation + one(codepoint_exclamation)
+
+    char_bitmap = @view bitmap[:, :, k]
+
+    return char_bitmap
+end
+
+is_valid(shape::Character) = has_char(shape.font, shape.char)
+
+function draw!(image::AbstractMatrix, shape::Character, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
+    position = shape.position
+    char = shape.char
+    font = shape.font
+
+    bitmap_shape = Bitmap(position, get_bitmap(font, char))
 
     draw!(put_pixel_unchecked!, image, clip(bitmap_shape, image), color)
 
@@ -39,15 +49,13 @@ function draw!(image::AbstractMatrix, shape::Character, color)
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::Character, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     char = shape.char
     font = shape.font
-    bitmap = font.bitmap
 
-    codepoint_exclamation = codepoint('!')
-    k = codepoint(char) - codepoint_exclamation + one(codepoint_exclamation)
-
-    bitmap_shape = Bitmap(position, @view bitmap[:, :, k])
+    bitmap_shape = Bitmap(position, get_bitmap(font, char))
 
     draw!(f, image, bitmap_shape, color)
 
