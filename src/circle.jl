@@ -95,10 +95,10 @@ struct ThickCircle{I <: Integer} <: AbstractCircle
 end
 
 #####
-##### AbstractOddOctantSymmetry
+##### AbstractOctantSymmetry
 #####
 
-function is_valid(shape::AbstractOddOctantSymmetry)
+function is_valid(shape::AbstractOctantSymmetry)
     center = shape.center
     point = shape.point
 
@@ -109,23 +109,6 @@ function is_valid(shape::AbstractOddOctantSymmetry)
     j_point = point.j
 
     return (i_point >= i_center) && (j_point >= j_center) && (i_point - i_center >= j_point - j_center)
-end
-
-#####
-##### AbstractEvenOctantSymmetry
-#####
-
-function is_valid(shape::AbstractEvenOctantSymmetry)
-    center = shape.center
-    point = shape.point
-
-    i_center = center.i
-    j_center = center.j
-
-    i_point = point.i
-    j_point = point.j
-
-    return (i_point > i_center) && (j_point > j_center) && (i_point - i_center >= j_point - j_center)
 end
 
 #####
@@ -231,6 +214,19 @@ end
 ##### EvenSymmetricVerticalLines4
 #####
 
+function is_valid(shape::EvenSymmetricVerticalLines4)
+    center = shape.center
+    point = shape.point
+
+    i_center = center.i
+    j_center = center.j
+
+    i_point = point.i
+    j_point = point.j
+
+    return (i_point > i_center) && (j_point > j_center) && (i_point - i_center >= j_point - j_center)
+end
+
 draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color) = draw!(put_pixel!, image, shape, color)
 
 function draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color)
@@ -323,7 +319,7 @@ function is_valid(shape::EvenSymmetricLines8)
     i_max_line = line.i_max
     j_line = line.j
 
-    return (i_min_line > i_center) && (j_line > j_center) && (i_min_line - i_center >= j_line - j_center) && is_valid(line)
+    return (i_min_line >= i_center) && (j_line >= j_center) && (i_min_line - i_center >= j_line - j_center) && is_valid(line)
 end
 
 draw!(image::AbstractMatrix, shape::EvenSymmetricLines8, color) = draw!(put_pixel!, image, shape, color)
@@ -532,11 +528,7 @@ function draw!(f::Function, image::AbstractMatrix, shape::EvenCircle, color)
     center, radius = get_center_radius(shape)
 
     draw!(image, CircleOctant(center, radius), color) do image, i, j, color
-        if i > center.i && j > center.j
-            draw!(f, image, EvenSymmetricPoints8(center, Point(i, j)), color)
-        else
-            return nothing
-        end
+        draw!(f, image, EvenSymmetricPoints8(center, Point(i, j)), color)
     end
 
     return nothing
@@ -843,11 +835,7 @@ function draw!(f::Function, image::AbstractMatrix, shape::EvenThickCircle, color
     center, radius = get_center_radius(shape)
 
     draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
-        if i1 > center.i && j1 > center.j
-            draw!(f, image, EvenSymmetricLines8(center, VerticalLine(i1, i2, j1)), color)
-        else
-            return nothing
-        end
+        draw!(f, image, EvenSymmetricLines8(center, VerticalLine(i1, i2, j1)), color)
     end
 
     return nothing
