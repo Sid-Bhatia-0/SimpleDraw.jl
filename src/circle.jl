@@ -27,16 +27,12 @@ end
 
 struct OddSymmetricLines8{I <: Integer} <: AbstractOddOctantSymmetry
     center::Point{I}
-    i_inner::I
-    i_outer::I
-    j::I
+    line::VerticalLine{I}
 end
 
 struct EvenSymmetricLines8{I <: Integer} <: AbstractEvenOctantSymmetry
     center::Point{I}
-    i_inner::I
-    i_outer::I
-    j::I
+    line::VerticalLine{I}
 end
 
 struct CircleOctant{I <: Integer} <: AbstractOctant
@@ -265,7 +261,19 @@ end
 ##### OddSymmetricLines8
 #####
 
-is_valid(shape::OddSymmetricLines8) = (shape.i_inner >= shape.center.i) && (shape.i_outer >= shape.center.i) && (shape.j >= shape.center.j) && (shape.i_outer >= shape.i_inner)
+function is_valid(shape::OddSymmetricLines8)
+    center = shape.center
+    line = shape.line
+
+    i_center = center.i
+    j_center = center.j
+
+    i_min_line = line.i_min
+    i_max_line = line.i_max
+    j_line = line.j
+
+    return (i_min_line >= i_center) && (j_line >= j_center) && (i_min_line - i_center >= j_line - j_center) && is_valid(line)
+end
 
 draw!(image::AbstractMatrix, shape::OddSymmetricLines8, color) = draw!(put_pixel!, image, shape, color)
 
@@ -273,16 +281,20 @@ function draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricLines8, co
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     center = shape.center
-    i_inner = shape.i_inner
-    i_outer = shape.i_outer
-    j = shape.j
+    line = shape.line
 
     i_center = center.i
     j_center = center.j
 
-    i_inner_relative = i_inner - i_center
-    i_outer_relative = i_outer - i_center
-    j_relative = j - j_center
+    i_min_line = line.i_min
+    i_max_line = line.i_max
+    j_line = line.j
+
+    I = typeof(i_center)
+
+    i_inner_relative = i_min_line - i_center
+    i_outer_relative = i_max_line - i_center
+    j_relative = j_line - j_center
 
     draw!(f, image, HorizontalLine(i_center - j_relative, j_center - i_outer_relative, j_center - i_inner_relative), color)
     draw!(f, image, HorizontalLine(i_center + j_relative, j_center - i_outer_relative, j_center - i_inner_relative), color)
@@ -300,7 +312,19 @@ end
 ##### EvenSymmetricLines8
 #####
 
-is_valid(shape::EvenSymmetricLines8) = (shape.i_inner >= shape.center.i) && (shape.i_outer >= shape.center.i) && (shape.j >= shape.center.j) && (shape.i_outer >= shape.i_inner)
+function is_valid(shape::EvenSymmetricLines8)
+    center = shape.center
+    line = shape.line
+
+    i_center = center.i
+    j_center = center.j
+
+    i_min_line = line.i_min
+    i_max_line = line.i_max
+    j_line = line.j
+
+    return (i_min_line > i_center) && (j_line > j_center) && (i_min_line - i_center >= j_line - j_center) && is_valid(line)
+end
 
 draw!(image::AbstractMatrix, shape::EvenSymmetricLines8, color) = draw!(put_pixel!, image, shape, color)
 
@@ -308,18 +332,20 @@ function draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricLines8, c
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     center = shape.center
-    i_inner = shape.i_inner
-    i_outer = shape.i_outer
-    j = shape.j
-
-    I = typeof(i_inner)
+    line = shape.line
 
     i_center = center.i
     j_center = center.j
 
-    i_inner_relative = i_inner - i_center
-    i_outer_relative = i_outer - i_center
-    j_relative = j - j_center
+    i_min_line = line.i_min
+    i_max_line = line.i_max
+    j_line = line.j
+
+    I = typeof(i_center)
+
+    i_inner_relative = i_min_line - i_center
+    i_outer_relative = i_max_line - i_center
+    j_relative = j_line - j_center
 
     draw!(f, image, HorizontalLine(i_center - j_relative, j_center - i_outer_relative, j_center - i_inner_relative), color)
     draw!(f, image, HorizontalLine(i_center + j_relative - one(I), j_center - i_outer_relative, j_center - i_inner_relative), color)
@@ -774,7 +800,7 @@ function draw!(f::Function, image::AbstractMatrix, shape::OddThickCircle, color)
     center, radius = get_center_radius(shape)
 
     draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
-        draw!(f, image, OddSymmetricLines8(center, i1, i2, j1), color)
+        draw!(f, image, OddSymmetricLines8(center, VerticalLine(i1, i2, j1)), color)
     end
 
     return nothing
@@ -818,7 +844,7 @@ function draw!(f::Function, image::AbstractMatrix, shape::EvenThickCircle, color
 
     draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
         if i1 > center.i && j1 > center.j
-            draw!(f, image, EvenSymmetricLines8(center, i1, i2, j1), color)
+            draw!(f, image, EvenSymmetricLines8(center, VerticalLine(i1, i2, j1)), color)
         else
             return nothing
         end
