@@ -240,9 +240,7 @@ function draw!(f::Function, image::AbstractMatrix, shape::ThickLine, color)
     point2 = shape.point2
     diameter = shape.diameter
 
-    I = typeof(diameter)
-
-    radius = diameter ÷ convert(I, 2)
+    radius = get_radius(shape)
 
     draw!(image, Line(point1, point2), color) do image, i, j, color
         draw!(f, image, FilledCircle(Point(i - radius, j - radius), diameter), color)
