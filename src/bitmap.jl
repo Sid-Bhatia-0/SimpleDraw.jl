@@ -3,32 +3,11 @@ struct Bitmap{I, B <: AbstractMatrix{Bool}} <: AbstractShape
     bitmap::B
 end
 
-function is_outbounds(shape::Bitmap, image::AbstractMatrix)
-    position = shape.position
-    i_position = position.i
-    j_position = position.j
-    bitmap = shape.bitmap
+get_i_min(shape::Bitmap) = shape.position.i
+get_i_max(shape::Bitmap) = shape.position.i + size(shape.bitmap, 1) - one(shape.position.i)
 
-    I = typeof(i_position)
-    one_value = one(I)
-
-    height = size(bitmap, 1)
-    width = size(bitmap, 2)
-
-    i_min = i_position
-    j_min = j_position
-
-    i_max = i_min + height - one_value
-    j_max = j_min + width - one_value
-
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    return i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
-end
+get_j_min(shape::Bitmap) = shape.position.j
+get_j_max(shape::Bitmap) = shape.position.j + size(shape.bitmap, 2) - one(shape.position.j)
 
 function clip(shape::Bitmap, image::AbstractMatrix)
     position = shape.position
