@@ -35,27 +35,7 @@ get_i_max(shape::VerticalLine) = shape.i_max
 get_j_min(shape::VerticalLine) = shape.j
 get_j_max(shape::VerticalLine) = shape.j
 
-function clip(shape::VerticalLine, image::AbstractMatrix)
-    i_min = shape.i_min
-    i_max = shape.i_max
-    j = shape.j
-
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    if i_min < i_min_image
-        i_min = i_min_image
-    end
-
-    if i_max > i_max_image
-        i_max = i_max_image
-    end
-
-    return VerticalLine(i_min, i_max, j)
-end
+clip(shape::VerticalLine, image::AbstractMatrix) = VerticalLine(max(get_i_min(shape), get_i_min(image)), min(get_i_max(shape), get_i_max(image)), shape.j)
 
 function draw!(image::AbstractMatrix, shape::VerticalLine, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
@@ -97,27 +77,7 @@ get_i_max(shape::HorizontalLine) = shape.i
 get_j_min(shape::HorizontalLine) = shape.j_min
 get_j_max(shape::HorizontalLine) = shape.j_max
 
-function clip(shape::HorizontalLine, image::AbstractMatrix)
-    i = shape.i
-    j_min = shape.j_min
-    j_max = shape.j_max
-
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    if j_min < j_min_image
-        j_min = j_min_image
-    end
-
-    if j_max > j_max_image
-        j_max = j_max_image
-    end
-
-    return HorizontalLine(i, j_min, j_max)
-end
+clip(shape::HorizontalLine, image::AbstractMatrix) = HorizontalLine(shape.i, max(get_j_min(shape), get_j_min(image)), min(get_j_max(shape), get_j_max(image)))
 
 function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
