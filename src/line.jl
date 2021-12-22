@@ -111,26 +111,13 @@ get_bounding_box(shape::HorizontalLine) = Rectangle(Point(shape.i, shape.j_min),
 ##### Line
 #####
 
-function is_inbounds(shape::Line, image::AbstractMatrix)
-    point1 = shape.point1
-    point2 = shape.point2
+get_i_min(shape::Line) = min(shape.point1.i, shape.point2.i)
+get_i_max(shape::Line) = max(shape.point1.i, shape.point2.i)
+get_i_extrema(shape::Line) = minmax(shape.point1.i, shape.point2.i)
 
-    i1 = point1.i
-    j1 = point1.j
-    i2 = point2.i
-    j2 = point2.j
-
-    i_min, i_max = minmax(i1, i2)
-    j_min, j_max = minmax(j1, j2)
-
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    return i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
-end
+get_j_min(shape::Line) = min(shape.point1.j, shape.point2.j)
+get_j_max(shape::Line) = max(shape.point1.j, shape.point2.j)
+get_j_extrema(shape::Line) = minmax(shape.point1.j, shape.point2.j)
 
 """
 Draw a line. Ref: https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
