@@ -29,19 +29,11 @@ end
 
 is_valid(shape::VerticalLine) = shape.i_min <= shape.i_max
 
-function is_outbounds(shape::VerticalLine, image::AbstractMatrix)
-    i_min = shape.i_min
-    i_max = shape.i_max
-    j = shape.j
+get_i_min(shape::VerticalLine) = shape.i_min
+get_i_max(shape::VerticalLine) = shape.i_max
 
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    return i_max < i_min_image || i_min > i_max_image || j < j_min_image || j > j_max_image
-end
+get_j_min(shape::VerticalLine) = shape.j
+get_j_max(shape::VerticalLine) = shape.j
 
 function clip(shape::VerticalLine, image::AbstractMatrix)
     i_min = shape.i_min
@@ -99,19 +91,11 @@ get_bounding_box(shape::VerticalLine) = Rectangle(Point(shape.i_min, shape.j), s
 
 is_valid(shape::HorizontalLine) = shape.j_min <= shape.j_max
 
-function is_outbounds(shape::HorizontalLine, image::AbstractMatrix)
-    i = shape.i
-    j_min = shape.j_min
-    j_max = shape.j_max
+get_i_min(shape::HorizontalLine) = shape.i
+get_i_max(shape::HorizontalLine) = shape.i
 
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    return i < i_min_image || i > i_max_image || j_max < j_min_image || j_min > j_max_image
-end
+get_j_min(shape::HorizontalLine) = shape.j_min
+get_j_max(shape::HorizontalLine) = shape.j_max
 
 function clip(shape::HorizontalLine, image::AbstractMatrix)
     i = shape.i
