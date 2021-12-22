@@ -45,6 +45,22 @@ function is_inbounds(shape::AbstractShape, image::AbstractMatrix)
     return i_min_shape >= i_min_image && i_max_shape <= i_max_image && j_min_shape >= j_min_image && j_max_shape <= j_max_image
 end
 
+function draw!(image::AbstractMatrix, shape::AbstractShape, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
+    if is_outbounds(shape, image)
+        return nothing
+    end
+
+    if is_inbounds(shape, image)
+        draw!(put_pixel_unchecked!, image, shape, color)
+    else
+        draw!(put_pixel!, image, shape, color)
+    end
+
+    return nothing
+end
+
 include("point.jl")
 include("background.jl")
 include("line.jl")
