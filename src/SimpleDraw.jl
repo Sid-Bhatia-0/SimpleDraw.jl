@@ -20,6 +20,7 @@ is_valid(::AbstractShape) = true
 include("point.jl")
 include("background.jl")
 include("line.jl")
+include("symmetry.jl")
 include("circle.jl")
 include("rectangle.jl")
 include("bitmap.jl")
