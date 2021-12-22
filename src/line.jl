@@ -119,39 +119,6 @@ get_j_min(shape::Line) = min(shape.point1.j, shape.point2.j)
 get_j_max(shape::Line) = max(shape.point1.j, shape.point2.j)
 get_j_extrema(shape::Line) = minmax(shape.point1.j, shape.point2.j)
 
-"""
-Draw a line. Ref: https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
-"""
-function draw!(image::AbstractMatrix, shape::Line, color)
-    point1 = shape.point1
-    point2 = shape.point2
-
-    i1 = point1.i
-    j1 = point1.j
-    i2 = point2.i
-    j2 = point2.j
-
-    if j1 == j2
-        i_min, i_max = minmax(i1, i2)
-        draw!(image, VerticalLine(i_min, i_max, j1), color)
-        return nothing
-    end
-
-    if i1 == i2
-        j_min, j_max = minmax(j1, j2)
-        draw!(image, HorizontalLine(i1, j_min, j_max), color)
-        return nothing
-    end
-
-    if is_inbounds(shape, image)
-        draw!(put_pixel_unchecked!, image, shape, color)
-    else
-        draw!(put_pixel!, image, shape, color)
-    end
-
-    return nothing
-end
-
 function draw!(f::Function, image::AbstractMatrix, shape::Line, color)
     point1 = shape.point1
     point2 = shape.point2
@@ -226,37 +193,44 @@ end
 ##### ThickLine
 #####
 
+get_radius(shape::ThickLine) = shape.diameter ÷ oftype(shape.diameter, 2)
+
 is_valid(shape::ThickLine) = shape.diameter > zero(shape.diameter)
 
-function is_inbounds(shape::ThickLine, image::AbstractMatrix)
-    bounding_box = get_bounding_box(shape)
-    i_min = bounding_box.position.i
-    j_min = bounding_box.position.j
+get_i_min(shape::ThickLine) = min(shape.point1.i, shape.point2.i) - get_radius(shape)
 
-    I = typeof(i_min)
+function get_i_max(shape::ThickLine)
+    point1 = shape.point1
+    point2 = shape.point2
+    diameter = shape.diameter
 
-    i_max = i_min + bounding_box.height - one(I)
-    j_max = j_min + bounding_box.width - one(I)
+    i_max = max(point1.i, point2.i)
 
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
+    radius = get_radius(shape)
 
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    return i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
+    if iseven(diameter)
+        return i_max + radius - one(radius)
+    else
+        return i_max + radius
+    end
 end
 
-function draw!(image::AbstractMatrix, shape::ThickLine, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+get_j_min(shape::ThickLine) = min(shape.point1.j, shape.point2.j) - get_radius(shape)
 
-    if is_inbounds(shape, image)
-        draw!(put_pixel_unchecked!, image, shape, color)
+function get_j_max(shape::ThickLine)
+    point1 = shape.point1
+    point2 = shape.point2
+    diameter = shape.diameter
+
+    j_max = max(point1.j, point2.j)
+
+    radius = get_radius(shape)
+
+    if iseven(diameter)
+        return j_max + radius - one(radius)
     else
-        draw!(put_pixel!, image, shape, color)
+        return j_max + radius
     end
-
-    return nothing
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::ThickLine, color)
