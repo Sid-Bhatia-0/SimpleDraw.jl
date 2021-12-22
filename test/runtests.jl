@@ -8,8 +8,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.Point(16, 16)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(shape, 1, 1)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -51,8 +49,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.Point(-1, -1)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(shape, 1, 1)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -139,8 +135,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.VerticalLine(9, 24, 16)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(9, 16), 24 - 9 + 1, 1)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -182,8 +176,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.VerticalLine(-1, 34, 16)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(-1, 16), 34 + 1 + 1, 1)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -227,8 +219,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.HorizontalLine(16, 9, 24)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(16, 9), 1, 24 - 9 + 1)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -270,8 +260,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.HorizontalLine(16, -1, 34)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(16, -1), 1, 34 + 1 + 1)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -315,8 +303,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.Line(SD.Point(9, 5), SD.Point(24, 28))
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(9, 5), 24 - 9 + 1, 28 - 5 + 1)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -358,8 +344,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.Line(SD.Point(-1, -1), SD.Point(34, 34))
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(-1, -1), 34 + 1 + 1, 34 + 1 + 1)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -403,8 +387,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.ThickLine(SD.Point(9, 5), SD.Point(24, 28), 7)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(6, 2), 24 - 9 + 7, 28 - 5 + 7)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -446,8 +428,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.ThickLine(SD.Point(9, 5), SD.Point(40, 40), 7)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(6, 2), 40 - 9 + 7, 40 - 5 + 7)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -491,8 +471,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.Circle(SD.Point(2, 2), 29)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(2, 2), 29, 29)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -534,8 +512,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.Circle(SD.Point(10, 10), 29)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(10, 10), 29, 29)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -579,8 +555,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.Circle(SD.Point(2, 2), 30)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(2, 2), 30, 30)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -622,8 +596,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.Circle(SD.Point(10, 10), 30)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(10, 10), 30, 30)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -667,8 +639,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.OddCircle(SD.Point(2, 2), 29)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(2, 2), 29, 29)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -710,8 +680,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.OddCircle(SD.Point(10, 10), 29)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(10, 10), 29, 29)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -755,8 +723,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.EvenCircle(SD.Point(2, 2), 30)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(2, 2), 30, 30)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -798,8 +764,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.EvenCircle(SD.Point(10, 10), 30)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(10, 10), 30, 30)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -843,8 +807,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.ThickCircle(SD.Point(2, 2), 29, 5)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(2, 2), 29, 29)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -886,8 +848,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.ThickCircle(SD.Point(10, 10), 29, 5)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(10, 10), 29, 29)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -931,8 +891,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.ThickCircle(SD.Point(2, 2), 30, 4)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(2, 2), 30, 30)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -974,8 +932,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.ThickCircle(SD.Point(10, 10), 30, 4)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(10, 10), 30, 30)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1019,8 +975,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.FilledCircle(SD.Point(2, 2), 29)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(2, 2), 29, 29)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1062,8 +1016,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.FilledCircle(SD.Point(10, 10), 29)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(10, 10), 29, 29)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1107,8 +1059,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.FilledCircle(SD.Point(2, 2), 30)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(2, 2), 30, 30)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1150,8 +1100,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.FilledCircle(SD.Point(10, 10), 30)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(10, 10), 30, 30)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1195,8 +1143,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.OddFilledCircle(SD.Point(2, 2), 29)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(2, 2), 29, 29)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1238,8 +1184,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.OddFilledCircle(SD.Point(10, 10), 29)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(10, 10), 29, 29)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1283,8 +1227,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.EvenFilledCircle(SD.Point(2, 2), 30)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(2, 2), 30, 30)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1326,8 +1268,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.EvenFilledCircle(SD.Point(10, 10), 30)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(10, 10), 30, 30)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1371,8 +1311,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.OddThickCircle(SD.Point(2, 2), 29, 5)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(2, 2), 29, 29)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1414,8 +1352,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.OddThickCircle(SD.Point(10, 10), 29, 5)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(10, 10), 29, 29)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1459,8 +1395,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.EvenThickCircle(SD.Point(2, 2), 30, 4)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(2, 2), 30, 30)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1502,8 +1436,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.EvenThickCircle(SD.Point(10, 10), 30, 4)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(10, 10), 30, 30)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1547,8 +1479,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.Rectangle(SD.Point(9, 5), 16, 24)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == shape
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1590,8 +1520,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.Rectangle(SD.Point(24, 16), 16, 24)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == shape
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1635,8 +1563,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.FilledRectangle(SD.Point(9, 5), 16, 24)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(9, 5), 16, 24)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1678,8 +1604,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.FilledRectangle(SD.Point(24, 16), 16, 24)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(24, 16), 16, 24)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1723,8 +1647,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.ThickRectangle(SD.Point(9, 5), 16, 24, 4)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(9, 5), 16, 24)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1766,8 +1688,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.ThickRectangle(SD.Point(24, 16), 16, 24, 4)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(24, 16), 16, 24)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1811,8 +1731,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 32
         image = falses(height, width)
         shape = SD.Character(SD.Point(1, 1), 'A', SD.TERMINUS_32_16)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(1, 1), 32, 16)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1856,8 +1774,6 @@ Test.@testset "SimpleDraw.jl" begin
         width = 64
         image = falses(height, width)
         shape = SD.TextLine(SD.Point(1, 1), "Text", SD.TERMINUS_32_16)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(1, 1), 32, 64)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1919,8 +1835,6 @@ Test.@testset "SimpleDraw.jl" begin
                             0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0
                            ])
         shape = SD.Bitmap(SD.Point(1, 1), bitmap)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(1, 1), 16, 16)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1980,8 +1894,6 @@ Test.@testset "SimpleDraw.jl" begin
                             0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0
                            ])
         shape = SD.Bitmap(SD.Point(25, 25), bitmap)
-        bounding_box = SD.get_bounding_box(shape)
-        Test.@test bounding_box == SD.Rectangle(SD.Point(25, 25), 16, 16)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([

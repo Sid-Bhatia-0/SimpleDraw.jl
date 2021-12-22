@@ -80,13 +80,3 @@ function draw!(f::Function, image::AbstractMatrix, shape::Bitmap, color)
 
     return nothing
 end
-
-function get_bounding_box(shape::Bitmap)
-    position = shape.position
-    bitmap = shape.bitmap
-
-    height = size(bitmap, 1)
-    width = size(bitmap, 2)
-
-    return Rectangle(position, height, width)
-end

@@ -88,8 +88,6 @@ get_i_max(shape::AbstractCircle) = shape.position.i + shape.diameter - one(shape
 get_j_min(shape::AbstractCircle) = shape.position.j
 get_j_max(shape::AbstractCircle) = shape.position.j + shape.diameter - one(shape.diameter)
 
-get_bounding_box(shape::AbstractCircle) = Rectangle(shape.position, shape.diameter, shape.diameter)
-
 #####
 ##### CircleOctant
 #####

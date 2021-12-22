@@ -63,8 +63,6 @@ function draw!(f::Function, image::AbstractMatrix, shape::VerticalLine, color)
     return nothing
 end
 
-get_bounding_box(shape::VerticalLine) = Rectangle(Point(shape.i_min, shape.j), shape.i_max - shape.i_min + one(shape.i_min), one(shape.i_min))
-
 #####
 ##### HorizontalLine
 #####
@@ -104,8 +102,6 @@ function draw!(f::Function, image::AbstractMatrix, shape::HorizontalLine, color)
 
     return nothing
 end
-
-get_bounding_box(shape::HorizontalLine) = Rectangle(Point(shape.i, shape.j_min), one(shape.i), shape.j_max - shape.j_min + one(shape.i))
 
 #####
 ##### Line
@@ -157,36 +153,6 @@ function draw!(f::Function, image::AbstractMatrix, shape::Line, color)
     end
 
     return nothing
-end
-
-function get_bounding_box(shape::Line)
-    point1 = shape.point1
-    point2 = shape.point2
-
-    i1 = point1.i
-    j1 = point1.j
-    i2 = point2.i
-    j2 = point2.j
-
-    I = typeof(i1)
-
-    if i1 < i2
-        i_min = i1
-        height = i2 - i1 + one(I)
-    else
-        i_min = i2
-        height = i1 - i2 + one(I)
-    end
-
-    if j1 < j2
-        j_min = j1
-        width = j2 - j1 + one(I)
-    else
-        j_min = j2
-        width = j1 - j2 + one(I)
-    end
-
-    return Rectangle(Point(i_min, j_min), height, width)
 end
 
 #####
@@ -247,36 +213,4 @@ function draw!(f::Function, image::AbstractMatrix, shape::ThickLine, color)
     end
 
     return nothing
-end
-
-function get_bounding_box(shape::ThickLine)
-    point1 = shape.point1
-    point2 = shape.point2
-    diameter = shape.diameter
-
-    i1 = point1.i
-    j1 = point1.j
-    i2 = point2.i
-    j2 = point2.j
-
-    I = typeof(i1)
-    radius = diameter ÷ convert(I, 2)
-
-    if i1 < i2
-        i_min = i1 - radius
-        i_diff = i2 - i1
-    else
-        i_min = i2 - radius
-        i_diff = i1 - i2
-    end
-
-    if j1 < j2
-        j_min = j1 - radius
-        j_diff = j2 - j1
-    else
-        j_min = j2 - radius
-        j_diff = j1 - j2
-    end
-
-    return Rectangle(Point(i_min, j_min), i_diff + diameter, j_diff + diameter)
 end

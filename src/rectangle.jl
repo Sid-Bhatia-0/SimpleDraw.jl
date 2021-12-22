@@ -31,8 +31,6 @@ get_i_max(shape::AbstractRectangle) = shape.position.i + shape.height - one(shap
 get_j_min(shape::AbstractRectangle) = shape.position.j
 get_j_max(shape::AbstractRectangle) = shape.position.j + shape.width - one(shape.width)
 
-get_bounding_box(shape::AbstractRectangle) = Rectangle(shape.position, shape.height, shape.width)
-
 #####
 ##### Rectangle
 #####
@@ -62,8 +60,6 @@ function draw!(f::Function, image::AbstractMatrix, shape::Rectangle, color)
 
     return nothing
 end
-
-get_bounding_box(shape::Rectangle) = shape
 
 #####
 ##### FilledRectangle
