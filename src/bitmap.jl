@@ -11,30 +11,19 @@ get_j_max(shape::Bitmap) = shape.position.j + size(shape.bitmap, 2) - one(shape.
 
 function clip(shape::Bitmap, image::AbstractMatrix)
     position = shape.position
-    i_position = position.i
-    j_position = position.j
     bitmap = shape.bitmap
 
-    I = typeof(i_position)
-    one_value = one(I)
+    i_min_shape, i_max_shape = get_i_extrema(shape)
+    i_min_image, i_max_image = get_i_extrema(image)
 
-    i_min = i_position
-    j_min = j_position
+    I = typeof(i_min_shape)
 
-    height = size(bitmap, 1)
-    width = size(bitmap, 2)
+    j_min_shape, j_max_shape = get_j_extrema(shape)
+    j_min_image, j_max_image = get_j_extrema(image)
 
-    i_max = i_min + height - one_value
-    j_max = j_min + width - one_value
+    clipped_height = min(i_max_shape, i_max_image) - max(i_min_shape, i_min_image) + one(I)
+    clipped_width = min(j_max_shape, j_max_image) - max(j_min_shape, j_min_image) + one(I)
 
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    clipped_height = min(i_max, i_max_image) - max(i_min, i_min_image) + one_value
-    clipped_width = min(j_max, j_max_image) - max(j_min, j_min_image) + one_value
     clipped_bitmap = @view bitmap[begin:clipped_height, begin:clipped_width]
 
     return Bitmap(position, clipped_bitmap)
@@ -52,26 +41,20 @@ end
 
 function draw!(f::Function, image::AbstractMatrix, shape::Bitmap, color)
     position = shape.position
-    i_position = position.i
-    j_position = position.j
     bitmap = shape.bitmap
 
+    i_position = position.i
+    j_position = position.j
+
     I = typeof(i_position)
-    one_value = one(I)
 
-    height = size(bitmap, 1)
-    width = size(bitmap, 2)
-
-    i_min = i_position
-    j_min = j_position
-
-    i_max = i_min + height - one_value
-    j_max = j_min + width - one_value
+    i_min, i_max = get_i_extrema(shape)
+    j_min, j_max = get_j_extrema(shape)
 
     for j in j_min:j_max
         for i in i_min:i_max
-            i_bitmap = i - i_position + one_value
-            j_bitmap = j - j_position + one_value
+            i_bitmap = i - i_position + one(I)
+            j_bitmap = j - j_position + one(I)
             if bitmap[i_bitmap, j_bitmap]
                 f(image, i, j, color)
             end
