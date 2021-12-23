@@ -291,17 +291,7 @@ end
 ##### ThickCircleOctant
 #####
 
-is_valid(shape::ThickCircleOctant) = (shape.radius >= zero(shape.radius)) && (shape.thickness >= zero(thickness) && (shape.thickness <= shape.radius + one(shape.radius)))
-
-function is_valid(shape::ThickCircleOctant)
-    center = shape.center
-    radius = shape.radius
-    thickness = shape.thickness
-
-    I = typeof(radius)
-
-    return radius >= zero(I) && thickness > zero(I) && thickness <= radius + one(I)
-end
+is_valid(shape::ThickCircleOctant) = (shape.radius >= zero(shape.radius)) && (shape.thickness > zero(shape.thickness) && (shape.thickness <= shape.radius + one(shape.radius)))
 
 draw!(image::AbstractMatrix, shape::ThickCircleOctant, color) = draw!(put_pixel!, image, shape, color)
 
