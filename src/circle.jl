@@ -82,51 +82,11 @@ end
 
 is_valid(shape::AbstractCircle) = shape.diameter > zero(shape.diameter)
 
-function is_outbounds(shape::AbstractCircle, image::AbstractMatrix)
-    position = shape.position
-    diameter = shape.diameter
+get_i_min(shape::AbstractCircle) = shape.position.i
+get_i_max(shape::AbstractCircle) = shape.position.i + shape.diameter - one(shape.diameter)
 
-    I = typeof(diameter)
-
-    i_min = position.i
-    j_min = position.j
-
-    diameter_minus_1 = diameter - one(I)
-    i_max = i_min + diameter_minus_1
-    j_max = j_min + diameter_minus_1
-
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    return i_max < i_min_image || i_min > i_max_image || j_max < j_min_image || j_min > j_max_image
-end
-
-function is_inbounds(shape::AbstractCircle, image::AbstractMatrix)
-    position = shape.position
-    diameter = shape.diameter
-
-    I = typeof(diameter)
-
-    i_min = position.i
-    j_min = position.j
-
-    diameter_minus_1 = diameter - one(I)
-    i_max = i_min + diameter_minus_1
-    j_max = j_min + diameter_minus_1
-
-    i_min_image = firstindex(image, 1)
-    i_max_image = lastindex(image, 1)
-
-    j_min_image = firstindex(image, 2)
-    j_max_image = lastindex(image, 2)
-
-    return i_min >= i_min_image && j_min >= j_min_image && i_max <= i_max_image && j_max <= j_max_image
-end
-
-get_bounding_box(shape::AbstractCircle) = Rectangle(shape.position, shape.diameter, shape.diameter)
+get_j_min(shape::AbstractCircle) = shape.position.j
+get_j_max(shape::AbstractCircle) = shape.position.j + shape.diameter - one(shape.diameter)
 
 #####
 ##### CircleOctant
@@ -175,18 +135,6 @@ end
 
 is_valid(shape::OddCircle) = isodd(shape.diameter) && shape.diameter > zero(shape.diameter)
 
-function draw!(image::AbstractMatrix, shape::OddCircle, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    if is_inbounds(shape, image)
-        draw!(put_pixel_unchecked!, image, shape, color)
-    else
-        draw!(put_pixel!, image, shape, color)
-    end
-
-    return nothing
-end
-
 function draw!(f::Function, image::AbstractMatrix, shape::OddCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
@@ -210,25 +158,11 @@ end
 
 is_valid(shape::EvenCircle) = iseven(shape.diameter) && shape.diameter > zero(shape.diameter)
 
-function draw!(image::AbstractMatrix, shape::EvenCircle, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    if is_inbounds(shape, image)
-        draw!(put_pixel_unchecked!, image, shape, color)
-    else
-        draw!(put_pixel!, image, shape, color)
-    end
-
-    return nothing
-end
-
 function draw!(f::Function, image::AbstractMatrix, shape::EvenCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position
     diameter = shape.diameter
-
-    I = typeof(diameter)
 
     center, radius = get_center_radius(shape)
 
@@ -244,6 +178,8 @@ end
 #####
 
 function draw!(image::AbstractMatrix, shape::Circle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     diameter = shape.diameter
 
@@ -277,18 +213,6 @@ end
 
 is_valid(shape::OddFilledCircle) = is_valid(OddCircle(shape.position, shape.diameter))
 
-function draw!(image::AbstractMatrix, shape::OddFilledCircle, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    if is_inbounds(shape, image)
-        draw!(put_pixel_unchecked!, image, shape, color)
-    else
-        draw!(put_pixel!, image, shape, color)
-    end
-
-    return nothing
-end
-
 function draw!(f::Function, image::AbstractMatrix, shape::OddFilledCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
@@ -309,18 +233,6 @@ end
 #####
 
 is_valid(shape::EvenFilledCircle) = is_valid(EvenCircle(shape.position, shape.diameter))
-
-function draw!(image::AbstractMatrix, shape::EvenFilledCircle, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    if is_inbounds(shape, image)
-        draw!(put_pixel_unchecked!, image, shape, color)
-    else
-        draw!(put_pixel!, image, shape, color)
-    end
-
-    return nothing
-end
 
 function draw!(f::Function, image::AbstractMatrix, shape::EvenFilledCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
@@ -346,6 +258,8 @@ end
 #####
 
 function draw!(image::AbstractMatrix, shape::FilledCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     diameter = shape.diameter
 
@@ -377,29 +291,9 @@ end
 ##### ThickCircleOctant
 #####
 
-is_valid(shape::ThickCircleOctant) = (shape.radius >= zero(shape.radius)) && (shape.thickness >= zero(thickness) && (shape.thickness <= shape.radius + one(shape.radius)))
+is_valid(shape::ThickCircleOctant) = (shape.radius >= zero(shape.radius)) && (shape.thickness > zero(shape.thickness) && (shape.thickness <= shape.radius + one(shape.radius)))
 
-function is_valid(shape::ThickCircleOctant)
-    center = shape.center
-    radius = shape.radius
-    thickness = shape.thickness
-
-    I = typeof(radius)
-
-    return radius >= zero(I) && thickness > zero(I) && thickness <= radius + one(I)
-end
-
-function draw!(image::AbstractMatrix, shape::ThickCircleOctant, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    if is_inbounds(shape, image)
-        draw!(put_pixel_unchecked!, image, shape, color)
-    else
-        draw!(put_pixel!, image, shape, color)
-    end
-
-    return nothing
-end
+draw!(image::AbstractMatrix, shape::ThickCircleOctant, color) = draw!(put_pixel!, image, shape, color)
 
 function draw!(f::Function, image::AbstractMatrix, shape::ThickCircleOctant, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
@@ -473,18 +367,6 @@ function is_valid(shape::OddThickCircle)
     return isodd(diameter) && diameter > zero(I) && thickness > zero(I) && convert(I, 2) * thickness <= diameter + one(I)
 end
 
-function draw!(image::AbstractMatrix, shape::OddThickCircle, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    if is_inbounds(shape, image)
-        draw!(put_pixel_unchecked!, image, shape, color)
-    else
-        draw!(put_pixel!, image, shape, color)
-    end
-
-    return nothing
-end
-
 function draw!(f::Function, image::AbstractMatrix, shape::OddThickCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
@@ -514,18 +396,6 @@ function is_valid(shape::EvenThickCircle)
     I = typeof(shape.diameter)
 
     return iseven(diameter) && diameter > zero(I) && thickness > zero(I) && convert(I, 2) * thickness <= diameter
-end
-
-function draw!(image::AbstractMatrix, shape::EvenThickCircle, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    if is_inbounds(shape, image)
-        draw!(put_pixel_unchecked!, image, shape, color)
-    else
-        draw!(put_pixel!, image, shape, color)
-    end
-
-    return nothing
 end
 
 function draw!(f::Function, image::AbstractMatrix, shape::EvenThickCircle, color)
@@ -563,6 +433,8 @@ function is_valid(shape::ThickCircle)
 end
 
 function draw!(image::AbstractMatrix, shape::ThickCircle, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     diameter = shape.diameter
     thickness = shape.thickness

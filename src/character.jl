@@ -67,13 +67,3 @@ function draw!(f::Function, image::AbstractMatrix, shape::Character{I, C, Termin
 
     return nothing
 end
-
-function get_bounding_box(shape::Character)
-    position = shape.position
-    bitmap = shape.font.bitmap
-
-    height = size(bitmap, 1)
-    width = size(bitmap, 2)
-
-    return Rectangle(position, height, width)
-end
