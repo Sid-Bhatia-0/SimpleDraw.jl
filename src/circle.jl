@@ -116,6 +116,20 @@ end
 
 is_valid(shape::ThickCircleOctant) = (shape.radius >= zero(shape.radius)) && (shape.thickness > zero(shape.thickness) && (shape.thickness <= shape.radius + one(shape.radius)))
 
+function draw!(image::AbstractMatrix, shape::ThickCircleOctant, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
+    center = shape.center
+    radius = shape.radius
+    thickness = shape.thickness
+
+    draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
+        draw!(put_pixel!, image, VerticalLine(i1, i2, j1), color)
+    end
+
+    return nothing
+end
+
 function draw!(f::Function, image::AbstractMatrix, shape::ThickCircleOctant, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
