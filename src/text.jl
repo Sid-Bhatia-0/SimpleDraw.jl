@@ -13,8 +13,6 @@ function draw!(image::AbstractMatrix, shape::TextLine, color)
     text = shape.text
     font = shape.font
 
-    i_min = position.i
-    j_min = position.j
     bitmap = font.bitmap
 
     height = size(bitmap, 1)
@@ -23,10 +21,8 @@ function draw!(image::AbstractMatrix, shape::TextLine, color)
     char_position = position
 
     for char in text
-        if isascii(char) && isprint(char)
-            draw!(image, Character(char_position, char, font), color)
-            char_position = Point(char_position.i, char_position.j + width)
-        end
+        draw!(image, Character(char_position, char, font), color)
+        char_position = Point(char_position.i, char_position.j + width)
     end
 
     return nothing
@@ -39,8 +35,6 @@ function draw!(f::Function, image::AbstractMatrix, shape::TextLine, color)
     text = shape.text
     font = shape.font
 
-    i_min = position.i
-    j_min = position.j
     bitmap = font.bitmap
 
     height = size(bitmap, 1)
