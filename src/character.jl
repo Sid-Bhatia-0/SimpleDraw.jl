@@ -12,20 +12,13 @@ struct Character{I, C <: AbstractChar, F <: AbstractFont} <: AbstractShape
     font::F
 end
 
-function has_char(font::Terminus_32_16, char::Char)
-    bitmap = font.bitmap
-
-    codepoint_exclamation = codepoint('!')
-    k = codepoint(char) - codepoint_exclamation + one(codepoint_exclamation)
-
-    return (k in axes(bitmap, 3) || char == ' ')
-end
+has_char(font::Terminus_32_16, char) = isascii(char) && isprint(char)
 
 function get_bitmap(font::Terminus_32_16, char::Char)
     bitmap = font.bitmap
 
-    codepoint_exclamation = codepoint('!')
-    k = codepoint(char) - codepoint_exclamation + one(codepoint_exclamation)
+    codepoint_begin = codepoint(' ')
+    k = codepoint(char) - codepoint_begin + one(codepoint_begin)
 
     char_bitmap = @view bitmap[:, :, k]
 
