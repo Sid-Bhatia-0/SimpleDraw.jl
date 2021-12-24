@@ -1,10 +1,17 @@
 abstract type AbstractOctant <: AbstractShape end
-abstract type AbstractCircle <: AbstractShape end
 
 struct CircleOctant{I <: Integer} <: AbstractOctant
     center::Point{I}
     radius::I
 end
+
+struct ThickCircleOctant{I <: Integer} <: AbstractOctant
+    center::Point{I}
+    radius::I
+    thickness::I
+end
+
+abstract type AbstractCircle <: AbstractShape end
 
 struct OddCircle{I <: Integer} <: AbstractCircle
     position::Point{I}
@@ -36,12 +43,6 @@ struct FilledCircle{I <: Integer} <: AbstractCircle
     diameter::I
 end
 
-struct ThickCircleOctant{I <: Integer} <: AbstractOctant
-    center::Point{I}
-    radius::I
-    thickness::I
-end
-
 struct OddThickCircle{I <: Integer} <: AbstractCircle
     position::Point{I}
     diameter::I
@@ -61,40 +62,20 @@ struct ThickCircle{I <: Integer} <: AbstractCircle
 end
 
 #####
-##### AbstractCircle
+##### AbstractOctant
 #####
 
-get_radius(shape::AbstractCircle) = shape.diameter ÷ oftype(shape.diameter, 2)
+is_valid(shape::AbstractOctant) = shape.radius >= zero(shape.radius)
 
-function get_center(shape::AbstractCircle, radius)
-    i_position = shape.position.i
-    j_position = shape.position.j
-    return Point(i_position + radius, j_position + radius)
-end
+get_i_min(shape::AbstractOctant) = shape.center.i
+get_i_max(shape::AbstractOctant) = shape.center.i + shape.radius - one(shape.radius)
 
-get_center(shape::AbstractCircle) = get_center(shape, get_radius(shape))
-
-function get_center_radius(shape::AbstractCircle)
-    radius = get_radius(shape)
-    center = get_center(shape, radius)
-    return (center, radius)
-end
-
-is_valid(shape::AbstractCircle) = shape.diameter > zero(shape.diameter)
-
-get_i_min(shape::AbstractCircle) = shape.position.i
-get_i_max(shape::AbstractCircle) = shape.position.i + shape.diameter - one(shape.diameter)
-
-get_j_min(shape::AbstractCircle) = shape.position.j
-get_j_max(shape::AbstractCircle) = shape.position.j + shape.diameter - one(shape.diameter)
+get_j_min(shape::AbstractOctant) = shape.center.j
+get_j_max(shape::AbstractOctant) = shape.center.j + shape.radius - one(shape.radius)
 
 #####
 ##### CircleOctant
 #####
-
-is_valid(shape::CircleOctant) = shape.radius >= zero(shape.radius)
-
-draw!(image::AbstractMatrix, shape::CircleOctant, color) = draw!(put_pixel!, image, shape, color)
 
 function draw!(f::Function, image::AbstractMatrix, shape::CircleOctant, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
@@ -128,6 +109,99 @@ function draw!(f::Function, image::AbstractMatrix, shape::CircleOctant, color)
 
     return nothing
 end
+
+#####
+##### ThickCircleOctant
+#####
+
+is_valid(shape::ThickCircleOctant) = (shape.radius >= zero(shape.radius)) && (shape.thickness > zero(shape.thickness) && (shape.thickness <= shape.radius + one(shape.radius)))
+
+function draw!(f::Function, image::AbstractMatrix, shape::ThickCircleOctant, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
+    center = shape.center
+    radius = shape.radius
+    thickness = shape.thickness
+
+    I = typeof(radius)
+
+    i_center = center.i
+    j_center = center.j
+
+    radius_inner = radius - thickness + one(I)
+    radius_outer = radius
+
+    i_inner = radius_inner
+    j_inner = zero(I)
+
+    i_outer = radius_outer
+    j_outer = zero(I)
+
+    constant_inner = convert(I, 3) - convert(I, 2) * radius_inner * radius_inner
+    constant_outer = convert(I, 3) - convert(I, 2) * radius_outer * radius_outer
+
+    f(image, i_center + i_inner, j_center + j_inner, i_center + i_outer, j_center + j_outer, color)
+
+    while i_inner > j_inner + one(I)
+        d_inner = convert(I, 2) * i_inner * i_inner + convert(I, 2) * j_inner * j_inner + convert(I, 4) * j_inner - convert(I, 2) * i_inner + constant_inner
+        d_outer = convert(I, 2) * i_outer * i_outer + convert(I, 2) * j_outer * j_outer + convert(I, 4) * j_outer - convert(I, 2) * i_outer + constant_outer
+
+        j_inner += one(I)
+        j_outer += one(I)
+
+        if d_inner > zero(I)
+            i_inner -= one(I)
+        end
+
+        if d_outer > zero(I)
+            i_outer -= one(I)
+        end
+
+        f(image, i_center + i_inner, j_center + j_inner, i_center + i_outer, j_center + j_outer, color)
+    end
+
+    while i_outer > j_outer + one(I)
+        d_outer = convert(I, 2) * i_outer * i_outer + convert(I, 2) * j_outer * j_outer + convert(I, 4) * j_outer - convert(I, 2) * i_outer + constant_outer
+
+        j_outer += one(I)
+
+        if d_outer > zero(I)
+            i_outer -= one(I)
+        end
+
+        f(image, i_center + j_outer, j_center + j_outer, i_center + i_outer, j_center + j_outer, color)
+    end
+
+    return nothing
+end
+
+#####
+##### AbstractCircle
+#####
+
+get_radius(shape::AbstractCircle) = shape.diameter ÷ oftype(shape.diameter, 2)
+
+function get_center(shape::AbstractCircle, radius)
+    i_position = shape.position.i
+    j_position = shape.position.j
+    return Point(i_position + radius, j_position + radius)
+end
+
+get_center(shape::AbstractCircle) = get_center(shape, get_radius(shape))
+
+function get_center_radius(shape::AbstractCircle)
+    radius = get_radius(shape)
+    center = get_center(shape, radius)
+    return (center, radius)
+end
+
+is_valid(shape::AbstractCircle) = shape.diameter > zero(shape.diameter)
+
+get_i_min(shape::AbstractCircle) = shape.position.i
+get_i_max(shape::AbstractCircle) = shape.position.i + shape.diameter - one(shape.diameter)
+
+get_j_min(shape::AbstractCircle) = shape.position.j
+get_j_max(shape::AbstractCircle) = shape.position.j + shape.diameter - one(shape.diameter)
 
 #####
 ##### OddCircle
@@ -282,73 +356,6 @@ function draw!(f::Function, image::AbstractMatrix, shape::FilledCircle, color)
         draw!(f, image, EvenFilledCircle(position, diameter), color)
     else
         draw!(f, image, OddFilledCircle(position, diameter), color)
-    end
-
-    return nothing
-end
-
-#####
-##### ThickCircleOctant
-#####
-
-is_valid(shape::ThickCircleOctant) = (shape.radius >= zero(shape.radius)) && (shape.thickness > zero(shape.thickness) && (shape.thickness <= shape.radius + one(shape.radius)))
-
-draw!(image::AbstractMatrix, shape::ThickCircleOctant, color) = draw!(put_pixel!, image, shape, color)
-
-function draw!(f::Function, image::AbstractMatrix, shape::ThickCircleOctant, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    center = shape.center
-    radius = shape.radius
-    thickness = shape.thickness
-
-    I = typeof(radius)
-
-    i_center = center.i
-    j_center = center.j
-
-    radius_inner = radius - thickness + one(I)
-    radius_outer = radius
-
-    i_inner = radius_inner
-    j_inner = zero(I)
-
-    i_outer = radius_outer
-    j_outer = zero(I)
-
-    constant_inner = convert(I, 3) - convert(I, 2) * radius_inner * radius_inner
-    constant_outer = convert(I, 3) - convert(I, 2) * radius_outer * radius_outer
-
-    f(image, i_center + i_inner, j_center + j_inner, i_center + i_outer, j_center + j_outer, color)
-
-    while i_inner > j_inner + one(I)
-        d_inner = convert(I, 2) * i_inner * i_inner + convert(I, 2) * j_inner * j_inner + convert(I, 4) * j_inner - convert(I, 2) * i_inner + constant_inner
-        d_outer = convert(I, 2) * i_outer * i_outer + convert(I, 2) * j_outer * j_outer + convert(I, 4) * j_outer - convert(I, 2) * i_outer + constant_outer
-
-        j_inner += one(I)
-        j_outer += one(I)
-
-        if d_inner > zero(I)
-            i_inner -= one(I)
-        end
-
-        if d_outer > zero(I)
-            i_outer -= one(I)
-        end
-
-        f(image, i_center + i_inner, j_center + j_inner, i_center + i_outer, j_center + j_outer, color)
-    end
-
-    while i_outer > j_outer + one(I)
-        d_outer = convert(I, 2) * i_outer * i_outer + convert(I, 2) * j_outer * j_outer + convert(I, 4) * j_outer - convert(I, 2) * i_outer + constant_outer
-
-        j_outer += one(I)
-
-        if d_outer > zero(I)
-            i_outer -= one(I)
-        end
-
-        f(image, i_center + j_outer, j_center + j_outer, i_center + i_outer, j_center + j_outer, color)
     end
 
     return nothing
