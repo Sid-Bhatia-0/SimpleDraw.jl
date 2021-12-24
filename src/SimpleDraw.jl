@@ -45,7 +45,17 @@ function is_inbounds(shape::AbstractShape, image::AbstractMatrix)
     return i_min_shape >= i_min_image && i_max_shape <= i_max_image && j_min_shape >= j_min_image && j_max_shape <= j_max_image
 end
 
-function draw!(image::AbstractMatrix, shape::AbstractShape, color)
+abstract type DrawingOptimizationStyle end
+
+struct PutPixel <: DrawingOptimizationStyle end
+const PUT_PIXEL = PutPixel()
+
+draw!(::PutPixel, image::AbstractMatrix, shape::AbstractShape, color) = draw!(put_pixel!, image, shape, color)
+
+struct CheckBounds <: DrawingOptimizationStyle end
+const CHECK_BOUNDS = CheckBounds()
+
+function draw!(::CheckBounds, image::AbstractMatrix, shape::AbstractShape, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_outbounds(shape, image)
@@ -60,6 +70,30 @@ function draw!(image::AbstractMatrix, shape::AbstractShape, color)
 
     return nothing
 end
+
+struct Clip <: DrawingOptimizationStyle end
+const CLIP = Clip()
+
+function draw!(::Clip, image::AbstractMatrix, shape::AbstractShape, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
+    if is_outbounds(shape, image)
+        return nothing
+    end
+
+    draw!(put_pixel_unchecked!, image, clip(shape, image), color)
+
+    return nothing
+end
+
+struct PutPixelUnchecked <: DrawingOptimizationStyle end
+const PUT_PIXEL_UNCHECKED = PutPixelUnchecked()
+
+draw!(::PutPixelUnchecked, image::AbstractMatrix, shape::AbstractShape, color) = draw!(put_pixel_unchecked!, image, shape, color)
+
+get_drawing_optimization_style(::AbstractShape) = PUT_PIXEL
+
+draw!(image::AbstractMatrix, shape::AbstractShape, color) = draw!(get_drawing_optimization_style(shape), image, shape, color)
 
 include("point.jl")
 include("background.jl")

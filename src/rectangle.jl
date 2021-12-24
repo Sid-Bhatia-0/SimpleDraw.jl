@@ -31,6 +31,8 @@ get_i_max(shape::AbstractRectangle) = shape.position.i + shape.height - one(shap
 get_j_min(shape::AbstractRectangle) = shape.position.j
 get_j_max(shape::AbstractRectangle) = shape.position.j + shape.width - one(shape.width)
 
+get_drawing_optimization_style(::AbstractRectangle) = CHECK_BOUNDS
+
 #####
 ##### Rectangle
 #####
@@ -76,17 +78,7 @@ function clip(shape::FilledRectangle, image::AbstractMatrix)
     return FilledRectangle(Point(i_min, j_min), i_max - i_min + one(I), j_max - j_min + one(I))
 end
 
-function draw!(image::AbstractMatrix, shape::FilledRectangle, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    if is_outbounds(shape, image)
-        return nothing
-    end
-
-    draw!(put_pixel_unchecked!, image, clip(shape, image), color)
-
-    return nothing
-end
+get_drawing_optimization_style(::FilledRectangle) = CLIP
 
 function draw!(f::Function, image::AbstractMatrix, shape::FilledRectangle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"

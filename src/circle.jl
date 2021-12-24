@@ -73,6 +73,8 @@ get_i_max(shape::AbstractOctant) = shape.center.i + shape.radius
 get_j_min(shape::AbstractOctant) = shape.center.j
 get_j_max(shape::AbstractOctant) = shape.center.j + shape.radius
 
+get_drawing_optimization_style(::AbstractOctant) = CHECK_BOUNDS
+
 #####
 ##### CircleOctant
 #####
@@ -123,8 +125,18 @@ function draw!(image::AbstractMatrix, shape::ThickCircleOctant, color)
     radius = shape.radius
     thickness = shape.thickness
 
-    draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
-        draw!(put_pixel!, image, VerticalLine(i1, i2, j1), color)
+    if is_outbounds(shape, image)
+        return nothing
+    end
+
+    if is_inbounds(shape, image)
+        draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
+            draw!(put_pixel_unchecked!, image, VerticalLine(i1, i2, j1), color)
+        end
+    else
+        draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
+            draw!(put_pixel!, image, VerticalLine(i1, i2, j1), color)
+        end
     end
 
     return nothing
@@ -216,6 +228,8 @@ get_i_max(shape::AbstractCircle) = shape.position.i + shape.diameter - one(shape
 
 get_j_min(shape::AbstractCircle) = shape.position.j
 get_j_max(shape::AbstractCircle) = shape.position.j + shape.diameter - one(shape.diameter)
+
+get_drawing_optimization_style(::AbstractCircle) = CHECK_BOUNDS
 
 #####
 ##### OddCircle
