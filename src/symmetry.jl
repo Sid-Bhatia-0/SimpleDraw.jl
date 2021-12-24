@@ -27,6 +27,31 @@ struct EvenSymmetricVerticalLines4{I <: Integer} <: AbstractSymmetry
 end
 
 #####
+##### reflections
+#####
+
+get_odd_reflection_horizontal_line(shape::Point, i) = Point(i + i - shape.i, shape.j)
+get_even_reflection_horizontal_line(shape::Point, i) = Point(i + i - shape.i - one(i), shape.j)
+
+get_odd_reflection_vertical_line(shape::Point, j) = Point(shape.i, j + j - shape.j)
+get_even_reflection_vertical_line(shape::Point, j) = Point(shape.i, j + j - shape.j - one(j))
+
+get_reflection_diagonal_line(shape::Point, i, j) = Point(i + shape.j - j, j + shape.i - i)
+
+get_odd_reflection_horizontal_line(shape::VerticalLine, i) = VerticalLine(i + i - shape.i_max, i + i - shape.i_min, shape.j)
+get_even_reflection_horizontal_line(shape::VerticalLine, i) = VerticalLine(i + i - shape.i_max - one(i), i + i - shape.i_min - one(i), shape.j)
+
+get_odd_reflection_vertical_line(shape::VerticalLine, j) = VerticalLine(shape.i_min, shape.i_max, j + j - shape.j)
+get_even_reflection_vertical_line(shape::VerticalLine, j) = VerticalLine(shape.i_min, shape.i_max, j + j - shape.j - one(j))
+
+function get_reflection_diagonal_line(shape::VerticalLine, i, j)
+    new_i = i + shape.j - j
+    j_min = j + shape.i_min - i
+    j_max = j + shape.i_max - i
+    return HorizontalLine(new_i, j_min, j_max)
+end
+
+#####
 ##### AbstractOctantSymmetry
 #####
 
@@ -36,7 +61,47 @@ is_valid(shape::AbstractOctantSymmetry) = is_valid(shape.shape)
 ##### OddOctantSymmetricShape
 #####
 
-draw!(image::AbstractMatrix, shape::OddOctantSymmetricShape{I, Point{I}}, color) where {I} = draw!(put_pixel!, image, shape, color)
+function get_i_min(shape::OddOctantSymmetricShape)
+    origin = shape.origin
+    generator = shape.shape
+    generator_reflected = get_odd_reflection_horizontal_line(generator, origin.i)
+    return min(get_i_min(generator), get_i_min(generator_reflected))
+end
+
+function get_i_max(shape::OddOctantSymmetricShape)
+    origin = shape.origin
+    generator = shape.shape
+    generator_reflected = get_odd_reflection_horizontal_line(generator, origin.i)
+    return max(get_i_max(generator), get_i_max(generator_reflected))
+end
+
+function get_i_extrema(shape::OddOctantSymmetricShape)
+    origin = shape.origin
+    generator = shape.shape
+    generator_reflected = get_odd_reflection_horizontal_line(generator, origin.i)
+    return (min(get_i_min(generator), get_i_min(generator_reflected)), max(get_i_max(generator), get_i_max(generator_reflected)))
+end
+
+function get_j_min(shape::OddOctantSymmetricShape)
+    origin = shape.origin
+    generator = shape.shape
+    generator_reflected = get_odd_reflection_horizontal_line(generator, origin.j)
+    return min(get_j_min(generator), get_j_min(generator_reflected))
+end
+
+function get_j_max(shape::OddOctantSymmetricShape)
+    origin = shape.origin
+    generator = shape.shape
+    generator_reflected = get_odd_reflection_horizontal_line(generator, origin.j)
+    return max(get_j_max(generator), get_j_max(generator_reflected))
+end
+
+function get_j_extrema(shape::OddOctantSymmetricShape)
+    origin = shape.origin
+    generator = shape.shape
+    generator_reflected = get_odd_reflection_horizontal_line(generator, origin.j)
+    return (min(get_j_min(generator), get_j_min(generator_reflected)), max(get_j_max(generator), get_j_max(generator_reflected)))
+end
 
 function draw!(f::Function, image::AbstractMatrix, shape::OddOctantSymmetricShape{I, Point{I}}, color) where {I}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
@@ -63,8 +128,6 @@ function draw!(f::Function, image::AbstractMatrix, shape::OddOctantSymmetricShap
 
     return nothing
 end
-
-draw!(image::AbstractMatrix, shape::OddOctantSymmetricShape{I, VerticalLine{I}}, color) where {I} = draw!(put_pixel!, image, shape, color)
 
 function draw!(f::Function, image::AbstractMatrix, shape::OddOctantSymmetricShape{I, VerticalLine{I}}, color) where {I}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
@@ -99,7 +162,47 @@ end
 ##### EvenOctantSymmetricShape
 #####
 
-draw!(image::AbstractMatrix, shape::EvenOctantSymmetricShape{I, Point{I}}, color) where {I} = draw!(put_pixel!, image, shape, color)
+function get_i_min(shape::EvenOctantSymmetricShape)
+    origin = shape.origin
+    generator = shape.shape
+    generator_reflected = get_even_reflection_horizontal_line(generator, origin.i)
+    return min(get_i_min(generator), get_i_min(generator_reflected))
+end
+
+function get_i_max(shape::EvenOctantSymmetricShape)
+    origin = shape.origin
+    generator = shape.shape
+    generator_reflected = get_even_reflection_horizontal_line(generator, origin.i)
+    return max(get_i_max(generator), get_i_max(generator_reflected))
+end
+
+function get_i_extrema(shape::EvenOctantSymmetricShape)
+    origin = shape.origin
+    generator = shape.shape
+    generator_reflected = get_even_reflection_horizontal_line(generator, origin.i)
+    return (min(get_i_min(generator), get_i_min(generator_reflected)), max(get_i_max(generator), get_i_max(generator_reflected)))
+end
+
+function get_j_min(shape::EvenOctantSymmetricShape)
+    origin = shape.origin
+    generator = shape.shape
+    generator_reflected = get_even_reflection_horizontal_line(generator, origin.j)
+    return min(get_j_min(generator), get_j_min(generator_reflected))
+end
+
+function get_j_max(shape::EvenOctantSymmetricShape)
+    origin = shape.origin
+    generator = shape.shape
+    generator_reflected = get_even_reflection_horizontal_line(generator, origin.j)
+    return max(get_j_max(generator), get_j_max(generator_reflected))
+end
+
+function get_j_extrema(shape::EvenOctantSymmetricShape)
+    origin = shape.origin
+    generator = shape.shape
+    generator_reflected = get_even_reflection_horizontal_line(generator, origin.j)
+    return (min(get_j_min(generator), get_j_min(generator_reflected)), max(get_j_max(generator), get_j_max(generator_reflected)))
+end
 
 function draw!(f::Function, image::AbstractMatrix, shape::EvenOctantSymmetricShape{I, Point{I}}, color) where {I}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
@@ -126,8 +229,6 @@ function draw!(f::Function, image::AbstractMatrix, shape::EvenOctantSymmetricSha
 
     return nothing
 end
-
-draw!(image::AbstractMatrix, shape::EvenOctantSymmetricShape{I, VerticalLine{I}}, color) where {I} = draw!(put_pixel!, image, shape, color)
 
 function draw!(f::Function, image::AbstractMatrix, shape::EvenOctantSymmetricShape{I, VerticalLine{I}}, color) where {I}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
@@ -175,7 +276,20 @@ function is_valid(shape::OddSymmetricVerticalLines4)
     return (i_point >= i_origin) && (j_point >= j_origin) && (i_point - i_origin >= j_point - j_origin)
 end
 
-draw!(image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color) = draw!(put_pixel!, image, shape, color)
+get_i_min(shape::OddSymmetricVerticalLines4) = get_odd_reflection_horizontal_line(shape.point, shape.origin.i).i
+get_i_max(shape::OddSymmetricVerticalLines4) = shape.point.i
+
+function get_j_min(shape::OddSymmetricVerticalLines4)
+    diagonally_reflected_point = get_reflection_diagonal_line(shape.point, shape.origin.i, shape.origin.j)
+    return get_odd_reflection_vertical_line(diagonally_reflected_point, shape.origin.j).j
+end
+
+get_j_max(shape::OddSymmetricVerticalLines4) = get_reflection_diagonal_line(shape.point, shape.origin.i, shape.origin.j).j
+
+function get_j_extrema(shape::OddSymmetricVerticalLines4)
+    diagonally_reflected_point = get_reflection_diagonal_line(shape.point, shape.origin.i, shape.origin.j)
+    return (get_odd_reflection_vertical_line(diagonally_reflected_point, shape.origin.j).j, diagonally_reflected_point.j)
+end
 
 function draw!(f::Function, image::AbstractMatrix, shape::OddSymmetricVerticalLines4, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
@@ -216,7 +330,20 @@ function is_valid(shape::EvenSymmetricVerticalLines4)
     return (i_point > i_origin) && (j_point > j_origin) && (i_point - i_origin >= j_point - j_origin)
 end
 
-draw!(image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color) = draw!(put_pixel!, image, shape, color)
+get_i_min(shape::EvenSymmetricVerticalLines4) = get_even_reflection_horizontal_line(shape.point, shape.origin.i).i
+get_i_max(shape::EvenSymmetricVerticalLines4) = shape.point.i
+
+function get_j_min(shape::EvenSymmetricVerticalLines4)
+    diagonally_reflected_point = get_reflection_diagonal_line(shape.point, shape.origin.i, shape.origin.j)
+    return get_even_reflection_vertical_line(diagonally_reflected_point, shape.origin.j).j
+end
+
+get_j_max(shape::EvenSymmetricVerticalLines4) = get_reflection_diagonal_line(shape.point, shape.origin.i, shape.origin.j).j
+
+function get_j_extrema(shape::EvenSymmetricVerticalLines4)
+    diagonally_reflected_point = get_reflection_diagonal_line(shape.point, shape.origin.i, shape.origin.j)
+    return (get_even_reflection_vertical_line(diagonally_reflected_point, shape.origin.j).j, diagonally_reflected_point.j)
+end
 
 function draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricVerticalLines4, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
