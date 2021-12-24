@@ -37,17 +37,7 @@ get_j_max(shape::VerticalLine) = shape.j
 
 clip(shape::VerticalLine, image::AbstractMatrix) = VerticalLine(max(get_i_min(shape), get_i_min(image)), min(get_i_max(shape), get_i_max(image)), shape.j)
 
-function draw!(image::AbstractMatrix, shape::VerticalLine, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    if is_outbounds(shape, image)
-        return nothing
-    end
-
-    draw!(put_pixel_unchecked!, image, clip(shape, image), color)
-
-    return nothing
-end
+get_drawing_optimization_style(::VerticalLine) = CLIP
 
 function draw!(f::Function, image::AbstractMatrix, shape::VerticalLine, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
@@ -77,17 +67,7 @@ get_j_max(shape::HorizontalLine) = shape.j_max
 
 clip(shape::HorizontalLine, image::AbstractMatrix) = HorizontalLine(shape.i, max(get_j_min(shape), get_j_min(image)), min(get_j_max(shape), get_j_max(image)))
 
-function draw!(image::AbstractMatrix, shape::HorizontalLine, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    if is_outbounds(shape, image)
-        return nothing
-    end
-
-    draw!(put_pixel_unchecked!, image, clip(shape, image), color)
-
-    return nothing
-end
+get_drawing_optimization_style(::HorizontalLine) = CLIP
 
 function draw!(f::Function, image::AbstractMatrix, shape::HorizontalLine, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
@@ -114,6 +94,8 @@ get_i_extrema(shape::Line) = minmax(shape.point1.i, shape.point2.i)
 get_j_min(shape::Line) = min(shape.point1.j, shape.point2.j)
 get_j_max(shape::Line) = max(shape.point1.j, shape.point2.j)
 get_j_extrema(shape::Line) = minmax(shape.point1.j, shape.point2.j)
+
+get_drawing_optimization_style(::Line) = CHECK_BOUNDS
 
 function draw!(f::Function, image::AbstractMatrix, shape::Line, color)
     point1 = shape.point1
@@ -198,6 +180,8 @@ function get_j_max(shape::ThickLine)
         return j_max + radius
     end
 end
+
+get_drawing_optimization_style(::ThickLine) = CHECK_BOUNDS
 
 function draw!(f::Function, image::AbstractMatrix, shape::ThickLine, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"

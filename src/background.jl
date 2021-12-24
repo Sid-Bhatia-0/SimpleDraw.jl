@@ -1,6 +1,6 @@
 struct Background <: AbstractShape end
 
-draw!(image::AbstractMatrix, shape::Background, color) = draw!(put_pixel_unchecked!, image, shape, color)
+get_drawing_optimization_style(::Background) = PUT_PIXEL_UNCHECKED
 
 function draw!(f::Function, image::AbstractMatrix, shape::Background, color)
     for j in axes(image, 2)

@@ -29,15 +29,7 @@ function clip(shape::Bitmap, image::AbstractMatrix)
     return Bitmap(position, clipped_bitmap)
 end
 
-function draw!(image::AbstractMatrix, shape::Bitmap, color)
-    if is_outbounds(shape, image)
-        return nothing
-    end
-
-    draw!(put_pixel_unchecked!, image, clip(shape, image), color)
-
-    return nothing
-end
+get_drawing_optimization_style(::Bitmap) = CLIP
 
 function draw!(f::Function, image::AbstractMatrix, shape::Bitmap, color)
     position = shape.position
