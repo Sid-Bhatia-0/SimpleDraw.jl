@@ -68,10 +68,10 @@ end
 is_valid(shape::AbstractOctant) = shape.radius >= zero(shape.radius)
 
 get_i_min(shape::AbstractOctant) = shape.center.i
-get_i_max(shape::AbstractOctant) = shape.center.i + shape.radius - one(shape.radius)
+get_i_max(shape::AbstractOctant) = shape.center.i + shape.radius
 
 get_j_min(shape::AbstractOctant) = shape.center.j
-get_j_max(shape::AbstractOctant) = shape.center.j + shape.radius - one(shape.radius)
+get_j_max(shape::AbstractOctant) = shape.center.j + shape.radius
 
 #####
 ##### CircleOctant
