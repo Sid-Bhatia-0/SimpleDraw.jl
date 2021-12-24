@@ -241,3 +241,28 @@ function draw!(f::Function, image::AbstractMatrix, shape::EvenSymmetricVerticalL
 
     return nothing
 end
+
+#####
+##### line symmetries
+#####
+
+get_odd_reflection_horizontal_line(shape::Point, i) = Point(i + i - shape.i, shape.j)
+get_even_reflection_horizontal_line(shape::Point, i) = Point(i + i - shape.i - one(i), shape.j)
+
+get_odd_reflection_vertical_line(shape::Point, j) = Point(shape.i, j + j - shape.j)
+get_even_reflection_vertical_line(shape::Point, j) = Point(shape.i, j + j - shape.j - one(j))
+
+get_reflection_diagonal_line(shape::Point, i, j) = Point(i + shape.j - j, j + shape.i - i)
+
+get_odd_reflection_horizontal_line(shape::VerticalLine, i) = VerticalLine(i + i - shape.i_max, i + i - shape.i_min, shape.j)
+get_even_reflection_horizontal_line(shape::VerticalLine, i) = VerticalLine(i + i - shape.i_max - one(i), i + i - shape.i_min - one(i), shape.j)
+
+get_odd_reflection_vertical_line(shape::VerticalLine, j) = VerticalLine(shape.i_min, shape.i_max, j + j - shape.j)
+get_even_reflection_vertical_line(shape::VerticalLine, j) = VerticalLine(shape.i_min, shape.i_max, j + j - shape.j - one(j))
+
+function get_reflection_diagonal_line(shape::VerticalLine, i, j)
+    new_i = i + shape.j - j
+    j_min = j + shape.i_min - i
+    j_max = j + shape.i_max - i
+    return HorizontalLine(new_i, j_min, j_max)
+end
