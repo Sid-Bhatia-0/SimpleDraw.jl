@@ -112,17 +112,12 @@ function draw!(f::Function, image::AbstractMatrix, shape::ThickRectangle, color)
     width = shape.width
     thickness = shape.thickness
 
-    I = typeof(height)
-
     i_min = position.i
     j_min = position.j
 
-    j_min_plus_thickness = j_min + thickness
-    width_minus_twice_thickness = width - convert(I, 2) * thickness
-
     draw!(f, image, FilledRectangle(position, height, thickness), color)
-    draw!(f, image, FilledRectangle(Point(i_min, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
-    draw!(f, image, FilledRectangle(Point(i_min + height - thickness, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
+    draw!(f, image, FilledRectangle(position, thickness, width), color)
+    draw!(f, image, FilledRectangle(Point(i_min + height - thickness, j_min), thickness, width), color)
     draw!(f, image, FilledRectangle(Point(i_min, j_min + width - thickness), height, thickness), color)
 
     return nothing
