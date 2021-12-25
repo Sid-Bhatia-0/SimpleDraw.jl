@@ -43,14 +43,9 @@ function draw!(f::Function, image::AbstractMatrix, shape::Rectangle, color)
     i_min, i_max = get_i_extrema(shape)
     j_min, j_max = get_j_extrema(shape)
 
-    I = typeof(i_min)
-
-    j_min_plus_1 = j_min + one(I)
-    j_max_minus_1 = j_max - one(I)
-
     draw!(f, image, VerticalLine(i_min, i_max, j_min), color)
-    draw!(f, image, HorizontalLine(i_min, j_min_plus_1, j_max_minus_1), color)
-    draw!(f, image, HorizontalLine(i_max, j_min_plus_1, j_max_minus_1), color)
+    draw!(f, image, HorizontalLine(i_min, j_min, j_max), color)
+    draw!(f, image, HorizontalLine(i_max, j_min, j_max), color)
     draw!(f, image, VerticalLine(i_min, i_max, j_max), color)
 
     return nothing
@@ -117,17 +112,12 @@ function draw!(f::Function, image::AbstractMatrix, shape::ThickRectangle, color)
     width = shape.width
     thickness = shape.thickness
 
-    I = typeof(height)
-
     i_min = position.i
     j_min = position.j
 
-    j_min_plus_thickness = j_min + thickness
-    width_minus_twice_thickness = width - convert(I, 2) * thickness
-
     draw!(f, image, FilledRectangle(position, height, thickness), color)
-    draw!(f, image, FilledRectangle(Point(i_min, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
-    draw!(f, image, FilledRectangle(Point(i_min + height - thickness, j_min_plus_thickness), thickness, width_minus_twice_thickness), color)
+    draw!(f, image, FilledRectangle(position, thickness, width), color)
+    draw!(f, image, FilledRectangle(Point(i_min + height - thickness, j_min), thickness, width), color)
     draw!(f, image, FilledRectangle(Point(i_min, j_min + width - thickness), height, thickness), color)
 
     return nothing
