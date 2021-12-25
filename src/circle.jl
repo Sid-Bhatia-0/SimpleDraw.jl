@@ -1,11 +1,11 @@
-abstract type AbstractOctant <: AbstractShape end
+abstract type AbstractCircleOctant <: AbstractShape end
 
-struct CircleOctant{I <: Integer} <: AbstractOctant
+struct CircleOctant{I <: Integer} <: AbstractCircleOctant
     center::Point{I}
     radius::I
 end
 
-struct ThickCircleOctant{I <: Integer} <: AbstractOctant
+struct ThickCircleOctant{I <: Integer} <: AbstractCircleOctant
     center::Point{I}
     radius::I
     thickness::I
@@ -62,18 +62,18 @@ struct ThickCircle{I <: Integer} <: AbstractCircle
 end
 
 #####
-##### AbstractOctant
+##### AbstractCircleOctant
 #####
 
-is_valid(shape::AbstractOctant) = shape.radius >= zero(shape.radius)
+is_valid(shape::AbstractCircleOctant) = shape.radius >= zero(shape.radius)
 
-get_i_min(shape::AbstractOctant) = shape.center.i
-get_i_max(shape::AbstractOctant) = shape.center.i + shape.radius
+get_i_min(shape::AbstractCircleOctant) = shape.center.i
+get_i_max(shape::AbstractCircleOctant) = shape.center.i + shape.radius
 
-get_j_min(shape::AbstractOctant) = shape.center.j
-get_j_max(shape::AbstractOctant) = shape.center.j + shape.radius
+get_j_min(shape::AbstractCircleOctant) = shape.center.j
+get_j_max(shape::AbstractCircleOctant) = shape.center.j + shape.radius
 
-get_drawing_optimization_style(::AbstractOctant) = CHECK_BOUNDS
+get_drawing_optimization_style(::AbstractCircleOctant) = CHECK_BOUNDS
 
 #####
 ##### CircleOctant
@@ -240,11 +240,6 @@ is_valid(shape::OddCircle) = isodd(shape.diameter) && shape.diameter > zero(shap
 function draw!(f::Function, image::AbstractMatrix, shape::OddCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
-    position = shape.position
-    diameter = shape.diameter
-
-    I = typeof(diameter)
-
     center, radius = get_center_radius(shape)
 
     draw!(image, CircleOctant(center, radius), color) do image, i, j, color
@@ -262,9 +257,6 @@ is_valid(shape::EvenCircle) = iseven(shape.diameter) && shape.diameter > zero(sh
 
 function draw!(f::Function, image::AbstractMatrix, shape::EvenCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    position = shape.position
-    diameter = shape.diameter
 
     center, radius = get_center_radius(shape)
 
@@ -318,9 +310,6 @@ is_valid(shape::OddFilledCircle) = is_valid(OddCircle(shape.position, shape.diam
 function draw!(f::Function, image::AbstractMatrix, shape::OddFilledCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
-    position = shape.position
-    diameter = shape.diameter
-
     center, radius = get_center_radius(shape)
 
     draw!(image, CircleOctant(center, radius), color) do image, i, j, color
@@ -338,9 +327,6 @@ is_valid(shape::EvenFilledCircle) = is_valid(EvenCircle(shape.position, shape.di
 
 function draw!(f::Function, image::AbstractMatrix, shape::EvenFilledCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    position = shape.position
-    diameter = shape.diameter
 
     center, radius = get_center_radius(shape)
 
@@ -405,11 +391,7 @@ end
 function draw!(f::Function, image::AbstractMatrix, shape::OddThickCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
-    position = shape.position
-    diameter = shape.diameter
     thickness = shape.thickness
-
-    I = typeof(diameter)
 
     center, radius = get_center_radius(shape)
 
@@ -436,11 +418,7 @@ end
 function draw!(f::Function, image::AbstractMatrix, shape::EvenThickCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
-    position = shape.position
-    diameter = shape.diameter
     thickness = shape.thickness
-
-    I = typeof(diameter)
 
     center, radius = get_center_radius(shape)
 
