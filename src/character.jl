@@ -33,7 +33,7 @@ get_i_max(shape::Character) = shape.position.i + size(shape.font.bitmap, 1) - on
 get_j_min(shape::Character) = shape.position.j
 get_j_max(shape::Character) = shape.position.j + size(shape.font.bitmap, 2) - one(shape.position.j)
 
-function draw!(image::AbstractMatrix, shape::Character{I, C, Terminus_32_16}, color) where {I, C}
+function draw!(image::AbstractMatrix, shape::Character{I, C, Terminus_32_16} where {I, C}, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position
@@ -54,7 +54,7 @@ function draw!(image::AbstractMatrix, shape::Character{I, C, Terminus_32_16}, co
     return nothing
 end
 
-function draw!(f::Function, image::AbstractMatrix, shape::Character{I, C, Terminus_32_16}, color) where {I, C}
+function draw!(f::Function, image::AbstractMatrix, shape::Character{I, C, Terminus_32_16} where {I, C}, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position
