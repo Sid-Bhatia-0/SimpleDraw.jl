@@ -43,14 +43,9 @@ function draw!(f::Function, image::AbstractMatrix, shape::Rectangle, color)
     i_min, i_max = get_i_extrema(shape)
     j_min, j_max = get_j_extrema(shape)
 
-    I = typeof(i_min)
-
-    j_min_plus_1 = j_min + one(I)
-    j_max_minus_1 = j_max - one(I)
-
     draw!(f, image, VerticalLine(i_min, i_max, j_min), color)
-    draw!(f, image, HorizontalLine(i_min, j_min_plus_1, j_max_minus_1), color)
-    draw!(f, image, HorizontalLine(i_max, j_min_plus_1, j_max_minus_1), color)
+    draw!(f, image, HorizontalLine(i_min, j_min, j_max), color)
+    draw!(f, image, HorizontalLine(i_max, j_min, j_max), color)
     draw!(f, image, VerticalLine(i_min, i_max, j_max), color)
 
     return nothing
