@@ -48,43 +48,10 @@ Test.@testset "SimpleDraw.jl" begin
         height = 32
         width = 32
         image = falses(height, width)
-        shape = SD.Point(-1, -1)
+        shape = SD.Point(100 + 16, 100 + 16)
         color = true
         SD.draw!(image, shape, color)
-        Test.@test image == BitArray([
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                        0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-                                     ])
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "Background" begin
@@ -212,6 +179,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.VerticalLine(100 + 9, 100 + 24, 100 + 16)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "HorizontalLine" begin
@@ -296,6 +271,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.HorizontalLine(100 + 16, 100 + 9, 100 + 24)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "Line" begin
@@ -380,6 +363,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.Line(SD.Point(100 + 9, 100 + 5), SD.Point(100 + 24, 100 + 28))
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "ThickLine" begin
@@ -464,6 +455,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.ThickLine(SD.Point(100 + 9, 100 + 5), SD.Point(100 + 24, 100 + 28), 7)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "OddOctantSymmetricShape{Int, Point{Int}}" begin
@@ -507,6 +506,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.OddOctantSymmetricShape(SD.Point(100 + 8, 100 + 8), SD.Point(100 + 14, 100 + 10))
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "EvenOctantSymmetricShape{Int, Point{Int}}" begin
@@ -550,6 +557,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.EvenOctantSymmetricShape(SD.Point(100 + 8, 100 + 8), SD.Point(100 + 14, 100 + 10))
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "OddOctantSymmetricShape{Int, VerticalLine{Int}}" begin
@@ -593,6 +608,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.OddOctantSymmetricShape(SD.Point(100 + 8, 100 + 8), SD.VerticalLine(100 + 12, 100 + 14, 100 + 10))
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "EvenOctantSymmetricShape{Int, VerticalLine{Int}}" begin
@@ -636,6 +659,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.EvenOctantSymmetricShape(SD.Point(100 + 8, 100 + 8), SD.VerticalLine(100 + 12, 100 + 14, 100 + 10))
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "OddSymmetricVerticalLines4" begin
@@ -679,6 +710,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.OddSymmetricVerticalLines4(SD.Point(100 + 8, 100 + 8), SD.Point(100 + 14, 100 + 10))
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "EvenSymmetricVerticalLines4" begin
@@ -722,6 +761,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.EvenSymmetricVerticalLines4(SD.Point(100 + 8, 100 + 8), SD.Point(100 + 14, 100 + 10))
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "CircleOctant" begin
@@ -765,6 +812,13 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.CircleOctant(SD.Point(100 + 1, 100 + 1), 31)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "ThickCircleOctant" begin
@@ -808,6 +862,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         1 1 1 1 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.ThickCircleOctant(SD.Point(100 + 1, 100 + 1), 31, 12)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "Circle (odd)" begin
@@ -892,6 +954,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.Circle(SD.Point(100 + 2, 100 + 2), 29)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "Circle (even)" begin
@@ -976,6 +1046,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.Circle(SD.Point(100 + 2, 100 + 2), 30)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "OddCircle" begin
@@ -1060,6 +1138,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.OddCircle(SD.Point(100 + 2, 100 + 2), 29)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "EvenCircle" begin
@@ -1144,6 +1230,13 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.EvenCircle(SD.Point(100 + 2, 100 + 2), 30)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "ThickCircle (odd)" begin
@@ -1228,6 +1321,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1
                                         0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 1 1 1
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.ThickCircle(SD.Point(100 + 2, 100 + 2), 29, 5)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "ThickCircle (even)" begin
@@ -1312,6 +1413,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.ThickCircle(SD.Point(100 + 2, 100 + 2), 30, 4)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "FilledCircle (odd)" begin
@@ -1396,6 +1505,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
                                         0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.FilledCircle(SD.Point(100 + 2, 100 + 2), 29)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "FilledCircle (even)" begin
@@ -1480,6 +1597,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
                                         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.FilledCircle(SD.Point(100 + 2, 100 + 2), 30)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "OddFilledCircle" begin
@@ -1564,6 +1689,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
                                         0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.OddFilledCircle(SD.Point(100 + 2, 100 + 2), 29)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "EvenFilledCircle" begin
@@ -1648,6 +1781,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
                                         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.EvenFilledCircle(SD.Point(100 + 2, 100 + 2), 30)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "OddThickCircle" begin
@@ -1732,6 +1873,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1
                                         0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 1 1 1
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.OddThickCircle(SD.Point(100 + 2, 100 + 2), 29, 5)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "EvenThickCircle" begin
@@ -1816,6 +1965,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.EvenThickCircle(SD.Point(100 + 2, 100 + 2), 30, 4)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "Rectangle" begin
@@ -1900,6 +2057,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.Rectangle(SD.Point(100 + 9, 100 + 5), 16, 24)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "FilledRectangle" begin
@@ -1984,6 +2149,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.FilledRectangle(SD.Point(100 + 9, 100 + 5), 16, 24)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "ThickRectangle" begin
@@ -2068,6 +2241,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.ThickRectangle(SD.Point(100 + 9, 100 + 5), 16, 24, 4)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "Character" begin
@@ -2111,6 +2292,14 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        shape = SD.Character(SD.Point(100 + 1, 100 + 1), 'A', SD.TERMINUS_32_16)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "TextLine" begin
@@ -2154,6 +2343,14 @@ Test.@testset "SimpleDraw.jl" begin
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 64
+        image = falses(height, width)
+        shape = SD.TextLine(SD.Point(100 + 1, 100 + 1), "Text", SD.TERMINUS_32_16)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 
     Test.@testset "Bitmap" begin
@@ -2274,5 +2471,31 @@ Test.@testset "SimpleDraw.jl" begin
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0
                                      ])
+
+        height = 32
+        width = 32
+        image = falses(height, width)
+        bitmap = BitArray([
+                            0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0
+                            0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0
+                            0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0
+                            0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0
+                            0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0
+                            0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0
+                            0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0
+                            1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+                            1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+                            0 1 0 0 0 0 0 0 0 0 0 0 0 0 1 0
+                            0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0
+                            0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0
+                            0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0
+                            0 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0
+                            0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0
+                            0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0
+                           ])
+        shape = SD.Bitmap(SD.Point(100 + 25, 100 + 25), bitmap)
+        color = true
+        SD.draw!(image, shape, color)
+        Test.@test image == falses(height, width)
     end
 end
