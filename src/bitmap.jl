@@ -9,7 +9,7 @@ get_i_max(shape::Bitmap) = shape.position.i + size(shape.bitmap, 1) - one(shape.
 get_j_min(shape::Bitmap) = shape.position.j
 get_j_max(shape::Bitmap) = shape.position.j + size(shape.bitmap, 2) - one(shape.position.j)
 
-function clip(shape::Bitmap, image::AbstractMatrix)
+function clip(image::AbstractMatrix, shape::Bitmap)
     position = shape.position
     bitmap = shape.bitmap
 

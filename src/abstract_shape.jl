@@ -111,7 +111,7 @@ function draw!(::Clip, image::AbstractMatrix, shape::AbstractShape, color)
         return nothing
     end
 
-    draw!(put_pixel_unchecked!, image, clip(shape, image), color)
+    draw!(put_pixel_unchecked!, image, clip(image, shape), color)
 
     return nothing
 end

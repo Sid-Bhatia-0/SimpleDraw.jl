@@ -55,7 +55,7 @@ end
 ##### FilledRectangle
 #####
 
-function clip(shape::FilledRectangle, image::AbstractMatrix)
+function clip(image::AbstractMatrix, shape::FilledRectangle)
     i_min_shape, i_max_shape = get_i_extrema(shape)
     i_min_image, i_max_image = get_i_extrema(image)
 

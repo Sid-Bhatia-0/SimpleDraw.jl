@@ -35,7 +35,7 @@ get_i_max(shape::VerticalLine) = shape.i_max
 get_j_min(shape::VerticalLine) = shape.j
 get_j_max(shape::VerticalLine) = shape.j
 
-clip(shape::VerticalLine, image::AbstractMatrix) = VerticalLine(max(get_i_min(shape), get_i_min(image)), min(get_i_max(shape), get_i_max(image)), shape.j)
+clip(image::AbstractMatrix, shape::VerticalLine) = VerticalLine(max(get_i_min(shape), get_i_min(image)), min(get_i_max(shape), get_i_max(image)), shape.j)
 
 get_drawing_optimization_style(::VerticalLine) = CLIP
 
@@ -65,7 +65,7 @@ get_i_max(shape::HorizontalLine) = shape.i
 get_j_min(shape::HorizontalLine) = shape.j_min
 get_j_max(shape::HorizontalLine) = shape.j_max
 
-clip(shape::HorizontalLine, image::AbstractMatrix) = HorizontalLine(shape.i, max(get_j_min(shape), get_j_min(image)), min(get_j_max(shape), get_j_max(image)))
+clip(image::AbstractMatrix, shape::HorizontalLine) = HorizontalLine(shape.i, max(get_j_min(shape), get_j_min(image)), min(get_j_max(shape), get_j_max(image)))
 
 get_drawing_optimization_style(::HorizontalLine) = CLIP
 
