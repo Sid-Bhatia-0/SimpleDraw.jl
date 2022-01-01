@@ -40,7 +40,7 @@ function draw!(image::AbstractMatrix, shape::Character{I, C, Terminus_32_16} whe
     char = shape.char
     font = shape.font
 
-    if is_outbounds(shape, image)
+    if is_outbounds(image, shape)
         return nothing
     end
 

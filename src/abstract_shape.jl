@@ -18,7 +18,7 @@ get_j_min(image::AbstractMatrix) = firstindex(image, 2)
 get_j_max(image::AbstractMatrix) = lastindex(image, 2)
 get_j_extrema(x) = (get_j_min(x), get_j_max(x))
 
-function is_outbounds(shape::AbstractShape, image::AbstractMatrix)
+function is_outbounds(image::AbstractMatrix, shape::AbstractShape)
     i_min_shape, i_max_shape = get_i_extrema(shape)
     i_min_image, i_max_image = get_i_extrema(image)
 
@@ -84,7 +84,7 @@ const CHECK_BOUNDS = CheckBounds()
 function draw!(::CheckBounds, image::AbstractMatrix, shape::AbstractShape, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
-    if is_outbounds(shape, image)
+    if is_outbounds(image, shape)
         return nothing
     end
 
@@ -107,7 +107,7 @@ const CLIP = Clip()
 function draw!(::Clip, image::AbstractMatrix, shape::AbstractShape, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
-    if is_outbounds(shape, image)
+    if is_outbounds(image, shape)
         return nothing
     end
 

@@ -125,7 +125,7 @@ function draw!(image::AbstractMatrix, shape::ThickCircleOctant, color)
     radius = shape.radius
     thickness = shape.thickness
 
-    if is_outbounds(shape, image)
+    if is_outbounds(image, shape)
         return nothing
     end
 
