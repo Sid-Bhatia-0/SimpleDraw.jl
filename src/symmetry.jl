@@ -327,7 +327,7 @@ function is_valid(shape::EvenSymmetricVerticalLines4)
     i_point = point.i
     j_point = point.j
 
-    return (i_point > i_origin) && (j_point > j_origin) && (i_point - i_origin >= j_point - j_origin)
+    return (i_point > i_origin) && (j_point >= j_origin) && (i_point - i_origin >= j_point - j_origin)
 end
 
 get_i_min(shape::EvenSymmetricVerticalLines4) = get_even_reflection_horizontal_line(shape.point, shape.origin.i).i

@@ -328,7 +328,19 @@ is_valid(shape::EvenFilledCircle) = is_valid(EvenCircle(shape.position, shape.di
 function draw!(f::Function, image::AbstractMatrix, shape::EvenFilledCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
+    position = shape.position
+    diameter = shape.diameter
+
+    I = typeof(diameter)
+
+    i_position = position.i
+    j_position = position.j
+
     center, radius = get_center_radius(shape)
+
+    if diameter == convert(I, 2)
+        draw!(f, image, FilledRectangle(position, convert(I, 2), convert(I, 2)), color)
+    end
 
     draw!(image, CircleOctant(center, radius), color) do image, i, j, color
         if i > center.i && j > center.j
