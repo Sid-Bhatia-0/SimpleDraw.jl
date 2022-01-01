@@ -28,7 +28,7 @@ function is_outbounds(image::AbstractMatrix, shape::AbstractShape)
     return i_max_shape < i_min_image || i_min_shape > i_max_image || j_max_shape < j_min_image || j_min_shape > j_max_image
 end
 
-function is_inbounds(shape::AbstractShape, image::AbstractMatrix)
+function is_inbounds(image::AbstractMatrix, shape::AbstractShape)
     i_min_shape, i_max_shape = get_i_extrema(shape)
     i_min_image, i_max_image = get_i_extrema(image)
 
@@ -88,7 +88,7 @@ function draw!(::CheckBounds, image::AbstractMatrix, shape::AbstractShape, color
         return nothing
     end
 
-    if is_inbounds(shape, image)
+    if is_inbounds(image, shape)
         draw!(put_pixel_unchecked!, image, shape, color)
     else
         draw!(put_pixel!, image, shape, color)
