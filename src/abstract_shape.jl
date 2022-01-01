@@ -18,7 +18,7 @@ get_j_min(image::AbstractMatrix) = firstindex(image, 2)
 get_j_max(image::AbstractMatrix) = lastindex(image, 2)
 get_j_extrema(x) = (get_j_min(x), get_j_max(x))
 
-function is_outbounds(shape::AbstractShape, image::AbstractMatrix)
+function is_outbounds(image::AbstractMatrix, shape::AbstractShape)
     i_min_shape, i_max_shape = get_i_extrema(shape)
     i_min_image, i_max_image = get_i_extrema(image)
 
@@ -28,7 +28,7 @@ function is_outbounds(shape::AbstractShape, image::AbstractMatrix)
     return i_max_shape < i_min_image || i_min_shape > i_max_image || j_max_shape < j_min_image || j_min_shape > j_max_image
 end
 
-function is_inbounds(shape::AbstractShape, image::AbstractMatrix)
+function is_inbounds(image::AbstractMatrix, shape::AbstractShape)
     i_min_shape, i_max_shape = get_i_extrema(shape)
     i_min_image, i_max_image = get_i_extrema(image)
 
@@ -84,11 +84,11 @@ const CHECK_BOUNDS = CheckBounds()
 function draw!(::CheckBounds, image::AbstractMatrix, shape::AbstractShape, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
-    if is_outbounds(shape, image)
+    if is_outbounds(image, shape)
         return nothing
     end
 
-    if is_inbounds(shape, image)
+    if is_inbounds(image, shape)
         draw!(put_pixel_unchecked!, image, shape, color)
     else
         draw!(put_pixel!, image, shape, color)
@@ -107,11 +107,11 @@ const CLIP = Clip()
 function draw!(::Clip, image::AbstractMatrix, shape::AbstractShape, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
-    if is_outbounds(shape, image)
+    if is_outbounds(image, shape)
         return nothing
     end
 
-    draw!(put_pixel_unchecked!, image, clip(shape, image), color)
+    draw!(put_pixel_unchecked!, image, clip(image, shape), color)
 
     return nothing
 end
