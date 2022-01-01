@@ -1,6 +1,6 @@
 function get_axis_label(i::Integer)
     if 0 <= i <= 9
-        return "0$(i)"
+        return " $(i)"
     elseif 10 <= i <= 99
         return "$(i)"
     else
