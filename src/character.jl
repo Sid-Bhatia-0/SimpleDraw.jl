@@ -54,7 +54,7 @@ function draw!(image::AbstractMatrix, shape::Character{I, C, Terminus_32_16} whe
     return nothing
 end
 
-function draw!(f::Function, image::AbstractMatrix, shape::Character{I, C, Terminus_32_16} where {I, C}, color)
+function draw!(f::F, image::AbstractMatrix, shape::Character{I, C, Terminus_32_16} where {I, C}, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position

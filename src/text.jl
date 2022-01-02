@@ -8,7 +8,7 @@ is_valid(shape::TextLine) = all(x -> has_char(shape.font, x), shape.text)
 
 get_drawing_optimization_style(::TextLine) = PUT_PIXEL
 
-function draw!(f::Function, image::AbstractMatrix, shape::TextLine, color)
+function draw!(f::F, image::AbstractMatrix, shape::TextLine, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position

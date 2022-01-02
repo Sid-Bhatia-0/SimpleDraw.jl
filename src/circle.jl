@@ -79,7 +79,7 @@ get_drawing_optimization_style(::AbstractCircleOctant) = CHECK_BOUNDS
 ##### CircleOctant
 #####
 
-function draw!(f::Function, image::AbstractMatrix, shape::CircleOctant, color)
+function draw!(f::F, image::AbstractMatrix, shape::CircleOctant, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     center = shape.center
@@ -142,7 +142,7 @@ function draw!(image::AbstractMatrix, shape::ThickCircleOctant, color)
     return nothing
 end
 
-function draw!(f::Function, image::AbstractMatrix, shape::ThickCircleOctant, color)
+function draw!(f::F, image::AbstractMatrix, shape::ThickCircleOctant, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     center = shape.center
@@ -237,7 +237,7 @@ get_drawing_optimization_style(::AbstractCircle) = CHECK_BOUNDS
 
 is_valid(shape::OddCircle) = isodd(shape.diameter) && shape.diameter > zero(shape.diameter)
 
-function draw!(f::Function, image::AbstractMatrix, shape::OddCircle, color)
+function draw!(f::F, image::AbstractMatrix, shape::OddCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     center, radius = get_center_radius(shape)
@@ -255,7 +255,7 @@ end
 
 is_valid(shape::EvenCircle) = iseven(shape.diameter) && shape.diameter > zero(shape.diameter)
 
-function draw!(f::Function, image::AbstractMatrix, shape::EvenCircle, color)
+function draw!(f::F, image::AbstractMatrix, shape::EvenCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     center, radius = get_center_radius(shape)
@@ -286,7 +286,7 @@ function draw!(image::AbstractMatrix, shape::Circle, color)
     return nothing
 end
 
-function draw!(f::Function, image::AbstractMatrix, shape::Circle, color)
+function draw!(f::F, image::AbstractMatrix, shape::Circle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position
@@ -307,7 +307,7 @@ end
 
 is_valid(shape::OddFilledCircle) = is_valid(OddCircle(shape.position, shape.diameter))
 
-function draw!(f::Function, image::AbstractMatrix, shape::OddFilledCircle, color)
+function draw!(f::F, image::AbstractMatrix, shape::OddFilledCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     center, radius = get_center_radius(shape)
@@ -325,7 +325,7 @@ end
 
 is_valid(shape::EvenFilledCircle) = is_valid(EvenCircle(shape.position, shape.diameter))
 
-function draw!(f::Function, image::AbstractMatrix, shape::EvenFilledCircle, color)
+function draw!(f::F, image::AbstractMatrix, shape::EvenFilledCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position
@@ -372,7 +372,7 @@ function draw!(image::AbstractMatrix, shape::FilledCircle, color)
     return nothing
 end
 
-function draw!(f::Function, image::AbstractMatrix, shape::FilledCircle, color)
+function draw!(f::F, image::AbstractMatrix, shape::FilledCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position
@@ -400,7 +400,7 @@ function is_valid(shape::OddThickCircle)
     return isodd(diameter) && diameter > zero(I) && thickness > zero(I) && convert(I, 2) * thickness <= diameter + one(I)
 end
 
-function draw!(f::Function, image::AbstractMatrix, shape::OddThickCircle, color)
+function draw!(f::F, image::AbstractMatrix, shape::OddThickCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     thickness = shape.thickness
@@ -427,7 +427,7 @@ function is_valid(shape::EvenThickCircle)
     return iseven(diameter) && diameter > zero(I) && thickness > zero(I) && convert(I, 2) * thickness <= diameter
 end
 
-function draw!(f::Function, image::AbstractMatrix, shape::EvenThickCircle, color)
+function draw!(f::F, image::AbstractMatrix, shape::EvenThickCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     thickness = shape.thickness
@@ -473,7 +473,7 @@ function draw!(image::AbstractMatrix, shape::ThickCircle, color)
     return nothing
 end
 
-function draw!(f::Function, image::AbstractMatrix, shape::ThickCircle, color)
+function draw!(f::F, image::AbstractMatrix, shape::ThickCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position
