@@ -37,7 +37,7 @@ get_drawing_optimization_style(::AbstractRectangle) = CHECK_BOUNDS
 ##### Rectangle
 #####
 
-function draw!(f::Function, image::AbstractMatrix, shape::Rectangle, color)
+function draw!(f::F, image::AbstractMatrix, shape::Rectangle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     i_min, i_max = get_i_extrema(shape)
@@ -75,7 +75,7 @@ end
 
 get_drawing_optimization_style(::FilledRectangle) = CLIP
 
-function draw!(f::Function, image::AbstractMatrix, shape::FilledRectangle, color)
+function draw!(f::F, image::AbstractMatrix, shape::FilledRectangle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     i_min, i_max = get_i_extrema(shape)
@@ -104,7 +104,7 @@ function is_valid(shape::ThickRectangle)
     return height > zero(I) && width > zero(I) && thickness > zero(I) && thickness <= min(height, width)
 end
 
-function draw!(f::Function, image::AbstractMatrix, shape::ThickRectangle, color)
+function draw!(f::F, image::AbstractMatrix, shape::ThickRectangle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position

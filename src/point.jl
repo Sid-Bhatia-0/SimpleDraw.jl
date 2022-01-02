@@ -11,7 +11,7 @@ get_j_max(shape::Point) = shape.j
 
 get_drawing_optimization_style(::Point) = PUT_PIXEL
 
-function draw!(f::Function, image::AbstractMatrix, shape::Point, color)
+function draw!(f::F, image::AbstractMatrix, shape::Point, color) where {F <: Function}
     f(image, shape.i, shape.j, color)
     return nothing
 end
