@@ -1,6 +1,6 @@
 # SimpleDraw
 
-This is a lightweight package that provides exact and efficient (for the most part) drawing methods for some simple shapes.
+This is a lightweight package that attempts to provide efficient drawing methods for some simple shapes. So far, in this package, all the shapes and drawing algorithms are integer-based, and all the drawing algorithms are single-threaded.
 
 ## Table of contents:
 
@@ -60,55 +60,44 @@ SD.visualize(image)
 Being able to draw broadly requires three things:
 
 1. `image`: A canvas to draw on. It could be any `AbstractMatrix`.
-1. `shape`: The shape to be drawn. Also, `shape`s can be composed to create more complex `shape`s.
+1. `shape`: The shape to be drawn. Note that primitive `shape`s can easily be composed to create more complex `shape`s. For example,
     ```julia
     struct MyComplexShape{I <: Integer} <: SD.AbstractShape
         line::SD.Line{I}
         circle::SD.Circle{I}
     end
     ```
-    For now, all drawables and algorithms are integer-based.
-1. `color`: The color to be draw the shape with.
+1. `color`: The color to draw the shape with. This is what fills up the entries of the `image` matrix at appropriate positions, thereby drawing the shape.
 
-With this in mind, this package provides the `draw!` function, which can be invoked as follows:
+With this in mind, this package provides the `draw!` function, which is commonly invoked as follows:
 
 ```julia
 SD.draw!(image, shape, color)
 ```
 
-### Draw with bounds-checking
+`draw!`, along with all the shapes in [List of shapes](#list-of-shapes) can be considered as a part of the API. This package does not explicitly export any names though.
 
-By default, the `draw!` function draws the clipped shape, that is, it draws only those pixes that fall within the bounds of the image. So you don't have to worry about your program breaking because it is trying to draw something outside the bounds of the `image`. This is achieved in different ways for different shapes. For example:
+### Safe drawing
 
-1. In case of `Background`, we simply fill the entire array and don't need any explicit bounds checking.
-1. In case of `VerticalLine` or `HorizontalLine`, we first clip the endpoints of the line to lie within the image and then draw the line with no further bounds checking.
-1. In case of more complex shapes like `Circle`, we iterate through all the pixels of the `Circle` like we normally would, but draw only those pixels that lie within the bounds of the `image`.
+By default, the `draw!` function is safe, that is, it draws only those pixels of the shape that lie within the bounds of the image. So you don't have to worry about your program breaking even if it tries to draw something outside the bounds of the `image`. That being said, certain basic optimizations are already enabled for drawing most shapes. See [Drawing optimizations](#drawing-optimizations).
+
+### Drawing optimizations
+
+`DrawingOptimizationStyle` is trait whose subtypes are used to define generic draw! methods with different levels of optimization for drawing shapes:
+1. PutPixel: Iterate through all the positions needed to draw the shape. For each position, if it lies within the bounds of the image, put a pixel at that position else don't do anything.
+1. CheckBounds: If the shape lies completely outside the bounds of the image, simply return `nothing`. If it lies completely inside the bounds of the image, then draw each pixel of the shape without any further bounds checking. If it is neither of the prevous cases, fall back to the slow but safe method of drawing each pixel of the shape only if it lies within the bounds of the image.
+1. Clip: Some shapes like `VerticalLine`, `HorizontalLine`, `FilledRectangle` can be direcly clipped into shapes that completely lie within the bounds of the image. In such cases, perform the clipping and draw the clipped shape without any further bounds checking.
+1. PutPixelUnchecked: Iterate through all the positions needed to draw the shape. For each position, put a pixel at that position assuming it lies within the bounds of the image.
+
+Use `get_drawing_optimization_style(shape)` to get which style of optimization is being used to draw a shape.
 
 ### Visualization
 
-The `visualize` function helps visualize a binary image inside the terminal using Unicode block characters to represent pixels. This is a quick tool to verify that your drawing algorithms are functioning as intended. This works well for low resolution images. You can maximize your terminal window and reduce the font size to visualize higher resolutions images.
+The `visualize` function helps in visualizing a boolean image directly inside the terminal. This is a quick and effective tool to verify whether a shape is being drawn as expected. This is particularly handy when you want to know about the exact pixels that are being drawn for a shape.
+
+It uses Unicode block characters to represent a pixel. This works well for low resolution images. You can maximize your terminal window and reduce its font size to visualize slightly higher resolution images.
 
 ### Benchmarks
-
-In order to generate the benchmarks, clone this repository and start the julia REPL inside the `/benchmark` directory using the `Project.toml` and `Manifest.toml` files given there:
-
-```
-benchmark $ julia --project=.
-```
-
-And then execute the following:
-
-```julia-repl
-julia> include("benchmark.jl");
-
-julia> generate_benchmark_file();
-
-julia> generate_benchmark_file();
-```
-
-The `generate_benchmark_file()` function produces a markdown file whose name is a timestamp so that multiple calls to the function don't overwrite the same file. I usually run the `generate_benchmark_file()` function twice and take the result of the second one just to make sure that everything is already compiled before the second one is run.
-
-For details on what exact shapes are drawn while generating these benchmarks, see `/benchmark/benchmarks.jl`.
 
 Here are the benchmarks for `v0.2.0`:
 
@@ -132,6 +121,26 @@ Date: 2021_11_04_17_10_38 (yyyy_mm_dd_HH_MM_SS)
 |FilledRectangle|4.393 μs<br>0 bytes|72.216 μs<br>0 bytes|1.179 ms<br>0 bytes|
 |Cross|52.212 ns<br>0 bytes|945.432 ns<br>0 bytes|5.289 μs<br>0 bytes|
 |HollowCross|71.390 ns<br>0 bytes|926.110 ns<br>0 bytes|4.900 μs<br>0 bytes|
+
+In order to generate such benchmarks, clone this repository and start a julia REPL inside the `/benchmark` directory using the `Project.toml` and `Manifest.toml` files given there:
+
+```
+benchmark $ julia --project=.
+```
+
+And then execute the following:
+
+```julia-repl
+julia> include("benchmark.jl");
+
+julia> generate_benchmark_file();
+
+julia> generate_benchmark_file();
+```
+
+The `generate_benchmark_file()` function produces a markdown file whose name is a timestamp so that multiple calls to the function don't overwrite the same file. I usually run the `generate_benchmark_file()` function twice and take the result of the second one just to make sure that everything is already compiled before the second one is run.
+
+For details on what exact shapes are drawn while generating these benchmarks, see `/benchmark/benchmarks.jl`.
 
 ### Fonts
 
