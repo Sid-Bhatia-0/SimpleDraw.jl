@@ -1,32 +1,30 @@
 # SimpleDraw
 
-This is a lightweight package that attempts to provide efficient drawing methods for some simple shapes. So far, in this package, all the shapes and drawing algorithms are integer-based, and all the drawing algorithms are single-threaded.
+This is a lightweight self-contained package that attempts to provide efficient drawing methods for some simple shapes. So far, in this package, all the shapes and drawing algorithms are integer-based, and all the drawing algorithms are single-threaded.
 
 ## Table of contents:
 
 * [Getting Started](#getting-started)
 * [Notes](#notes)
   - [API](#api)
-  - [Draw with bounds checking](#draw-with-bounds-checking)
+  - [Safe drawing](#safe-drawing)
+  - [Drawing optimizations](#drawing-optimizations)
   - [Visualization](#visualization)
-  - [Benchmarks](#benchmarks)
   - [Fonts](#fonts)
+  - [Benchmarks](#benchmarks)
 
 [List of shapes](#list-of-shapes):
 
 1. [`Point`](#point)
 1. [`Background`](#background)
-1. [`VerticalLine`](#verticalline)
-1. [`HorizontalLine`](#horizontalline)
 1. [`Line`](#line)
 1. [`ThickLine`](#thickline)
 1. [`Circle`](#circle)
 1. [`FilledCircle`](#filledcircle)
 1. [`ThickCircle`](#thickcircle)
 1. [`Rectangle`](#rectangle)
-1. [`ThickRectangle`](#thickrectangle)
 1. [`FilledRectangle`](#filledrectangle)
-1. [`Bitmap`](#bitmap)
+1. [`ThickRectangle`](#thickrectangle)
 1. [`Character`](#character)
 1. [`TextLine`](#textline)
 
@@ -51,7 +49,7 @@ SD.draw!(image, shape, color)
 SD.visualize(image)
 ```
 
-<img src="https://user-images.githubusercontent.com/32610387/139564759-50d524b8-bd70-4a19-a143-1a75644ad929.png">
+<img src="https://user-images.githubusercontent.com/32610387/147943649-0c332388-589a-49db-984b-41dac44390a8.png">
 
 ## Notes
 
@@ -96,6 +94,10 @@ Use `get_drawing_optimization_style(shape)` to get which style of optimization i
 The `visualize` function helps in visualizing a boolean image directly inside the terminal. This is a quick and effective tool to verify whether a shape is being drawn as expected. This is particularly handy when you want to know about the exact pixels that are being drawn for a shape.
 
 It uses Unicode block characters to represent a pixel. This works well for low resolution images. You can maximize your terminal window and reduce its font size to visualize slightly higher resolution images.
+
+### Fonts
+
+This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASCII) characters at this point. We use a subset of [Terminus Font](http://terminus-font.sourceforge.net/) for drawing the glyphs. Terminus Font is licensed under the SIL Open Font License, Version 1.1. The license is included as OFL.TXT in the `/src/fonts` directory in this repository, and is also available with a FAQ at [http://scripts.sil.org/OFL](http://scripts.sil.org/OFL).
 
 ### Benchmarks
 
@@ -142,11 +144,7 @@ The `generate_benchmark_file()` function produces a markdown file whose name is 
 
 For details on what exact shapes are drawn while generating these benchmarks, see `/benchmark/benchmarks.jl`.
 
-### Fonts
-
-This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASCII) characters at this point. We use a subset of [Terminus Font](http://terminus-font.sourceforge.net/) for drawing the glyphs. Terminus Font is licensed under the SIL Open Font License, Version 1.1. The license is included as OFL.TXT in the `/src/fonts` directory in this repository, and is also available with a FAQ at [http://scripts.sil.org/OFL](http://scripts.sil.org/OFL).
-
-## List of drawables
+## List of shapes
 
 1. ### `Point`
 
@@ -157,7 +155,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/139564735-8f9d7b27-e254-430c-90d9-81b7eef65cdd.png">
+    <img src="https://user-images.githubusercontent.com/32610387/147943555-5e6c4560-a02b-48b8-9638-c7c568936147.png">
 
 1. ### `Background`
 
@@ -165,31 +163,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     struct Background <: AbstractShape end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/139564738-1269502a-9fa2-448d-88af-e2a02ec9baf8.png">
-
-1. ### `VerticalLine`
-
-    ```julia
-    struct VerticalLine{I <: Integer} <: AbstractLine
-        i_min::I
-        i_max::I
-        j::I
-    end
-    ```
-
-    <img src="https://user-images.githubusercontent.com/32610387/139564744-cf7ecb09-cb1c-4820-a74b-e81536d489c6.png">
-
-1. ### `HorizontalLine`
-
-    ```julia
-    struct HorizontalLine{I <: Integer} <: AbstractLine
-        i::I
-        j_min::I
-        j_max::I
-    end
-    ```
-
-    <img src="https://user-images.githubusercontent.com/32610387/139564748-8b8092ae-bb2f-4ae7-a76d-82f13aaaeb7a.png">
+    <img src="https://user-images.githubusercontent.com/32610387/147943624-244cbe86-1aac-4ad1-9285-4f35d38009c6.png">
 
 1. ### `Line`
 
@@ -200,7 +174,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/139564759-50d524b8-bd70-4a19-a143-1a75644ad929.png">
+    <img src="https://user-images.githubusercontent.com/32610387/147943649-0c332388-589a-49db-984b-41dac44390a8.png">
 
 1. ### `ThickLine`
 
@@ -212,7 +186,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/144703038-3c3904da-044d-4bae-a9ac-b6a0ae7f5545.png">
+    <img src="https://user-images.githubusercontent.com/32610387/147943690-a2e54b48-9d76-4b17-a983-7d0c662f99a8.png">
 
 1. ### `Circle`
 
@@ -223,7 +197,18 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/144611658-fa47d384-85c7-4024-9421-cd1cff2c175a.png">
+    <img src="https://user-images.githubusercontent.com/32610387/147943714-72fa3f0a-daca-47ee-ae54-a92bfaf0d962.png">
+
+1. ### `FilledCircle`
+
+    ```julia
+    struct FilledCircle{I <: Integer} <: AbstractCircle
+        position::Point{I}
+        diameter::I
+    end
+    ```
+
+    <img src="https://user-images.githubusercontent.com/32610387/147943755-2a4ebfb0-cb7d-4a19-83cb-925dbf259022.png">
 
 1. ### `ThickCircle`
 
@@ -235,18 +220,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/144611729-74a4cf1f-82de-4e3d-ae6d-874180330129.png">
-
-1. ### `FilledCircle`
-
-    ```julia
-    struct FilledCircle{I <: Integer} <: AbstractCircle
-        position::Point{I}
-        diameter::I
-    end
-    ```
-
-    <img src="https://user-images.githubusercontent.com/32610387/144611779-6d814e74-b797-41e0-84f7-83fcb5a650a9.png">
+    <img src="https://user-images.githubusercontent.com/32610387/147943783-883609bb-2f16-422b-a5c8-150878135c97.png">
 
 1. ### `Rectangle`
 
@@ -258,7 +232,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/139564833-cc6e8445-01da-4f6e-83a2-512e69d402dc.png">
+    <img src="https://user-images.githubusercontent.com/32610387/147943835-44c41d80-8272-48e8-8122-adc56dc949ad.png">
 
 1. ### `FilledRectangle`
 
@@ -270,7 +244,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/139564859-bd027f70-857d-47eb-a42d-30e402aaf6d6.png">
+    <img src="https://user-images.githubusercontent.com/32610387/147943862-5515ca23-234c-4f2e-b3f0-3a8b54e07c37.png">
 
 1. ### `ThickRectangle`
 
@@ -283,18 +257,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/139564844-fb07ea5d-1ed5-422c-a2a5-067f1fb5c216.png">
-
-1. ### `Bitmap`
-
-    ```julia
-    struct Bitmap{I, B <: AbstractMatrix{Bool}} <: AbstractShape
-        position::Point{I}
-        bitmap::B
-    end
-    ```
-
-    <img src="https://user-images.githubusercontent.com/32610387/145029622-b0a236f4-09f4-4b70-bc72-bf3f12d16b95.png">
+    <img src="https://user-images.githubusercontent.com/32610387/147943890-badcce13-f1fd-4295-9ea3-37561b9821aa.png">
 
 1. ### `Character`
 
@@ -306,7 +269,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/140615301-2a263b84-44ce-40ec-a081-8f465346f404.png">
+    <img src="https://user-images.githubusercontent.com/32610387/147944083-56f45efc-1c7f-4f19-ae53-e17d5f8e51b6.png">
 
 1. ### `TextLine`
 
@@ -318,4 +281,4 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/141676460-3b38faed-f7b9-4b6e-8699-5f71b064e620.png">
+    <img src="https://user-images.githubusercontent.com/32610387/147944102-2480436c-d9b8-47bb-9134-5537b4014791.png">
