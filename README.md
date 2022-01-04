@@ -186,7 +186,7 @@ For details on what exact shapes are drawn while generating these benchmarks, se
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/147943690-a2e54b48-9d76-4b17-a983-7d0c662f99a8.png">
+    <img src="https://user-images.githubusercontent.com/32610387/148082257-79ded105-a737-4286-8d58-a5c821a41f14.png">
 
 1. ### `Circle`
 
