@@ -47,15 +47,18 @@ function get_benchmarks(shape_types, sizes)
     for n in sizes
         image = zeros(typeof(color), n, n)
         for ShapeType in shape_types
+            shape_name = nameof(ShapeType)
             shape = get_shape(ShapeType, n)
             benchmark = BT.@benchmark SD.draw!($(Ref(image))[], $(Ref(shape))[], $(Ref(color))[])
             memory, median_time = get_summary(benchmark)
-            benchmarks[(nameof(ShapeType), n)] = (shape, memory, median_time)
+            benchmarks[(shape_name, n)] = (shape, memory, median_time)
             println("############################")
-            println("n = $(n)")
-            println("shape = $(Base.limitrepr(shape))")
+            println("shape type = $(shape_name)")
+            println("image height = $(n)")
+            println("image width = $(n)")
             println("median_time = $(median_time)")
             println("memory = $(memory)")
+            println("shape = $(Base.limitrepr(shape))")
         end
         fill!(image, zero(color))
     end
@@ -116,6 +119,8 @@ function generate_benchmark_file(; shape_types = SHAPE_TYPES, sizes = SIZES, fil
     io = open(file_name, "w")
 
     println(io, "Timestamp: $(date) (yyyy_mm_dd_HH_MM_SS)")
+    println(io)
+    println(io, "Shapes are drawn on an image of type `Matrix{UInt32}` with a color of type `UInt32`")
     println(io)
 
     benchmarks = get_benchmarks(shape_types, sizes)
