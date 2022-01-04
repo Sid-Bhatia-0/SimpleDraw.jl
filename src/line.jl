@@ -20,7 +20,7 @@ end
 struct ThickLine{I <: Integer} <: AbstractLine
     point1::Point{I}
     point2::Point{I}
-    diameter::I
+    thickness::I
 end
 
 #####
@@ -141,44 +141,40 @@ end
 ##### ThickLine
 #####
 
-get_radius(shape::ThickLine) = shape.diameter ÷ oftype(shape.diameter, 2)
+is_valid(shape::ThickLine) = shape.thickness > zero(shape.thickness)
 
-is_valid(shape::ThickLine) = shape.diameter > zero(shape.diameter)
-
-get_i_min(shape::ThickLine) = min(shape.point1.i, shape.point2.i) - get_radius(shape)
+get_i_min(shape::ThickLine) = min(shape.point1.i, shape.point2.i) - shape.thickness ÷ 2
 
 function get_i_max(shape::ThickLine)
     point1 = shape.point1
     point2 = shape.point2
-    diameter = shape.diameter
+    thickness = shape.thickness
 
     i_max = max(point1.i, point2.i)
 
-    radius = get_radius(shape)
+    I = typeof(thickness)
 
-    if iseven(diameter)
-        return i_max + radius - one(radius)
-    else
-        return i_max + radius
-    end
+    i_max = max(point1.j, point2.j)
+
+    half_thickness = thickness ÷ 2
+
+    return i_max - half_thickness + thickness - one(I)
 end
 
-get_j_min(shape::ThickLine) = min(shape.point1.j, shape.point2.j) - get_radius(shape)
+get_j_min(shape::ThickLine) = min(shape.point1.j, shape.point2.j) - shape.thickness ÷ 2
 
 function get_j_max(shape::ThickLine)
     point1 = shape.point1
     point2 = shape.point2
-    diameter = shape.diameter
+    thickness = shape.thickness
+
+    I = typeof(thickness)
 
     j_max = max(point1.j, point2.j)
 
-    radius = get_radius(shape)
+    half_thickness = thickness ÷ 2
 
-    if iseven(diameter)
-        return j_max + radius - one(radius)
-    else
-        return j_max + radius
-    end
+    return j_max - half_thickness + thickness - one(I)
 end
 
 get_drawing_optimization_style(::ThickLine) = CHECK_BOUNDS
@@ -188,12 +184,19 @@ function draw!(f::F, image::AbstractMatrix, shape::ThickLine, color) where {F <:
 
     point1 = shape.point1
     point2 = shape.point2
-    diameter = shape.diameter
+    thickness = shape.thickness
 
-    radius = get_radius(shape)
+    I = typeof(thickness)
+
+    i1 = point1.i
+    j1 = point1.j
+    i2 = point2.i
+    j2 = point2.j
+
+    half_thickness = thickness ÷ 2
 
     draw!(image, Line(point1, point2), color) do image, i, j, color
-        draw!(f, image, FilledCircle(Point(i - radius, j - radius), diameter), color)
+        draw!(f, image, FilledRectangle(Point(i - half_thickness, j - half_thickness), thickness, thickness), color)
     end
 
     return nothing
