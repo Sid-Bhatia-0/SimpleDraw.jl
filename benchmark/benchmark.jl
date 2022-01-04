@@ -50,7 +50,7 @@ function get_benchmarks(shape_types, sizes)
             shape = get_shape(ShapeType, n)
             benchmark = BT.@benchmark SD.draw!($(Ref(image))[], $(Ref(shape))[], $(Ref(color))[])
             memory, median_time = get_summary(benchmark)
-            benchmarks[(nameof(ShapeType), n)] = (memory, median_time)
+            benchmarks[(nameof(ShapeType), n)] = (shape, memory, median_time)
             println("############################")
             println("n = $(n)")
             println("shape = $(Base.limitrepr(shape))")
@@ -71,28 +71,36 @@ function get_summary(trial)
 end
 
 function get_table(shape_types, sizes, benchmarks)
-    table = "| |"
-    for n in sizes
-        table = table * "n = $(n)|"
-    end
+    table = "|shape type|"
+    table = table * "image height|"
+    table = table * "image width|"
+    table = table * "median time|"
+    table = table * "memory|"
+    table = table * "shape|"
     table = table * "\n"
 
-    table = table * "|"
-    for _ in 1:length(sizes)+1
-        table = table * ":---:|"
-    end
+    table = table * ":---|"
+    table = table * ":---|"
+    table = table * ":---|"
+    table = table * ":---|"
+    table = table * ":---|"
+    table = table * ":---|"
     table = table * "\n"
 
     for ShapeType in shape_types
-        shape_name = nameof(ShapeType)
-        table = table * "|"
-        table = table * "$(shape_name)|"
-
         for n in sizes
-            memory, median_time = benchmarks[(shape_name, n)]
-            table = table * "$(median_time)<br>$(memory)|"
+            shape_name = nameof(ShapeType)
+            shape, memory, median_time = benchmarks[(shape_name, n)]
+
+            table = table * "|"
+            table = table * "$(shape_name)|"
+            table = table * "$(n)|"
+            table = table * "$(n)|"
+            table = table * "$(median_time)|"
+            table = table * "$(memory)|"
+            table = table * "$(Base.limitrepr(shape))|"
+            table = table * "\n"
         end
-        table = table * "\n"
     end
 
     return table
@@ -107,9 +115,7 @@ function generate_benchmark_file(; shape_types = SHAPE_TYPES, sizes = SIZES, fil
 
     io = open(file_name, "w")
 
-    println(io, "Date: $(date) (yyyy_mm_dd_HH_MM_SS)")
-    println(io)
-    println(io, "**Note:** The time in benchmarks is the median time.")
+    println(io, "Timestamp: $(date) (yyyy_mm_dd_HH_MM_SS)")
     println(io)
 
     benchmarks = get_benchmarks(shape_types, sizes)
