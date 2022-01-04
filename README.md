@@ -182,7 +182,7 @@ For details on what exact shapes are drawn while generating these benchmarks, se
     struct ThickLine{I <: Integer} <: AbstractLine
         point1::Point{I}
         point2::Point{I}
-        diameter::I
+        thickness::I
     end
     ```
 
