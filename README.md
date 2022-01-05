@@ -7,6 +7,7 @@ This is a lightweight self-contained package that attempts to provide efficient 
 * [Getting Started](#getting-started)
 * [Notes](#notes)
   - [API](#api)
+  - [`draw!`](#draw!)
   - [Safe drawing](#safe-drawing)
   - [Drawing optimizations](#drawing-optimizations)
   - [Visualization](#visualization)
@@ -55,17 +56,21 @@ SD.visualize(image)
 
 ### API
 
+This package does not export any names. The `draw!` function, along with all the types in [List of shapes](#list-of-shapes) can be considered as a part of the API. Everything else should be considered internal for now.
+
+### `draw!`
+
 Being able to draw broadly requires three things:
 
 1. `image`: A canvas to draw on. It could be any `AbstractMatrix`.
-1. `shape`: The shape to be drawn. Note that primitive `shape`s can easily be composed to create more complex `shape`s. For example,
+1. `shape`: The geometric shape to be drawn. Note that primitive `shape`s can easily be composed to create more complex `shape`s. For example,
     ```julia
     struct MyComplexShape{I <: Integer} <: SD.AbstractShape
         line::SD.Line{I}
         circle::SD.Circle{I}
     end
     ```
-1. `color`: The color to draw the shape with. This is what fills up the entries of the `image` matrix at appropriate positions, thereby drawing the shape.
+1. `color`: The color to draw the shape with. This is what fills up the entries of the `image` matrix at appropriate positions, thereby drawing the geometric shape.
 
 With this in mind, this package provides the `draw!` function, which is commonly invoked as follows:
 
@@ -73,7 +78,7 @@ With this in mind, this package provides the `draw!` function, which is commonly
 SD.draw!(image, shape, color)
 ```
 
-`draw!`, along with all the shapes in [List of shapes](#list-of-shapes) can be considered as a part of the API. This package does not explicitly export any names though.
+Under the hood, it calls other `draw!` methods that automatically take care of some basic optimizations (see [Drawing optimizations](#drawing-optimizations)). Then there are `draw!` methods of the form `SD.draw!(f, image, shape, color)` that are heavily used internally. Here, `f` can roughly be thought of as a drawing function applied to every pixel of the shape. This offers a lot of flexibility with the "brush-stroke" and significantly increases code reuse. At the same time, it does not adversely affect performance. Most users will not need to use these methods directly, but in case you do, please look up the source code as their usage is not very well documented as of now.
 
 ### Safe drawing
 
@@ -81,19 +86,19 @@ By default, the `draw!` function is safe, that is, it draws only those pixels of
 
 ### Drawing optimizations
 
-`DrawingOptimizationStyle` is trait whose subtypes are used to define generic draw! methods with different levels of optimization for drawing shapes:
-1. PutPixel: Iterate through all the positions needed to draw the shape. For each position, if it lies within the bounds of the image, put a pixel at that position else don't do anything.
-1. CheckBounds: If the shape lies completely outside the bounds of the image, simply return `nothing`. If it lies completely inside the bounds of the image, then draw each pixel of the shape without any further bounds checking. If it is neither of the prevous cases, fall back to the slow but safe method of drawing each pixel of the shape only if it lies within the bounds of the image.
-1. Clip: Some shapes like `VerticalLine`, `HorizontalLine`, `FilledRectangle` can be direcly clipped into shapes that completely lie within the bounds of the image. In such cases, perform the clipping and draw the clipped shape without any further bounds checking.
-1. PutPixelInbounds: Iterate through all the positions needed to draw the shape. For each position, put a pixel at that position assuming it lies within the bounds of the image.
+`DrawingOptimizationStyle` is trait whose subtypes are used to define generic `draw!` methods with different levels of optimization for drawing shapes:
+1. `PUT_PIXEL`: Iterate through all the positions needed to draw the shape. For each position, if it lies within the bounds of the image, put a pixel at that position else don't do anything.
+1. `CHECK_BOUNDS`: If the shape lies completely outside the bounds of the image, simply return `nothing`. If it lies completely inside the bounds of the image, then draw each pixel of the shape without any further bounds checking. If it is neither of the previous cases, fall back to the slow but safe method of drawing each pixel of the shape only if it lies within the bounds of the image.
+1. `CLIP`: Some shapes like `VerticalLine`, `HorizontalLine`, `FilledRectangle` can be direcly clipped into shapes that completely lie within the bounds of the image. In such cases, perform the clipping and draw the clipped shape without any further bounds checking.
+1. `PUT_PIXEL_INBOUNDS`: Iterate through all the positions needed to draw the shape. For each position, put a pixel at that position assuming it lies within the bounds of the image.
 
 Use `get_drawing_optimization_style(shape)` to get which style of optimization is being used to draw a shape.
 
 ### Visualization
 
-The `visualize` function helps in visualizing a boolean image directly inside the terminal. This is a quick and effective tool to verify whether a shape is being drawn as expected. This is particularly handy when you want to know about the exact pixels that are being drawn for a shape.
+The `visualize` function helps in visualizing a boolean image directly inside the terminal. This is a quick and effective tool to verify whether a shape is being drawn as expected. This is particularly handy when you want to know about the exact coordinates of the pixels that are being drawn for a shape.
 
-It uses Unicode block characters to represent a pixel. This works well for low resolution images. You can maximize your terminal window and reduce its font size to visualize slightly higher resolution images.
+It uses Unicode block characters to represent a pixel. This works well for low resolution images. To visualize slightly higher resolution images, you can maximize your terminal window and reduce its font size.
 
 ### Fonts
 
