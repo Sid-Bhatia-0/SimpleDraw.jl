@@ -7,8 +7,7 @@ This is a lightweight self-contained package that attempts to provide efficient 
 * [Getting Started](#getting-started)
 * [Notes](#notes)
   - [API](#api)
-  - [`draw!`](#draw!)
-  - [Safe drawing](#safe-drawing)
+  - [Basic drawing](#basic-drawing)
   - [Drawing optimizations](#drawing-optimizations)
   - [Visualization](#visualization)
   - [Fonts](#fonts)
@@ -79,8 +78,6 @@ SD.draw!(image, shape, color)
 
 Under the hood, it calls other `draw!` methods that automatically take care of some basic optimizations (see [Drawing optimizations](#drawing-optimizations)). Then there are `draw!` methods of the form `SD.draw!(f, image, shape, color)` that are heavily used internally. Here, `f` can roughly be thought of as a drawing function applied to every pixel of the shape. This offers a lot of flexibility with the "brush-stroke" and significantly increases code reuse. At the same time, it does not adversely affect performance. Most users will not need to use these methods directly, but in case you do, please look up the source code as their usage is not very well documented as of now.
 
-### Safe drawing
-
 By default, the `draw!` function is safe, that is, it draws only those pixels of the shape that lie within the bounds of the image. So you don't have to worry about your program breaking even if it tries to draw something outside the bounds of the `image`. That being said, certain basic optimizations are already enabled for drawing most shapes. See [Drawing optimizations](#drawing-optimizations).
 
 ### Drawing optimizations
@@ -145,6 +142,9 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     end
     ```
 
+    An instance of `ThickLine` is considered valid only if the following conditions hold true:
+    * `thickness > 0`
+
     <img src="https://user-images.githubusercontent.com/32610387/148082257-79ded105-a737-4286-8d58-a5c821a41f14.png">
 
 1. ### `Circle`
@@ -156,6 +156,9 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     end
     ```
 
+    An instance of `Circle` is considered valid only if the following conditions hold true:
+    * `diameter > 0`
+
     <img src="https://user-images.githubusercontent.com/32610387/147943714-72fa3f0a-daca-47ee-ae54-a92bfaf0d962.png">
 
 1. ### `FilledCircle`
@@ -166,6 +169,9 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
         diameter::I
     end
     ```
+
+    An instance of `FilledCircle` is considered valid only if the following conditions hold true:
+    * `diameter > 0`
 
     <img src="https://user-images.githubusercontent.com/32610387/147943755-2a4ebfb0-cb7d-4a19-83cb-925dbf259022.png">
 
@@ -179,6 +185,12 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     end
     ```
 
+    An instance of `ThickCircle` is considered valid only if the following conditions hold true:
+    * `diameter > 0`
+    * `thickness > 0`
+    * if `diameter` is odd, then `2 * thickness <= diameter + 1`
+    * if `diameter` is even, then `2 * thickness <= diameter`
+
     <img src="https://user-images.githubusercontent.com/32610387/147943783-883609bb-2f16-422b-a5c8-150878135c97.png">
 
 1. ### `Rectangle`
@@ -191,6 +203,10 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     end
     ```
 
+    An instance of `Rectangle` is considered valid only if the following conditions hold true:
+    * `height > 0`
+    * `width > 0`
+
     <img src="https://user-images.githubusercontent.com/32610387/147943835-44c41d80-8272-48e8-8122-adc56dc949ad.png">
 
 1. ### `FilledRectangle`
@@ -202,6 +218,10 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
         width::I
     end
     ```
+
+    An instance of `FilledRectangle` is considered valid only if the following conditions hold true:
+    * `height > 0`
+    * `width > 0`
 
     <img src="https://user-images.githubusercontent.com/32610387/147943862-5515ca23-234c-4f2e-b3f0-3a8b54e07c37.png">
 
@@ -216,6 +236,12 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     end
     ```
 
+    An instance of `ThickRectangle` is considered valid only if the following conditions hold true:
+    * `height > 0`
+    * `width > 0`
+    * `thickness > 0`
+    * `thickness <= min(height, width)`
+
     <img src="https://user-images.githubusercontent.com/32610387/147943890-badcce13-f1fd-4295-9ea3-37561b9821aa.png">
 
 1. ### `Character`
@@ -228,6 +254,8 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
     end
     ```
 
+    When `font` is `TERMINUS_32_16`, then an instance of `Character` is considered valid only if `char` is a printable ascii character.
+
     <img src="https://user-images.githubusercontent.com/32610387/147944083-56f45efc-1c7f-4f19-ae53-e17d5f8e51b6.png">
 
 1. ### `TextLine`
@@ -239,5 +267,7 @@ This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASC
         font::F
     end
     ```
+
+    When `font` is `TERMINUS_32_16`, then an instance of `TextLine` is considered valid only if `text` is composed of printable ascii character.
 
     <img src="https://user-images.githubusercontent.com/32610387/147944102-2480436c-d9b8-47bb-9134-5537b4014791.png">
