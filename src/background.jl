@@ -1,6 +1,6 @@
 struct Background <: AbstractShape end
 
-get_drawing_optimization_style(::Background) = PUT_PIXEL_UNCHECKED
+get_drawing_optimization_style(::Background) = PUT_PIXEL_INBOUNDS
 
 function draw!(f::F, image::AbstractMatrix, shape::Background, color) where {F <: Function}
     for j in axes(image, 2)

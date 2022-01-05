@@ -85,7 +85,7 @@ By default, the `draw!` function is safe, that is, it draws only those pixels of
 1. PutPixel: Iterate through all the positions needed to draw the shape. For each position, if it lies within the bounds of the image, put a pixel at that position else don't do anything.
 1. CheckBounds: If the shape lies completely outside the bounds of the image, simply return `nothing`. If it lies completely inside the bounds of the image, then draw each pixel of the shape without any further bounds checking. If it is neither of the prevous cases, fall back to the slow but safe method of drawing each pixel of the shape only if it lies within the bounds of the image.
 1. Clip: Some shapes like `VerticalLine`, `HorizontalLine`, `FilledRectangle` can be direcly clipped into shapes that completely lie within the bounds of the image. In such cases, perform the clipping and draw the clipped shape without any further bounds checking.
-1. PutPixelUnchecked: Iterate through all the positions needed to draw the shape. For each position, put a pixel at that position assuming it lies within the bounds of the image.
+1. PutPixelInbounds: Iterate through all the positions needed to draw the shape. For each position, put a pixel at that position assuming it lies within the bounds of the image.
 
 Use `get_drawing_optimization_style(shape)` to get which style of optimization is being used to draw a shape.
 

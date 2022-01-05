@@ -131,7 +131,7 @@ function draw!(image::AbstractMatrix, shape::ThickCircleOctant, color)
 
     if is_inbounds(image, shape)
         draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
-            draw!(put_pixel_unchecked!, image, VerticalLine(i1, i2, j1), color)
+            draw!(put_pixel_inbounds!, image, VerticalLine(i1, i2, j1), color)
         end
     else
         draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color

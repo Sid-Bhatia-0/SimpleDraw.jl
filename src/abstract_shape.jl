@@ -44,13 +44,13 @@ end
 
 function put_pixel!(image::AbstractMatrix, i, j, color)
     if checkbounds(Bool, image, i, j)
-        put_pixel_unchecked!(image, i, j, color)
+        put_pixel_inbounds!(image, i, j, color)
     end
 
     return nothing
 end
 
-function put_pixel_unchecked!(image::AbstractMatrix, i, j, color)
+function put_pixel_inbounds!(image::AbstractMatrix, i, j, color)
     @inbounds image[i, j] = color
     return nothing
 end
@@ -89,7 +89,7 @@ function draw!(::CheckBounds, image::AbstractMatrix, shape::AbstractShape, color
     end
 
     if is_inbounds(image, shape)
-        draw!(put_pixel_unchecked!, image, shape, color)
+        draw!(put_pixel_inbounds!, image, shape, color)
     else
         draw!(put_pixel!, image, shape, color)
     end
@@ -111,16 +111,16 @@ function draw!(::Clip, image::AbstractMatrix, shape::AbstractShape, color)
         return nothing
     end
 
-    draw!(put_pixel_unchecked!, image, clip(image, shape), color)
+    draw!(put_pixel_inbounds!, image, clip(image, shape), color)
 
     return nothing
 end
 
 #####
-##### PutPixelUnchecked (directly draw assuming shape is inbounds)
+##### PutPixelInbounds (directly draw assuming shape is inbounds)
 #####
 
-struct PutPixelUnchecked <: DrawingOptimizationStyle end
-const PUT_PIXEL_UNCHECKED = PutPixelUnchecked()
+struct PutPixelInbounds <: DrawingOptimizationStyle end
+const PUT_PIXEL_INBOUNDS = PutPixelInbounds()
 
-draw!(::PutPixelUnchecked, image::AbstractMatrix, shape::AbstractShape, color) = draw!(put_pixel_unchecked!, image, shape, color)
+draw!(::PutPixelInbounds, image::AbstractMatrix, shape::AbstractShape, color) = draw!(put_pixel_inbounds!, image, shape, color)
