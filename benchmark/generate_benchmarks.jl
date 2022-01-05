@@ -1,8 +1,11 @@
 include("benchmark.jl")
 
-# run everything once to make sure everything is compiled
-# throw away the results of this run
+println("####################################################")
+println("Ingore the first set of benchmarks. They are run so as to make sure that everything is compiled once.")
+println("####################################################")
 generate_benchmark_file(file_name = tempname())
 
-# save the results of this run
+println("####################################################")
+println("Everything has been compiled once. The following are the final benchmarks.")
+println("####################################################")
 generate_benchmark_file()

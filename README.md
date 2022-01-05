@@ -11,6 +11,7 @@ This is a lightweight self-contained package that attempts to provide efficient 
   - [Drawing optimizations](#drawing-optimizations)
   - [Visualization](#visualization)
   - [Fonts](#fonts)
+  - [Benchmarks](#benchmarks)
 
 [List of shapes](#list-of-shapes):
 
@@ -99,6 +100,79 @@ It uses Unicode block characters to represent a pixel. This works well for low r
 ### Fonts
 
 This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASCII) characters at this point. We use a subset of [Terminus Font](http://terminus-font.sourceforge.net/) for drawing the glyphs. Terminus Font is licensed under the SIL Open Font License, Version 1.1. The license is included as OFL.TXT in the `/src/fonts` directory in this repository, and is also available with a FAQ at [http://scripts.sil.org/OFL](http://scripts.sil.org/OFL).
+
+### Benchmarks
+
+Below are the benchmarks for `v0.3.0` of this package using julia `v1.7.1`.
+
+Timestamp: 2022_01_05_19_10_52 (yyyy_mm_dd_HH_MM_SS)
+
+Shapes are drawn on an image of type `Matrix{UInt32}` with a color of type `UInt32`
+
+|shape type|image height|image width|median time|memory|shape|
+:---|:---|:---|:---|:---|:---|
+|Point|64|64|3.463 ns|0 bytes|SimpleDraw.Point{Int64}(33, 33)|
+|Point|256|256|3.454 ns|0 bytes|SimpleDraw.Point{Int64}(129, 129)|
+|Point|1024|1024|3.464 ns|0 bytes|SimpleDraw.Point{Int64}(513, 513)|
+|Background|64|64|174.279 ns|0 bytes|SimpleDraw.Background()|
+|Background|256|256|5.619 μs|0 bytes|SimpleDraw.Background()|
+|Background|1024|1024|158.790 μs|0 bytes|SimpleDraw.Background()|
+|Line|64|64|122.932 ns|0 bytes|SimpleDraw.Line{Int64}(SimpleDraw.Point{Int64}(9, 2), SimpleDraw.Point{Int64}(56, 63))|
+|Line|256|256|488.272 ns|0 bytes|SimpleDraw.Line{Int64}(SimpleDraw.Point{Int64}(33, 2), SimpleDraw.Point{Int64}(224, 255))|
+|Line|1024|1024|2.403 μs|0 bytes|SimpleDraw.Line{Int64}(SimpleDraw.Point{Int64}(129, 2), SimpleDraw.Point{Int64}(896, 1023))|
+|ThickLine|64|64|1.485 μs|0 bytes|SimpleDraw.ThickLine{Int64}(SimpleDraw.Point{Int64}(9, 9), SimpleDraw.Point{Int64}(56, 56), 7)|
+|ThickLine|256|256|74.086 μs|0 bytes|SimpleDraw.ThickLine{Int64}(SimpleDraw.Point{Int64}(33, 33), SimpleDraw.Point{Int64}(224, 224), 31)|
+|ThickLine|1024|1024|2.424 ms|0 bytes|SimpleDraw.ThickLine{Int64}(SimpleDraw.Point{Int64}(129, 129), SimpleDraw.Point{Int64}(896, 896), 127)|
+|Circle|64|64|149.877 ns|0 bytes|SimpleDraw.Circle{Int64}(SimpleDraw.Point{Int64}(2, 2), 62)|
+|Circle|256|256|1.348 μs|0 bytes|SimpleDraw.Circle{Int64}(SimpleDraw.Point{Int64}(2, 2), 254)|
+|Circle|1024|1024|8.180 μs|0 bytes|SimpleDraw.Circle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1022)|
+|FilledCircle|64|64|1.469 μs|0 bytes|SimpleDraw.FilledCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 62)|
+|FilledCircle|256|256|11.294 μs|0 bytes|SimpleDraw.FilledCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 254)|
+|FilledCircle|1024|1024|146.581 μs|0 bytes|SimpleDraw.FilledCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1022)|
+|ThickCircle|64|64|2.227 μs|0 bytes|SimpleDraw.ThickCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 62, 16)|
+|ThickCircle|256|256|71.456 μs|0 bytes|SimpleDraw.ThickCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 254, 64)|
+|ThickCircle|1024|1024|1.175 ms|0 bytes|SimpleDraw.ThickCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1022, 256)|
+|Rectangle|64|64|136.071 ns|0 bytes|SimpleDraw.Rectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 63, 63)|
+|Rectangle|256|256|1.668 μs|0 bytes|SimpleDraw.Rectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 255, 255)|
+|Rectangle|1024|1024|8.552 μs|0 bytes|SimpleDraw.Rectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1023, 1023)|
+|FilledRectangle|64|64|783.196 ns|0 bytes|SimpleDraw.FilledRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 63, 63)|
+|FilledRectangle|256|256|9.221 μs|0 bytes|SimpleDraw.FilledRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 255, 255)|
+|FilledRectangle|1024|1024|172.170 μs|0 bytes|SimpleDraw.FilledRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1023, 1023)|
+|ThickRectangle|64|64|1.263 μs|0 bytes|SimpleDraw.ThickRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 63, 63, 16)|
+|ThickRectangle|256|256|7.531 μs|0 bytes|SimpleDraw.ThickRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 255, 255, 64)|
+|ThickRectangle|1024|1024|187.453 μs|0 bytes|SimpleDraw.ThickRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1023, 1023, 256)|
+|Character|64|64|1.518 μs|0 bytes|SimpleDraw.Character{Int64, Char, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(2, 2), 'A', SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
+|Character|256|256|1.473 μs|0 bytes|SimpleDraw.Character{Int64, Char, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(2, 2), 'A', SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
+|Character|1024|1024|1.478 μs|0 bytes|SimpleDraw.Character{Int64, Char, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(2, 2), 'A', SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
+|TextLine|64|64|5.556 μs|0 bytes|SimpleDraw.TextLine{Int64, String, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(1, 1), "OMVJ", SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
+|TextLine|256|256|22.815 μs|0 bytes|SimpleDraw.TextLine{Int64, String, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(1, 1), "XVFYWDHWRMXBZDTT", SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
+|TextLine|1024|1024|93.881 μs|0 bytes|SimpleDraw.TextLine{Int64, String, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(1, 1), "ABIFZIJMRNFMIPNOMGPICUKEESMIRENGUKLTQIGJAGJAMLUGPKIMPYMQSNHOGXRQ", SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
+
+Follow these steps to reproduce similar benchmarks:
+
+1. Clone the project
+
+    ```
+    $ git clone https://github.com/Sid-Bhatia-0/SimpleDraw.jl.git
+    ```
+
+1. Start the julia REPL inside the `/benchmark` directory
+
+    benchmark $ julia
+
+1. Activate and instantiate the project
+
+    ```
+    julia> import Pkg; Pkg.activate("."); Pkg.instantiate()
+    ```
+
+1. Exit the REP and run `generate_benchmarks.jl` with the `Project.toml` and `Manifest.toml` files in this directory
+
+    ```
+    benchmark $ julia --project=. generate_benchmarks.jl
+    ```
+
+This will print a bunch of outputs and produce a markdown file named with a timestamp containing the final benchmarks. Using a timestamp in the name helps ensure that running `generate_benchmarks.jl` multiple times does not overwrite the same file.
 
 ## List of shapes
 
