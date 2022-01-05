@@ -12,7 +12,6 @@ This is a lightweight self-contained package that attempts to provide efficient 
   - [Drawing optimizations](#drawing-optimizations)
   - [Visualization](#visualization)
   - [Fonts](#fonts)
-  - [Benchmarks](#benchmarks)
 
 [List of shapes](#list-of-shapes):
 
@@ -103,51 +102,6 @@ It uses Unicode block characters to represent a pixel. This works well for low r
 ### Fonts
 
 This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASCII) characters at this point. We use a subset of [Terminus Font](http://terminus-font.sourceforge.net/) for drawing the glyphs. Terminus Font is licensed under the SIL Open Font License, Version 1.1. The license is included as OFL.TXT in the `/src/fonts` directory in this repository, and is also available with a FAQ at [http://scripts.sil.org/OFL](http://scripts.sil.org/OFL).
-
-### Benchmarks
-
-Here are the benchmarks for `v0.2.0`:
-
-Date: 2021_11_04_17_10_38 (yyyy_mm_dd_HH_MM_SS)
-
-**Note:** The time in benchmarks is the median time.
-
-| |64|256|1024|
-|:---:|:---:|:---:|:---:|
-|Point|4.022 ns<br>0 bytes|4.151 ns<br>0 bytes|4.149 ns<br>0 bytes|
-|Background|173.898 ns<br>0 bytes|6.716 μs<br>0 bytes|233.739 μs<br>0 bytes|
-|Line|185.178 ns<br>0 bytes|841.583 ns<br>0 bytes|3.419 μs<br>0 bytes|
-|VerticalLine|22.484 ns<br>0 bytes|37.138 ns<br>0 bytes|94.983 ns<br>0 bytes|
-|HorizontalLine|43.455 ns<br>0 bytes|909.604 ns<br>0 bytes|4.702 μs<br>0 bytes|
-|ThickLine|9.998 μs<br>0 bytes|223.935 μs<br>0 bytes|8.741 ms<br>0 bytes|
-|Circle|170.603 ns<br>0 bytes|1.205 μs<br>0 bytes|9.209 μs<br>0 bytes|
-|ThickCircle|1.621 μs<br>0 bytes|66.197 μs<br>0 bytes|1.376 ms<br>0 bytes|
-|FilledCircle|1.101 μs<br>0 bytes|9.043 μs<br>0 bytes|199.065 μs<br>0 bytes|
-|Rectangle|91.700 ns<br>0 bytes|1.748 μs<br>0 bytes|11.386 μs<br>0 bytes|
-|ThickRectangle|3.374 μs<br>0 bytes|54.228 μs<br>0 bytes|891.390 μs<br>0 bytes|
-|FilledRectangle|4.393 μs<br>0 bytes|72.216 μs<br>0 bytes|1.179 ms<br>0 bytes|
-|Cross|52.212 ns<br>0 bytes|945.432 ns<br>0 bytes|5.289 μs<br>0 bytes|
-|HollowCross|71.390 ns<br>0 bytes|926.110 ns<br>0 bytes|4.900 μs<br>0 bytes|
-
-In order to generate such benchmarks, clone this repository and start a julia REPL inside the `/benchmark` directory using the `Project.toml` and `Manifest.toml` files given there:
-
-```
-benchmark $ julia --project=.
-```
-
-And then execute the following:
-
-```julia-repl
-julia> include("benchmark.jl");
-
-julia> generate_benchmark_file();
-
-julia> generate_benchmark_file();
-```
-
-The `generate_benchmark_file()` function produces a markdown file whose name is a timestamp so that multiple calls to the function don't overwrite the same file. I usually run the `generate_benchmark_file()` function twice and take the result of the second one just to make sure that everything is already compiled before the second one is run.
-
-For details on what exact shapes are drawn while generating these benchmarks, see `/benchmark/benchmarks.jl`.
 
 ## List of shapes
 
