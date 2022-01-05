@@ -48,7 +48,7 @@ function draw!(image::AbstractMatrix, shape::Character{I, C, Terminus_32_16} whe
         return nothing
     else
         bitmap_shape = Bitmap(position, get_bitmap(font, char))
-        draw!(put_pixel_unchecked!, image, clip(image, bitmap_shape), color)
+        draw!(put_pixel_inbounds!, image, clip(image, bitmap_shape), color)
     end
 
     return nothing
