@@ -1,13 +1,20 @@
 abstract type AbstractFont end
 
+abstract type AbstractASCIIFont <: AbstractFont end
+
 include("fonts/Terminus_32_16.jl")
+include("fonts/Terminus_16_8.jl")
 
 const FONTS = [
                TERMINUS_32_16,
+               TERMINUS_16_8,
               ]
 
 get_height(font::Terminus_32_16) = 32
 get_width(font::Terminus_32_16) = 16
+
+get_height(font::Terminus_16_8) = 16
+get_width(font::Terminus_16_8) = 8
 
 struct Character{I, C <: AbstractChar, F <: AbstractFont} <: AbstractShape
     position::Point{I}
@@ -15,9 +22,9 @@ struct Character{I, C <: AbstractChar, F <: AbstractFont} <: AbstractShape
     font::F
 end
 
-has_char(font::Terminus_32_16, char) = isascii(char) && isprint(char)
+has_char(font::AbstractASCIIFont, char) = isascii(char) && isprint(char)
 
-function get_bitmap(font::Terminus_32_16, char::Char)
+function get_bitmap(font::AbstractASCIIFont, char::Char)
     bitmap = font.bitmap
 
     codepoint_begin = codepoint(' ')
@@ -34,7 +41,7 @@ get_i_max(shape::Character) = shape.position.i + size(shape.font.bitmap, 1) - on
 get_j_min(shape::Character) = shape.position.j
 get_j_max(shape::Character) = shape.position.j + size(shape.font.bitmap, 2) - one(shape.position.j)
 
-function draw!(image::AbstractMatrix, shape::Character{I, C, Terminus_32_16} where {I, C}, color)
+function draw!(image::AbstractMatrix, shape::Character{I, C, <:AbstractASCIIFont} where {I, C}, color)
     position = shape.position
     char = shape.char
     font = shape.font
@@ -60,7 +67,7 @@ function draw!(image::AbstractMatrix, shape::Character{I, C, Terminus_32_16} whe
     return nothing
 end
 
-function draw!(f::F, image::AbstractMatrix, shape::Character{I, C, Terminus_32_16} where {I, C}, color) where {F <: Function}
+function draw!(f::F, image::AbstractMatrix, shape::Character{I, C, <:AbstractASCIIFont} where {I, C}, color) where {F <: Function}
     position = shape.position
     char = shape.char
     font = shape.font

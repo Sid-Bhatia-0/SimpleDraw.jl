@@ -1,4 +1,4 @@
-struct Terminus_32_16 <: AbstractFont
+struct Terminus_32_16 <: AbstractASCIIFont
     bitmap::BitArray{3}
 end
 
