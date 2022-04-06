@@ -10,8 +10,8 @@ This is a lightweight self-contained package that attempts to provide efficient 
   - [Basic drawing](#basic-drawing)
   - [Drawing optimizations](#drawing-optimizations)
   - [Visualization](#visualization)
-  - [Fonts](#fonts)
   - [Benchmarks](#benchmarks)
+* [References and License Information](#references-and-license-information)
 
 [List of shapes](#list-of-shapes):
 
@@ -96,10 +96,6 @@ Use `get_drawing_optimization_style(shape)` to get which style of optimization i
 The `visualize` function helps in visualizing a boolean image directly inside the terminal. This is a quick and effective tool to verify whether a shape is being drawn as expected. This is particularly handy when you want to know about the exact coordinates of the pixels that are being drawn for a shape.
 
 It uses Unicode block characters to represent a pixel. This works well for low resolution images. To visualize slightly higher resolution images, you can maximize your terminal window and reduce its font size.
-
-### Fonts
-
-This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASCII) characters at this point. We use a subset of [Terminus Font](http://terminus-font.sourceforge.net/) for drawing the glyphs. Terminus Font is licensed under the SIL Open Font License, Version 1.1. The license is included as OFL.TXT in the `/src/fonts` directory in this repository, and is also available with a FAQ at [http://scripts.sil.org/OFL](http://scripts.sil.org/OFL).
 
 ### Benchmarks
 
@@ -345,3 +341,10 @@ This will print a bunch of outputs and produce a markdown file named with a time
     When `font` is `TERMINUS_32_16`, then an instance of `TextLine` is considered valid only if `text` is composed of printable ascii character.
 
     <img src="https://user-images.githubusercontent.com/32610387/147944102-2480436c-d9b8-47bb-9134-5537b4014791.png">
+
+## References and License Information
+
+1. Octant drawing: [https://en.wikipedia.org/w/index.php?title=Midpoint_circle_algorithm&oldid=1073593456](https://en.wikipedia.org/w/index.php?title=Midpoint_circle_algorithm&oldid=1073593456)
+1. Line drawing: [https://en.wikipedia.org/w/index.php?title=Bresenham%27s_line_algorithm&oldid=1073834153](https://en.wikipedia.org/w/index.php?title=Bresenham%27s_line_algorithm&oldid=1073834153)
+1. Fonts: This package supports bitmap fonts for [ASCII](https://en.wikipedia.org/wiki/ASCII) characters at this point. We use a subset of [Terminus Font](http://terminus-font.sourceforge.net/) for drawing the glyphs. Terminus Font is licensed under the SIL Open Font License, Version 1.1. The license is included as OFL.TXT in the `/src/fonts` directory in this repository, and is also available with a FAQ at [http://scripts.sil.org/OFL](http://scripts.sil.org/OFL).
+1. Everything else is under [LICENSE](https://github.com/Sid-Bhatia-0/SimpleDraw.jl/blob/master/LICENSE).
