@@ -3,13 +3,18 @@ abstract type AbstractFont end
 abstract type AbstractASCIIFont <: AbstractFont end
 
 include("fonts/Terminus_32_16.jl")
+include("fonts/Terminus_16_8.jl")
 
 const FONTS = [
                TERMINUS_32_16,
+               TERMINUS_16_8,
               ]
 
 get_height(font::Terminus_32_16) = 32
 get_width(font::Terminus_32_16) = 16
+
+get_height(font::Terminus_16_8) = 16
+get_width(font::Terminus_16_8) = 8
 
 struct Character{I, C <: AbstractChar, F <: AbstractFont} <: AbstractShape
     position::Point{I}
