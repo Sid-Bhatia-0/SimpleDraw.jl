@@ -5,6 +5,16 @@ struct VerticalBaseTriangle{I <: Integer} <: AbstractTriangle
     point::Point{I}
 end
 
+struct Triangle{I <: Integer} <: AbstractTriangle
+    point1::Point{I}
+    point2::Point{I}
+    point3::Point{I}
+end
+
+#####
+##### VerticalBaseTriangle
+#####
+
 is_valid(shape::VerticalBaseTriangle) = is_valid(shape.vertical_line)
 
 get_i_min(shape::VerticalBaseTriangle) = min(shape.vertical_line.i_min, shape.point.i)
@@ -97,6 +107,69 @@ function draw!(f::F, image::AbstractMatrix, shape::VerticalBaseTriangle, color) 
     end
 
     draw!(f, image, Line(point3, point2), color)
+
+    return nothing
+end
+
+#####
+##### Triangle
+#####
+
+get_i_min(shape::Triangle) = min(shape.point1.i, shape.point2.i, shape.point3.i)
+get_i_max(shape::Triangle) = max(shape.point1.i, shape.point2.i, shape.point3.i)
+
+get_j_min(shape::Triangle) = min(shape.point1.j, shape.point2.j, shape.point3.j)
+get_j_max(shape::Triangle) = max(shape.point1.j, shape.point2.j, shape.point3.j)
+
+get_drawing_optimization_style(::Triangle) = CHECK_BOUNDS
+
+function sort_horizontal(point1, point2)
+    if point1.j <= point2.j
+        return (point1, point2)
+    else
+        return (point2, point1)
+    end
+end
+
+function sort_horizontal(point1, point2, point3)
+    point1, point3 = sort_horizontal(point1, point3)
+    point1, point2 = sort_horizontal(point1, point2)
+    point2, point3 = sort_horizontal(point2, point3)
+
+    return (point1, point2, point3)
+end
+
+function vertical_line_intersection(point1, point2, j)
+    i1 = point1.i
+    j1 = point1.j
+    i2 = point2.i
+    j2 = point2.j
+
+    i = i1 + div((i2 - i1) * (j - j1), j2 - j1, RoundNearest)
+
+    return i
+end
+
+function draw!(f::F, image::AbstractMatrix, shape::Triangle, color) where {F <: Function}
+    point1, point2, point3 = sort_horizontal(shape.point1, shape.point2, shape.point3)
+
+    i1 = point1.i
+    j1 = point1.j
+    i2 = point2.i
+    j2 = point2.j
+    i3 = point3.i
+    j3 = point3.j
+
+    if point1.j == point3.j
+        draw!(f, image, VerticalLine(min(i1, i2, i3), max(i1, i2, i3), j1), color)
+    else
+        i = vertical_line_intersection(point1, point3, j2)
+        vertical_line = VerticalLine(minmax(i, i2)..., j2)
+        left_triangle = VerticalBaseTriangle(vertical_line, point1)
+        right_triangle = VerticalBaseTriangle(vertical_line, point3)
+        draw!(f, image, left_triangle, color)
+        draw!(f, image, right_triangle, color)
+    end
 
     return nothing
 end
