@@ -1,31 +1,31 @@
 abstract type AbstractTriangle <: AbstractShape end
 
-struct VerticalBaseTriangle{I <: Integer} <: AbstractTriangle
+struct VerticalBaseFilledTriangle{I <: Integer} <: AbstractTriangle
     vertical_line::VerticalLine{I}
     point::Point{I}
 end
 
-struct Triangle{I <: Integer} <: AbstractTriangle
+struct FilledTriangle{I <: Integer} <: AbstractTriangle
     point1::Point{I}
     point2::Point{I}
     point3::Point{I}
 end
 
 #####
-##### VerticalBaseTriangle
+##### VerticalBaseFilledTriangle
 #####
 
-is_valid(shape::VerticalBaseTriangle) = is_valid(shape.vertical_line)
+is_valid(shape::VerticalBaseFilledTriangle) = is_valid(shape.vertical_line)
 
-get_i_min(shape::VerticalBaseTriangle) = min(shape.vertical_line.i_min, shape.point.i)
-get_i_max(shape::VerticalBaseTriangle) = max(shape.vertical_line.i_max, shape.point.i)
+get_i_min(shape::VerticalBaseFilledTriangle) = min(shape.vertical_line.i_min, shape.point.i)
+get_i_max(shape::VerticalBaseFilledTriangle) = max(shape.vertical_line.i_max, shape.point.i)
 
-get_j_min(shape::VerticalBaseTriangle) = min(shape.vertical_line.j, shape.point.j)
-get_j_max(shape::VerticalBaseTriangle) = max(shape.vertical_line.j, shape.point.j)
+get_j_min(shape::VerticalBaseFilledTriangle) = min(shape.vertical_line.j, shape.point.j)
+get_j_max(shape::VerticalBaseFilledTriangle) = max(shape.vertical_line.j, shape.point.j)
 
-get_drawing_optimization_style(::VerticalBaseTriangle) = CHECK_BOUNDS
+get_drawing_optimization_style(::VerticalBaseFilledTriangle) = CHECK_BOUNDS
 
-function draw!(f::F, image::AbstractMatrix, shape::VerticalBaseTriangle, color) where {F <: Function}
+function draw!(f::F, image::AbstractMatrix, shape::VerticalBaseFilledTriangle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     i1 = shape.vertical_line.i_min
@@ -112,16 +112,16 @@ function draw!(f::F, image::AbstractMatrix, shape::VerticalBaseTriangle, color) 
 end
 
 #####
-##### Triangle
+##### FilledTriangle
 #####
 
-get_i_min(shape::Triangle) = min(shape.point1.i, shape.point2.i, shape.point3.i)
-get_i_max(shape::Triangle) = max(shape.point1.i, shape.point2.i, shape.point3.i)
+get_i_min(shape::FilledTriangle) = min(shape.point1.i, shape.point2.i, shape.point3.i)
+get_i_max(shape::FilledTriangle) = max(shape.point1.i, shape.point2.i, shape.point3.i)
 
-get_j_min(shape::Triangle) = min(shape.point1.j, shape.point2.j, shape.point3.j)
-get_j_max(shape::Triangle) = max(shape.point1.j, shape.point2.j, shape.point3.j)
+get_j_min(shape::FilledTriangle) = min(shape.point1.j, shape.point2.j, shape.point3.j)
+get_j_max(shape::FilledTriangle) = max(shape.point1.j, shape.point2.j, shape.point3.j)
 
-get_drawing_optimization_style(::Triangle) = CHECK_BOUNDS
+get_drawing_optimization_style(::FilledTriangle) = CHECK_BOUNDS
 
 function sort_horizontal(point1, point2)
     if point1.j <= point2.j
@@ -150,7 +150,7 @@ function vertical_line_intersection(point1, point2, j)
     return i
 end
 
-function draw!(f::F, image::AbstractMatrix, shape::Triangle, color) where {F <: Function}
+function draw!(f::F, image::AbstractMatrix, shape::FilledTriangle, color) where {F <: Function}
     point1, point2, point3 = sort_horizontal(shape.point1, shape.point2, shape.point3)
 
     i1 = point1.i
@@ -165,8 +165,8 @@ function draw!(f::F, image::AbstractMatrix, shape::Triangle, color) where {F <: 
     else
         i = vertical_line_intersection(point1, point3, j2)
         vertical_line = VerticalLine(minmax(i, i2)..., j2)
-        left_triangle = VerticalBaseTriangle(vertical_line, point1)
-        right_triangle = VerticalBaseTriangle(vertical_line, point3)
+        left_triangle = VerticalBaseFilledTriangle(vertical_line, point1)
+        right_triangle = VerticalBaseFilledTriangle(vertical_line, point3)
         draw!(f, image, left_triangle, color)
         draw!(f, image, right_triangle, color)
     end
