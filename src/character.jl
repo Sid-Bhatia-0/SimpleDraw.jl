@@ -16,7 +16,7 @@ get_width(font::Terminus_32_16) = 16
 get_height(font::Terminus_16_8) = 16
 get_width(font::Terminus_16_8) = 8
 
-struct Character{I, C <: AbstractChar, F <: AbstractFont} <: AbstractShape
+struct Character{I <: Integer, C <: AbstractChar, F <: AbstractFont} <: AbstractShape
     position::Point{I}
     char::C
     font::F

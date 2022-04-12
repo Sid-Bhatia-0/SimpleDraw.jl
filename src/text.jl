@@ -1,4 +1,4 @@
-struct TextLine{I, S, F <: AbstractFont} <: AbstractShape
+struct TextLine{I <: Integer, S, F <: AbstractFont} <: AbstractShape
     position::Point{I}
     text::S
     font::F
