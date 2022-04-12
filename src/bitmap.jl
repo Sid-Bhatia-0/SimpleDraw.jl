@@ -1,4 +1,4 @@
-struct Bitmap{I, B <: AbstractMatrix{Bool}} <: AbstractShape
+struct Bitmap{I <: Integer, B <: AbstractMatrix{Bool}} <: AbstractShape
     position::Point{I}
     bitmap::B
 end
