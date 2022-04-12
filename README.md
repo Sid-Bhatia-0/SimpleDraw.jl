@@ -337,7 +337,7 @@ This will print a bunch of outputs and produce a markdown file named with a time
     end
     ```
 
-    When `font` is `TERMINUS_32_16`, then an instance of `Character` is considered valid only if `char` is a printable ascii character.
+    There are two monospace fonts available at this point - `TERMINUS_32_16` (height 32 pixels, width 16 pixels) and `TERMINUS_16_8` (height 16 pixels, width 8 pixels). Only glyphs for ASCII characters are available as of now.
 
     <img src="https://user-images.githubusercontent.com/32610387/147944083-56f45efc-1c7f-4f19-ae53-e17d5f8e51b6.png">
 
@@ -351,7 +351,7 @@ This will print a bunch of outputs and produce a markdown file named with a time
     end
     ```
 
-    When `font` is `TERMINUS_32_16`, then an instance of `TextLine` is considered valid only if `text` is composed of printable ascii character.
+    There are two monospace fonts available at this point - `TERMINUS_32_16` (height 32 pixels, width 16 pixels) and `TERMINUS_16_8` (height 16 pixels, width 8 pixels). Only glyphs for ASCII characters are available as of now.
 
     <img src="https://user-images.githubusercontent.com/32610387/147944102-2480436c-d9b8-47bb-9134-5537b4014791.png">
 
