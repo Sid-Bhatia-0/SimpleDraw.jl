@@ -203,6 +203,8 @@ This will print a bunch of outputs and produce a markdown file named with a time
     end
     ```
 
+    The line is not symmetric in general. Reversing the order of points may produce different outcomes.
+
     <img src="https://user-images.githubusercontent.com/32610387/147943649-0c332388-589a-49db-984b-41dac44390a8.png">
 
 1. ### `ThickLine`
