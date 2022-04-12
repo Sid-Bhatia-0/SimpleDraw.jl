@@ -155,7 +155,9 @@ Follow these steps to reproduce similar benchmarks:
 
 1. Start the julia REPL inside the `/benchmark` directory
 
+    ```
     benchmark $ julia
+    ```
 
 1. Activate and instantiate the project
 
