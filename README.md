@@ -155,7 +155,9 @@ Follow these steps to reproduce similar benchmarks:
 
 1. Start the julia REPL inside the `/benchmark` directory
 
+    ```
     benchmark $ julia
+    ```
 
 1. Activate and instantiate the project
 
@@ -200,6 +202,8 @@ This will print a bunch of outputs and produce a markdown file named with a time
         point2::Point{I}
     end
     ```
+
+    The line is not symmetric in general. Reversing the order of points may produce different outcomes.
 
     <img src="https://user-images.githubusercontent.com/32610387/147943649-0c332388-589a-49db-984b-41dac44390a8.png">
 
@@ -325,7 +329,7 @@ This will print a bunch of outputs and produce a markdown file named with a time
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/147943862-5515ca23-234c-4f2e-b3f0-3a8b54e07c37.png">
+    <img src="https://user-images.githubusercontent.com/32610387/162975187-2eb6e57f-b693-4c9b-99f3-961c7b3aff18.png">
 
 1. ### `Character`
 
@@ -337,7 +341,7 @@ This will print a bunch of outputs and produce a markdown file named with a time
     end
     ```
 
-    When `font` is `TERMINUS_32_16`, then an instance of `Character` is considered valid only if `char` is a printable ascii character.
+    There are two monospace fonts available at this point - `TERMINUS_32_16` (height 32 pixels, width 16 pixels) and `TERMINUS_16_8` (height 16 pixels, width 8 pixels). Only glyphs for ASCII characters are available as of now.
 
     <img src="https://user-images.githubusercontent.com/32610387/147944083-56f45efc-1c7f-4f19-ae53-e17d5f8e51b6.png">
 
@@ -351,7 +355,7 @@ This will print a bunch of outputs and produce a markdown file named with a time
     end
     ```
 
-    When `font` is `TERMINUS_32_16`, then an instance of `TextLine` is considered valid only if `text` is composed of printable ascii character.
+    There are two monospace fonts available at this point - `TERMINUS_32_16` (height 32 pixels, width 16 pixels) and `TERMINUS_16_8` (height 16 pixels, width 8 pixels). Only glyphs for ASCII characters are available as of now.
 
     <img src="https://user-images.githubusercontent.com/32610387/147944102-2480436c-d9b8-47bb-9134-5537b4014791.png">
 
