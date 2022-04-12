@@ -334,7 +334,7 @@ This will print a bunch of outputs and produce a markdown file named with a time
 1. ### `Character`
 
     ```julia
-    struct Character{I, C <: AbstractChar, F <: AbstractFont} <: AbstractShape
+    struct Character{I <: Integer, C <: AbstractChar, F <: AbstractFont} <: AbstractShape
         position::Point{I}
         char::C
         font::F
@@ -348,7 +348,7 @@ This will print a bunch of outputs and produce a markdown file named with a time
 1. ### `TextLine`
 
     ```julia
-    struct TextLine{I, S, F <: AbstractFont} <: AbstractShape
+    struct TextLine{I <: Integer, S, F <: AbstractFont} <: AbstractShape
         position::Point{I}
         text::S
         font::F
