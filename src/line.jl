@@ -154,8 +154,6 @@ function get_i_max(shape::ThickLine)
 
     I = typeof(thickness)
 
-    i_max = max(point1.j, point2.j)
-
     half_thickness = thickness ÷ convert(typeof(thickness), 2)
 
     return i_max - half_thickness + thickness - one(I)
