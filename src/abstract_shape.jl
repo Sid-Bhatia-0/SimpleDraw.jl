@@ -14,9 +14,21 @@ get_i_min(image::AbstractMatrix) = firstindex(image, 1)
 get_i_max(image::AbstractMatrix) = lastindex(image, 1)
 get_i_extrema(x) = (get_i_min(x), get_i_max(x))
 
+function get_height(shape)
+    i_min, i_max = get_i_extrema(shape)
+    return i_max - i_min + one(i_min)
+end
+
 get_j_min(image::AbstractMatrix) = firstindex(image, 2)
 get_j_max(image::AbstractMatrix) = lastindex(image, 2)
 get_j_extrema(x) = (get_j_min(x), get_j_max(x))
+
+function get_width(shape)
+    j_min, j_max = get_j_extrema(shape)
+    return j_max - j_min + one(j_min)
+end
+
+get_position(shape) = Point(get_i_min(shape), get_j_min(shape))
 
 function is_outbounds(image::AbstractMatrix, shape::AbstractShape)
     i_min_shape, i_max_shape = get_i_extrema(shape)
