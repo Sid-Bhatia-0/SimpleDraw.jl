@@ -344,7 +344,7 @@ This will print a bunch of outputs and produce a markdown file named with a time
     ```julia
     struct Character{I <: Integer, C <: AbstractChar, F <: AbstractFont} <: AbstractShape
         position::Point{I}
-        char::C
+        character::C
         font::F
     end
     ```

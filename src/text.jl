@@ -9,8 +9,8 @@ get_drawing_optimization_style(::TextLine) = PUT_PIXEL
 function get_num_printable(shape::TextLine)
     num_printable = 0
 
-    for char in shape.text
-        if isprint(char)
+    for character in shape.text
+        if isprint(character)
             num_printable += 1
         end
     end
@@ -54,9 +54,9 @@ function draw!(f::F, image::AbstractMatrix, shape::TextLine, color) where {F <: 
 
     char_position = position
 
-    for char in text
-        draw!(f, image, Character(char_position, char, font), color)
-        if isprint(char)
+    for character in text
+        draw!(f, image, Character(char_position, character, font), color)
+        if isprint(character)
             char_position = Point(char_position.i, char_position.j + width)
         end
     end
