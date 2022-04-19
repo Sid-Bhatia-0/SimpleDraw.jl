@@ -18,17 +18,17 @@ get_width(font::Terminus_16_8) = 8
 
 struct Character{I <: Integer, C <: AbstractChar, F <: AbstractFont} <: AbstractShape
     position::Point{I}
-    char::C
+    character::C
     font::F
 end
 
-has_char(font::AbstractASCIIFont, char) = isascii(char) && isprint(char)
+has_char(font::AbstractASCIIFont, character) = isascii(character) && isprint(character)
 
-function get_bitmap(font::AbstractASCIIFont, char::Char)
+function get_bitmap(font::AbstractASCIIFont, character)
     bitmap = font.bitmap
 
     codepoint_begin = codepoint(' ')
-    k = codepoint(char) - codepoint_begin + one(codepoint_begin)
+    k = codepoint(character) - codepoint_begin + one(codepoint_begin)
 
     char_bitmap = @view bitmap[:, :, k]
 
@@ -36,26 +36,26 @@ function get_bitmap(font::AbstractASCIIFont, char::Char)
 end
 
 get_i_min(shape::Character) = shape.position.i
-get_i_max(shape::Character) = isprint(shape.char) ? shape.position.i + get_height(shape.font) - one(shape.position.i) : shape.position.i
+get_i_max(shape::Character) = isprint(shape.character) ? shape.position.i + get_height(shape.font) - one(shape.position.i) : shape.position.i
 
 get_j_min(shape::Character) = shape.position.j
-get_j_max(shape::Character) = isprint(shape.char) ? shape.position.j + get_width(shape.font) - one(shape.position.j) : shape.position.j
+get_j_max(shape::Character) = isprint(shape.character) ? shape.position.j + get_width(shape.font) - one(shape.position.j) : shape.position.j
 
 function draw!(image::AbstractMatrix, shape::Character{I, C, <:AbstractASCIIFont} where {I, C}, color)
     position = shape.position
-    char = shape.char
+    character = shape.character
     font = shape.font
 
     if is_outbounds(image, shape)
         return nothing
     end
 
-    if isprint(char)
-        if isascii(char)
-            if char == ' '
+    if isprint(character)
+        if isascii(character)
+            if character == ' '
                 return nothing
             else
-                bitmap_shape = Bitmap(position, get_bitmap(font, char))
+                bitmap_shape = Bitmap(position, get_bitmap(font, character))
                 draw!(put_pixel_inbounds!, image, bitmap_shape, color)
             end
         else
@@ -69,15 +69,15 @@ end
 
 function draw!(f::F, image::AbstractMatrix, shape::Character{I, C, <:AbstractASCIIFont} where {I, C}, color) where {F <: Function}
     position = shape.position
-    char = shape.char
+    character = shape.character
     font = shape.font
 
-    if isprint(char)
-        if isascii(char)
-            if char == ' '
+    if isprint(character)
+        if isascii(character)
+            if character == ' '
                 return nothing
             else
-                bitmap_shape = Bitmap(position, get_bitmap(font, char))
+                bitmap_shape = Bitmap(position, get_bitmap(font, character))
                 draw!(f, image, bitmap_shape, color)
             end
         else
