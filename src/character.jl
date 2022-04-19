@@ -36,10 +36,10 @@ function get_bitmap(font::AbstractASCIIFont, char::Char)
 end
 
 get_i_min(shape::Character) = shape.position.i
-get_i_max(shape::Character) = shape.position.i + size(shape.font.bitmap, 1) - one(shape.position.i)
+get_i_max(shape::Character) = isprint(shape.char) ? shape.position.i + get_height(shape.font) - one(shape.position.i) : shape.position.i
 
 get_j_min(shape::Character) = shape.position.j
-get_j_max(shape::Character) = shape.position.j + size(shape.font.bitmap, 2) - one(shape.position.j)
+get_j_max(shape::Character) = isprint(shape.char) ? shape.position.j + get_width(shape.font) - one(shape.position.j) : shape.position.j
 
 function draw!(image::AbstractMatrix, shape::Character{I, C, <:AbstractASCIIFont} where {I, C}, color)
     position = shape.position
