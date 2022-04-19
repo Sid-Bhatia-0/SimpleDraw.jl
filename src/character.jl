@@ -24,7 +24,7 @@ end
 
 has_char(font::AbstractASCIIFont, character) = isascii(character) && isprint(character)
 
-function get_bitmap(font::AbstractASCIIFont, character::Char)
+function get_bitmap(font::AbstractASCIIFont, character)
     bitmap = font.bitmap
 
     codepoint_begin = codepoint(' ')
