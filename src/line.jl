@@ -143,25 +143,23 @@ end
 
 is_valid(shape::ThickLine) = shape.thickness > zero(shape.thickness)
 
-get_i_min(shape::ThickLine) = min(shape.point1.i, shape.point2.i) - shape.thickness ÷ 2
+get_i_min(shape::ThickLine) = min(shape.point1.i, shape.point2.i) - shape.thickness ÷ convert(typeof(shape.thickness), 2)
 
 function get_i_max(shape::ThickLine)
     point1 = shape.point1
     point2 = shape.point2
     thickness = shape.thickness
 
-    i_max = max(point1.i, point2.i)
-
     I = typeof(thickness)
 
-    i_max = max(point1.j, point2.j)
+    i_max = max(point1.i, point2.i)
 
-    half_thickness = thickness ÷ 2
+    half_thickness = thickness ÷ convert(I, 2)
 
     return i_max - half_thickness + thickness - one(I)
 end
 
-get_j_min(shape::ThickLine) = min(shape.point1.j, shape.point2.j) - shape.thickness ÷ 2
+get_j_min(shape::ThickLine) = min(shape.point1.j, shape.point2.j) - shape.thickness ÷ convert(typeof(shape.thickness), 2)
 
 function get_j_max(shape::ThickLine)
     point1 = shape.point1
@@ -172,7 +170,7 @@ function get_j_max(shape::ThickLine)
 
     j_max = max(point1.j, point2.j)
 
-    half_thickness = thickness ÷ 2
+    half_thickness = thickness ÷ convert(I, 2)
 
     return j_max - half_thickness + thickness - one(I)
 end
@@ -193,7 +191,7 @@ function draw!(f::F, image::AbstractMatrix, shape::ThickLine, color) where {F <:
     i2 = point2.i
     j2 = point2.j
 
-    half_thickness = thickness ÷ 2
+    half_thickness = thickness ÷ convert(I, 2)
 
     draw!(image, Line(point1, point2), color) do image, i, j, color
         draw!(f, image, FilledRectangle(Point(i - half_thickness, j - half_thickness), thickness, thickness), color)

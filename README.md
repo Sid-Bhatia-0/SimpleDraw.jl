@@ -56,7 +56,15 @@ SD.visualize(image)
 
 ### API
 
-This package does not export any names. The `draw!` function, along with all the types in [List of shapes](#list-of-shapes) can be considered as a part of the API. Everything else should be considered internal for now.
+This package does not export any names. All the types in [List of shapes](#list-of-shapes), along with the following functions can be considered as a part of the API:
+1. `draw!`
+1. `is_valid`
+1. `get_i_min`
+1. `get_i_max`
+1. `get_j_min`
+1. `get_j_max`
+
+Everything else should be considered internal for now.
 
 ### `draw!`
 

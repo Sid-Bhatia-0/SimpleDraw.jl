@@ -4,14 +4,18 @@ struct Bitmap{I <: Integer, B <: AbstractMatrix{Bool}} <: AbstractShape
 end
 
 get_i_min(shape::Bitmap) = shape.position.i
-get_i_max(shape::Bitmap) = shape.position.i + size(shape.bitmap, 1) - one(shape.position.i)
+get_i_max(shape::Bitmap) = isempty(shape.bitmap) ? shape.position.i : shape.position.i + size(shape.bitmap, 1) - one(shape.position.i)
 
 get_j_min(shape::Bitmap) = shape.position.j
-get_j_max(shape::Bitmap) = shape.position.j + size(shape.bitmap, 2) - one(shape.position.j)
+get_j_max(shape::Bitmap) = isempty(shape.bitmap) ? shape.position.j : shape.position.j + size(shape.bitmap, 2) - one(shape.position.j)
 
 function clip(image::AbstractMatrix, shape::Bitmap)
     position = shape.position
     bitmap = shape.bitmap
+
+    if isempty(bitmap)
+        return Bitmap(position, bitmap)
+    end
 
     i_min_shape, i_max_shape = get_i_extrema(shape)
     i_min_image, i_max_image = get_i_extrema(image)
@@ -34,6 +38,10 @@ get_drawing_optimization_style(::Bitmap) = CLIP
 function draw!(f::F, image::AbstractMatrix, shape::Bitmap, color) where {F <: Function}
     position = shape.position
     bitmap = shape.bitmap
+
+    if isempty(bitmap)
+        return nothing
+    end
 
     i_position = position.i
     j_position = position.j
