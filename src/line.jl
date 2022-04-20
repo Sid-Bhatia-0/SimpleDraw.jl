@@ -95,6 +95,9 @@ get_j_min(shape::Line) = min(shape.point1.j, shape.point2.j)
 get_j_max(shape::Line) = max(shape.point1.j, shape.point2.j)
 get_j_extrema(shape::Line) = minmax(shape.point1.j, shape.point2.j)
 
+move_i(shape::Line, i) = Line(move_i(shape.point1, i), move_i(shape.point2, i))
+move_j(shape::Line, j) = Line(move_j(shape.point1, j), move_j(shape.point2, j))
+
 get_drawing_optimization_style(::Line) = CHECK_BOUNDS
 
 function draw!(f::F, image::AbstractMatrix, shape::Line, color) where {F <: Function}
@@ -174,6 +177,9 @@ function get_j_max(shape::ThickLine)
 
     return j_max - half_thickness + thickness - one(I)
 end
+
+move_i(shape::ThickLine, i) = ThickLine(move_i(shape.point1, i), move_i(shape.point2, i), shape.thickness)
+move_j(shape::ThickLine, j) = ThickLine(move_j(shape.point1, j), move_j(shape.point2, j), shape.thickness)
 
 get_drawing_optimization_style(::ThickLine) = CHECK_BOUNDS
 

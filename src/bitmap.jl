@@ -9,6 +9,9 @@ get_i_max(shape::Bitmap) = isempty(shape.bitmap) ? shape.position.i : shape.posi
 get_j_min(shape::Bitmap) = shape.position.j
 get_j_max(shape::Bitmap) = isempty(shape.bitmap) ? shape.position.j : shape.position.j + size(shape.bitmap, 2) - one(shape.position.j)
 
+move_i(shape::Bitmap, i) = Bitmap(move_i(shape.position, i), shape.bitmap)
+move_j(shape::Bitmap, j) = Bitmap(move_j(shape.position, j), shape.bitmap)
+
 function clip(image::AbstractMatrix, shape::Bitmap)
     position = shape.position
     bitmap = shape.bitmap

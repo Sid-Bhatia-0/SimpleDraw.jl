@@ -271,6 +271,9 @@ end
 ##### Circle
 #####
 
+move_i(shape::Circle, i) = Circle(move_i(shape.position, i), shape.radius)
+move_j(shape::Circle, j) = Circle(move_j(shape.position, j), shape.radius)
+
 function draw!(image::AbstractMatrix, shape::Circle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
@@ -356,6 +359,9 @@ end
 #####
 ##### FilledCircle
 #####
+
+move_i(shape::FilledCircle, i) = FilledCircle(move_i(shape.position, i), shape.radius)
+move_j(shape::FilledCircle, j) = FilledCircle(move_j(shape.position, j), shape.radius)
 
 function draw!(image::AbstractMatrix, shape::FilledCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
@@ -456,6 +462,9 @@ function is_valid(shape::ThickCircle)
         return is_valid(OddThickCircle(position, diameter, thickness))
     end
 end
+
+move_i(shape::ThickCircle, i) = ThickCircle(move_i(shape.position, i), shape.radius, shape.thickness)
+move_j(shape::ThickCircle, j) = ThickCircle(move_j(shape.position, j), shape.radius, shape.thickness)
 
 function draw!(image::AbstractMatrix, shape::ThickCircle, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"

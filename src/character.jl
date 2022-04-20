@@ -41,6 +41,9 @@ get_i_max(shape::Character) = isprint(shape.character) ? shape.position.i + get_
 get_j_min(shape::Character) = shape.position.j
 get_j_max(shape::Character) = isprint(shape.character) ? shape.position.j + get_width(shape.font) - one(shape.position.j) : shape.position.j
 
+move_i(shape::Character, i) = Character(move_i(shape.position, i), shape.character, shape.font)
+move_j(shape::Character, j) = Character(move_j(shape.position, j), shape.character, shape.font)
+
 function draw!(image::AbstractMatrix, shape::Character{I, C, <:AbstractASCIIFont} where {I, C}, color)
     position = shape.position
     character = shape.character

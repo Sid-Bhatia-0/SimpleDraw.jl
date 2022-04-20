@@ -121,6 +121,9 @@ get_i_max(shape::FilledTriangle) = max(shape.point1.i, shape.point2.i, shape.poi
 get_j_min(shape::FilledTriangle) = min(shape.point1.j, shape.point2.j, shape.point3.j)
 get_j_max(shape::FilledTriangle) = max(shape.point1.j, shape.point2.j, shape.point3.j)
 
+move_i(shape::FilledTriangle, i) = Line(move_i(shape.point1, i), move_i(shape.point2, i), move_i(shape.point3, i))
+move_j(shape::FilledTriangle, j) = Line(move_j(shape.point1, j), move_j(shape.point2, j), move_j(shape.point3, j))
+
 get_drawing_optimization_style(::FilledTriangle) = CHECK_BOUNDS
 
 function sort_horizontal(point1, point2)

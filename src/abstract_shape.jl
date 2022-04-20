@@ -51,6 +51,12 @@ function is_inbounds(image::AbstractMatrix, shape::AbstractShape)
 end
 
 #####
+##### move shape
+#####
+
+move(shape::AbstractShape, i, j) = move_j(move_i(shape, i), j)
+
+#####
 ##### drawing a single pixel on the image
 #####
 
