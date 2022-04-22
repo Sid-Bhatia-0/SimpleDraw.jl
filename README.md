@@ -63,6 +63,10 @@ This package does not export any names. All the types in [List of shapes](#list-
 1. `get_i_max`
 1. `get_j_min`
 1. `get_j_max`
+1. `get_height`
+1. `get_width`
+1. `get_position`
+1. `move`
 
 Everything else should be considered internal for now.
 

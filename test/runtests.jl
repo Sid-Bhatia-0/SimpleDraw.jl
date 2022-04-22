@@ -13,6 +13,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 16
         Test.@test SD.get_j_min(shape) == 16
         Test.@test SD.get_j_max(shape) == 16
+        Test.@test SD.move(shape, 2, 3) == SD.Point(16 + 2, 16 + 3)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -70,6 +71,7 @@ Test.@testset "SimpleDraw.jl" begin
         image = falses(height, width)
         shape = SD.Background()
         Test.@test SD.is_valid(shape)
+        Test.@test SD.move(shape, 2, 3) == shape
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -424,6 +426,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 24
         Test.@test SD.get_j_min(shape) == 5
         Test.@test SD.get_j_max(shape) == 28
+        Test.@test SD.move(shape, 2, 3) == SD.Line(SD.Point(9 + 2, 5 + 3), SD.Point(24 + 2, 28 + 3))
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -577,6 +580,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 24 + 5 ÷ 2
         Test.@test SD.get_j_min(shape) == 5 - 5 ÷ 2
         Test.@test SD.get_j_max(shape) == 28 + 5 ÷ 2
+        Test.@test SD.move(shape, 2, 3) == SD.ThickLine(SD.Point(9 + 2, 5 + 3), SD.Point(24 + 2, 28 + 3), 5)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1794,6 +1798,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 30
         Test.@test SD.get_j_min(shape) == 2
         Test.@test SD.get_j_max(shape) == 30
+        Test.@test SD.move(shape, 2, 3) == SD.Circle(SD.Point(2 + 2, 2 + 3), 29)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -1947,6 +1952,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 31
         Test.@test SD.get_j_min(shape) == 2
         Test.@test SD.get_j_max(shape) == 31
+        Test.@test SD.move(shape, 2, 3) == SD.Circle(SD.Point(2 + 2, 2 + 3), 30)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -2365,6 +2371,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 30
         Test.@test SD.get_j_min(shape) == 2
         Test.@test SD.get_j_max(shape) == 30
+        Test.@test SD.move(shape, 2, 3) == SD.ThickCircle(SD.Point(2 + 2, 2 + 3), 29, 5)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -2518,6 +2525,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 31
         Test.@test SD.get_j_min(shape) == 2
         Test.@test SD.get_j_max(shape) == 31
+        Test.@test SD.move(shape, 2, 3) == SD.ThickCircle(SD.Point(2 + 2, 2 + 3), 30, 4)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -2671,6 +2679,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 30
         Test.@test SD.get_j_min(shape) == 2
         Test.@test SD.get_j_max(shape) == 30
+        Test.@test SD.move(shape, 2, 3) == SD.FilledCircle(SD.Point(2 + 2, 2 + 3), 29)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -2824,6 +2833,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 31
         Test.@test SD.get_j_min(shape) == 2
         Test.@test SD.get_j_max(shape) == 31
+        Test.@test SD.move(shape, 2, 3) == SD.FilledCircle(SD.Point(2 + 2, 2 + 3), 30)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -3427,6 +3437,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 24
         Test.@test SD.get_j_min(shape) == 5
         Test.@test SD.get_j_max(shape) == 28
+        Test.@test SD.move(shape, 2, 3) == SD.Rectangle(SD.Point(9 + 2, 5 + 3), 16, 24)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -3580,6 +3591,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 24
         Test.@test SD.get_j_min(shape) == 5
         Test.@test SD.get_j_max(shape) == 28
+        Test.@test SD.move(shape, 2, 3) == SD.FilledRectangle(SD.Point(9 + 2, 5 + 3), 16, 24)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -3733,6 +3745,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 24
         Test.@test SD.get_j_min(shape) == 5
         Test.@test SD.get_j_max(shape) == 28
+        Test.@test SD.move(shape, 2, 3) == SD.ThickRectangle(SD.Point(9 + 2, 5 + 3), 16, 24, 4)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -3932,6 +3945,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 26
         Test.@test SD.get_j_min(shape) == 3
         Test.@test SD.get_j_max(shape) == 28
+        Test.@test SD.move(shape, 2, 3) == SD.FilledTriangle(SD.Point(5 + 2, 14 + 3), SD.Point(18 + 2, 3 + 3), SD.Point(26 + 2, 28 + 3))
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -4131,6 +4145,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 32
         Test.@test SD.get_j_min(shape) == 1
         Test.@test SD.get_j_max(shape) == 16
+        Test.@test SD.move(shape, 2, 3) == SD.Character(SD.Point(1 + 2, 1 + 3), 'A', SD.TERMINUS_32_16)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -4199,6 +4214,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 32
         Test.@test SD.get_j_min(shape) == 1
         Test.@test SD.get_j_max(shape) == 64
+        Test.@test SD.move(shape, 2, 3) == SD.TextLine(SD.Point(1 + 2, 1 + 3), "Text", SD.TERMINUS_32_16)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([
@@ -4292,6 +4308,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 16
         Test.@test SD.get_j_min(shape) == 1
         Test.@test SD.get_j_max(shape) == 16
+        Test.@test SD.move(shape, 2, 3) == SD.Bitmap(SD.Point(1 + 2, 1 + 3), bitmap)
         color = true
         SD.draw!(image, shape, color)
         Test.@test image == BitArray([

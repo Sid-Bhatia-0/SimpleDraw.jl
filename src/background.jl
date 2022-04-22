@@ -8,6 +8,9 @@ get_i_max(shape::Background) = error("i_max for $(shape) depends upon the type o
 get_j_min(shape::Background) = error("j_min for $(shape) depends upon the type of image. Cannot determine it solely based on the shape")
 get_j_max(shape::Background) = error("j_max for $(shape) depends upon the type of image. Cannot determine it solely based on the shape")
 
+move_i(shape::Background, i) = shape
+move_j(shape::Background, j) = shape
+
 function draw!(f::F, image::AbstractMatrix, shape::Background, color) where {F <: Function}
     for j in axes(image, 2)
         for i in axes(image, 1)
