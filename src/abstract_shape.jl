@@ -184,6 +184,20 @@ function get_width(shape)
     return j_max - j_min + one(j_min)
 end
 
+"""
+    get_position(x)
+
+Return a `Point` corresponding to the position of the top-left corner of `x` (a shape or an image).
+
+# Examples
+```julia-repl
+julia> get_position(Line(Point(9, 5), Point(24, 28)))
+Point{Int64}(9, 5)
+
+julia> get_position(falses(32, 64))
+Point{Int64}(1, 1)
+```
+"""
 get_position(shape) = Point(get_i_min(shape), get_j_min(shape))
 
 function is_outbounds(image::AbstractMatrix, shape::AbstractShape)
