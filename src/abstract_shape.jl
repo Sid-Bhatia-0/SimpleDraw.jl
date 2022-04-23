@@ -7,21 +7,118 @@ abstract type AbstractShape end
 is_valid(::AbstractShape) = true
 
 #####
-##### functions for identifying where the shape lies with respect to the bounds of the image
+##### position related functions
 #####
 
+"""
+    get_i_min(shape)
+
+Return the minimum index of the bounding box of `shape` along the i-axis (vertical-axis, 1st-axis).
+
+# Examples
+```julia-repl
+julia> get_i_min(Line(Point(9, 5), Point(24, 28)))
+9
+```
+"""
+function get_i_min end
+
+"""
+    get_i_max(shape)
+
+Return the maximum index of the bounding box of `shape` along the i-axis (vertical-axis, 1st-axis).
+
+# Examples
+```julia-repl
+julia> get_i_max(Line(Point(9, 5), Point(24, 28)))
+24
+```
+"""
+function get_i_max end
+
+"""
+    get_j_min(shape)
+
+Return the minimum index of the bounding box of `shape` along the j-axis (horizontal-axis, 2nd-axis).
+
+# Examples
+```julia-repl
+julia> get_j_min(Line(Point(9, 5), Point(24, 28)))
+5
+```
+"""
+function get_j_min end
+
+"""
+    get_j_max(shape)
+
+Return the maximum index of the bounding box of `shape` along the j-axis (horizontal-axis, 2nd-axis).
+
+# Examples
+```julia-repl
+julia> get_j_max(Line(Point(9, 5), Point(24, 28)))
+28
+```
+"""
+function get_j_max end
+
+"""
+    get_i_min(image::AbstractMatrix)
+
+Return the first index of `image` along the i-axis (vertical-axis, 1st-axis).
+
+# Examples
+```julia-repl
+julia> get_i_min(falses(32, 64))
+1
+```
+"""
 get_i_min(image::AbstractMatrix) = firstindex(image, 1)
+
+"""
+    get_i_max(image::AbstractMatrix)
+
+Return the last index of `image` along the i-axis (vertical-axis, 1st-axis).
+
+# Examples
+```julia-repl
+julia> get_i_max(falses(32, 64))
+32
+"""
 get_i_max(image::AbstractMatrix) = lastindex(image, 1)
+
+"""
+    get_j_min(image::AbstractMatrix)
+
+Return the first index of `image` along the j-axis (horizontal-axis, 2nd-axis).
+
+# Examples
+```julia-repl
+julia> get_j_min(falses(32, 64))
+1
+```
+"""
+get_j_min(image::AbstractMatrix) = firstindex(image, 2)
+
+"""
+    get_j_max(image::AbstractMatrix)
+
+Return the last index of `image` along the j-axis (horizontal-axis, 2nd-axis).
+
+# Examples
+```julia-repl
+julia> get_j_max(falses(32, 64))
+64
+"""
+get_j_max(image::AbstractMatrix) = lastindex(image, 2)
+
 get_i_extrema(x) = (get_i_min(x), get_i_max(x))
+get_j_extrema(x) = (get_j_min(x), get_j_max(x))
 
 function get_height(shape)
     i_min, i_max = get_i_extrema(shape)
     return i_max - i_min + one(i_min)
 end
-
-get_j_min(image::AbstractMatrix) = firstindex(image, 2)
-get_j_max(image::AbstractMatrix) = lastindex(image, 2)
-get_j_extrema(x) = (get_j_min(x), get_j_max(x))
 
 function get_width(shape)
     j_min, j_max = get_j_extrema(shape)
