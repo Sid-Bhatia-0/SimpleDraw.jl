@@ -146,11 +146,39 @@ julia> get_j_extrema(falses(32, 64))
 """
 get_j_extrema(x) = (get_j_min(x), get_j_max(x))
 
+"""
+    get_height(x)
+
+Return the height of `x` (a shape or an image) along the i-axis (vertical-axis, 1st-axis).
+
+# Examples
+```julia-repl
+julia> get_height(Line(Point(9, 5), Point(24, 28)))
+16
+
+julia> get_height(falses(32, 64))
+32
+```
+"""
 function get_height(shape)
     i_min, i_max = get_i_extrema(shape)
     return i_max - i_min + one(i_min)
 end
 
+"""
+    get_width(x)
+
+Return the width of `x` (a shape or an image) along the j-axis (horizontal-axis, 2nd-axis).
+
+# Examples
+```julia-repl
+julia> get_width(Line(Point(9, 5), Point(24, 28)))
+24
+
+julia> get_width(falses(32, 64))
+64
+```
+"""
 function get_width(shape)
     j_min, j_max = get_j_extrema(shape)
     return j_max - j_min + one(j_min)
