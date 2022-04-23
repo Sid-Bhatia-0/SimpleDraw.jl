@@ -56,16 +56,20 @@ SD.visualize(image)
 
 ### API
 
-This package does not export any names. All the types in [List of shapes](#list-of-shapes), along with the following functions can be considered as a part of the API:
+All the types in [List of shapes](#list-of-shapes), the abstract type `AbstractShape`, and the following functions are a part of the API:
 1. `draw!`
 1. `is_valid`
 1. `get_i_min`
 1. `get_i_max`
 1. `get_j_min`
 1. `get_j_max`
+1. `get_i_extrema`
+1. `get_j_extrema`
 1. `get_height`
 1. `get_width`
 1. `get_position`
+1. `move_i`
+1. `move_j`
 1. `move`
 
 Everything else should be considered internal for now.
