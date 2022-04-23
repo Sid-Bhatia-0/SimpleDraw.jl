@@ -71,6 +71,7 @@ All the types in [List of shapes](#list-of-shapes), the abstract type `AbstractS
 1. `move_i`
 1. `move_j`
 1. `move`
+1. `visualize`
 
 Everything else should be considered internal for now.
 
