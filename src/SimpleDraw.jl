@@ -69,4 +69,7 @@ export move
 # shape drawing methods
 export draw!
 
+# drawing visualization methods
+export visualize
+
 end
