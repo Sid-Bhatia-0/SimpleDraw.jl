@@ -224,6 +224,43 @@ end
 ##### move shape
 #####
 
+"""
+    move_i(shape, i)
+
+Return the shape obtained by translating `shape` by `i` pixels along the i-axis (vertical-axis).
+
+# Examples
+```julia-repl
+julia> move_i(Line(Point(9, 5), Point(24, 28)), 2)
+Line{Int64}(Point{Int64}(11, 5), Point{Int64}(26, 28))
+```
+"""
+function move_i end
+
+"""
+    move_j(shape, j)
+
+Return the shape obtained by translating `shape` by `j` pixels along the j-axis (horizontal-axis).
+
+# Examples
+```julia-repl
+julia> move_j(Line(Point(9, 5), Point(24, 28)), 3)
+Line{Int64}(Point{Int64}(9, 8), Point{Int64}(24, 31))
+```
+"""
+function move_j end
+
+"""
+    move(shape::AbstractShape, i, j)
+
+Return the shape obtained by translating `shape` by `i` pixels along the i-axis (vertical-axis) and `j` pixels along the j-axis (horizontal-axis).
+
+# Examples
+```julia-repl
+julia> move(Line(Point(9, 5), Point(24, 28)), 2, 3)
+Line{Int64}(Point{Int64}(11, 8), Point{Int64}(26, 31))
+```
+"""
 move(shape::AbstractShape, i, j) = move_j(move_i(shape, i), j)
 
 #####
