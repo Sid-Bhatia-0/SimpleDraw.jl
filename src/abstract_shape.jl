@@ -84,6 +84,7 @@ Return the last index of `image` along the i-axis (vertical-axis, 1st-axis).
 ```julia-repl
 julia> get_i_max(falses(32, 64))
 32
+```
 """
 get_i_max(image::AbstractMatrix) = lastindex(image, 1)
 
@@ -109,10 +110,40 @@ Return the last index of `image` along the j-axis (horizontal-axis, 2nd-axis).
 ```julia-repl
 julia> get_j_max(falses(32, 64))
 64
+```
 """
 get_j_max(image::AbstractMatrix) = lastindex(image, 2)
 
+"""
+    get_i_extrema(x)
+
+Return the minimum and maximum index of `x` (a shape or an image) along the i-axis (vertical-axis, 1st-axis).
+
+# Examples
+```julia-repl
+julia> get_i_extrema(Line(Point(9, 5), Point(24, 28)))
+(9, 24)
+
+julia> get_i_extrema(falses(32, 64))
+(1, 32)
+```
+"""
 get_i_extrema(x) = (get_i_min(x), get_i_max(x))
+
+"""
+    get_j_extrema(x)
+
+Return the minimum and maximum index of `x` (a shape or an image) along the j-axis (horizontal-axis, 2nd-axis).
+
+# Examples
+```julia-repl
+julia> get_j_extrema(Line(Point(9, 5), Point(24, 28)))
+(5, 28)
+
+julia> get_j_extrema(falses(32, 64))
+(1, 64)
+```
+"""
 get_j_extrema(x) = (get_j_min(x), get_j_max(x))
 
 function get_height(shape)
