@@ -281,6 +281,25 @@ function put_pixel_inbounds!(image::AbstractMatrix, i, j, color)
 end
 
 #####
+##### drawing shapes
+#####
+
+"""
+    draw!(image, shape, color)
+
+Draw the geometric shape `shape` on the image array `image` with value `color` and return `nothing`.
+
+# Examples
+```julia-repl
+julia> image = falses(32, 32); shape = Line(Point(9, 5), Point(24, 28)); color = true;
+
+julia> draw!(image, shape, color)
+
+```
+"""
+function draw! end
+
+#####
 ##### DrawingOptimizationStyle to define generic draw! methods with different levels of optimization for drawing shapes
 #####
 
