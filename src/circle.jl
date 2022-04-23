@@ -24,6 +24,11 @@ struct EvenCircle{I <: Integer} <: AbstractCircle
 end
 
 """
+    struct Circle{I <: Integer} <: AbstractCircle
+        position::Point{I}
+        diameter::I
+    end
+
 # Examples
 ```julia-repl
 julia> image = falses(32, 32); shape = Circle(Point(2, 2), 30); color = true;
@@ -82,6 +87,11 @@ struct EvenFilledCircle{I <: Integer} <: AbstractCircle
 end
 
 """
+    struct FilledCircle{I <: Integer} <: AbstractCircle
+        position::Point{I}
+        diameter::I
+    end
+
 # Examples
 ```julia-repl
 julia> image = falses(32, 32); shape = FilledCircle(Point(2, 2), 30); color = true;
@@ -142,6 +152,12 @@ struct EvenThickCircle{I <: Integer} <: AbstractCircle
 end
 
 """
+    struct ThickCircle{I <: Integer} <: AbstractCircle
+        position::Point{I}
+        diameter::I
+        thickness::I
+    end
+
 # Examples
 ```julia-repl
 julia> image = falses(32, 32); shape = ThickCircle(Point(2, 2), 30, 4); color = true;

@@ -1,4 +1,9 @@
 """
+    struct Point{I <: Integer} <: AbstractShape
+        i::I
+        j::I
+    end
+
 # Examples
 ```julia-repl
 julia> image = falses(32, 32); shape = Point(17, 17); color = true;

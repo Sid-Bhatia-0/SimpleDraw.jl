@@ -1,6 +1,12 @@
 abstract type AbstractRectangle <: AbstractShape end
 
 """
+    struct Rectangle{I <: Integer} <: AbstractRectangle
+        position::Point{I}
+        height::I
+        width::I
+    end
+
 # Examples
 ```julia-repl
 julia> image = falses(32, 32); shape = Rectangle(Point(9, 5), 16, 24); color = true;
@@ -50,6 +56,12 @@ struct Rectangle{I <: Integer} <: AbstractRectangle
 end
 
 """
+    struct FilledRectangle{I <: Integer} <: AbstractRectangle
+        position::Point{I}
+        height::I
+        width::I
+    end
+
 # Examples
 ```julia-repl
 julia> image = falses(32, 32); shape = FilledRectangle(Point(9, 5), 16, 24); color = true;
@@ -99,6 +111,13 @@ struct FilledRectangle{I <: Integer} <: AbstractRectangle
 end
 
 """
+    struct ThickRectangle{I <: Integer} <: AbstractRectangle
+        position::Point{I}
+        height::I
+        width::I
+        thickness::I
+    end
+
 # Examples
 ```julia-repl
 julia> image = falses(32, 32); shape = ThickRectangle(Point(9, 5), 16, 24, 4); color = true;

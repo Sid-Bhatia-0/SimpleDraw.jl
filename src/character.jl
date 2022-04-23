@@ -17,6 +17,12 @@ get_height(font::Terminus_16_8) = 16
 get_width(font::Terminus_16_8) = 8
 
 """
+    struct Character{I <: Integer, C <: AbstractChar, F <: AbstractFont} <: AbstractShape
+        position::Point{I}
+        character::C
+        font::F
+    end
+
 # Examples
 ```julia-repl
 julia> image = falses(32, 32); shape = Character(Point(1, 1), 'A', TERMINUS_32_16); color = true;

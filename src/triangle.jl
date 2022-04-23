@@ -6,6 +6,12 @@ struct VerticalBaseFilledTriangle{I <: Integer} <: AbstractTriangle
 end
 
 """
+    struct FilledTriangle{I <: Integer} <: AbstractTriangle
+        point1::Point{I}
+        point2::Point{I}
+        point3::Point{I}
+    end
+
 # Examples
 ```julia-repl
 julia> image = falses(32, 32); shape = FilledTriangle(Point(5, 14), Point(18, 3), Point(26, 28)); color = true;

@@ -1,4 +1,10 @@
 """
+    struct TextLine{I <: Integer, S, F <: AbstractFont} <: AbstractShape
+        position::Point{I}
+        text::S
+        font::F
+    end
+
 # Examples
 ```julia-repl
 julia> image = falses(32, 64); shape = TextLine(Point(1, 1), "Text", TERMINUS_32_16); color = true;

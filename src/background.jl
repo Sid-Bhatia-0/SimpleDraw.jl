@@ -1,4 +1,6 @@
 """
+    struct Background <: AbstractShape end
+
 # Examples
 ```julia-repl
 julia> image = falses(32, 32); shape = Background(); color = true;

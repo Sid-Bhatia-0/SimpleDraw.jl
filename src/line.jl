@@ -13,6 +13,11 @@ struct HorizontalLine{I <: Integer} <: AbstractLine
 end
 
 """
+    struct Line{I <: Integer} <: AbstractLine
+        point1::Point{I}
+        point2::Point{I}
+    end
+
 # Examples
 ```julia-repl
 julia> image = falses(32, 32); shape = Line(Point(9, 5), Point(24, 28)); color = true;
@@ -61,6 +66,12 @@ struct Line{I <: Integer} <: AbstractLine
 end
 
 """
+    struct ThickLine{I <: Integer} <: AbstractLine
+        point1::Point{I}
+        point2::Point{I}
+        thickness::I
+    end
+
 # Examples
 ```julia-repl
 julia> image = falses(32, 32); shape = ThickLine(Point(9, 5), Point(24, 28), 5); color = true;
