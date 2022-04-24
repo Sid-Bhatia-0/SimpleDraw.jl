@@ -62,7 +62,7 @@ move_j(shape::Point, j) = Point(shape.i, shape.j + j)
 
 get_drawing_optimization_style(::Point) = PUT_PIXEL
 
-function draw!(f::F, image::AbstractMatrix, shape::Point, color) where {F <: Function}
+function draw!(f::F, image, shape::Point, color) where {F <: Function}
     f(image, shape.i, shape.j, color)
     return nothing
 end

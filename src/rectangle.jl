@@ -208,7 +208,7 @@ get_drawing_optimization_style(::AbstractRectangle) = CHECK_BOUNDS
 move_i(shape::Rectangle, i) = Rectangle(move_i(shape.position, i), shape.height, shape.width)
 move_j(shape::Rectangle, j) = Rectangle(move_j(shape.position, j), shape.height, shape.width)
 
-function draw!(f::F, image::AbstractMatrix, shape::Rectangle, color) where {F <: Function}
+function draw!(f::F, image, shape::Rectangle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     i_min, i_max = get_i_extrema(shape)
@@ -229,7 +229,7 @@ end
 move_i(shape::FilledRectangle, i) = FilledRectangle(move_i(shape.position, i), shape.height, shape.width)
 move_j(shape::FilledRectangle, j) = FilledRectangle(move_j(shape.position, j), shape.height, shape.width)
 
-function clip(image::AbstractMatrix, shape::FilledRectangle)
+function clip(image, shape::FilledRectangle)
     i_min_shape, i_max_shape = get_i_extrema(shape)
     i_min_image, i_max_image = get_i_extrema(image)
 
@@ -249,7 +249,7 @@ end
 
 get_drawing_optimization_style(::FilledRectangle) = CLIP
 
-function draw!(f::F, image::AbstractMatrix, shape::FilledRectangle, color) where {F <: Function}
+function draw!(f::F, image, shape::FilledRectangle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     i_min, i_max = get_i_extrema(shape)
@@ -281,7 +281,7 @@ function is_valid(shape::ThickRectangle)
     return height > zero(I) && width > zero(I) && thickness > zero(I) && thickness <= min(height, width)
 end
 
-function draw!(f::F, image::AbstractMatrix, shape::ThickRectangle, color) where {F <: Function}
+function draw!(f::F, image, shape::ThickRectangle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position

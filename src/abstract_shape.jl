@@ -18,7 +18,7 @@ julia> is_valid(Rectangle(Point(9, 5), -16, 24))
 false
 ```
 """
-is_valid(::AbstractShape) = true
+is_valid(shape) = true
 
 #####
 ##### position related functions
@@ -230,7 +230,7 @@ Point{Int64}(1, 1)
 """
 get_position(shape) = Point(get_i_min(shape), get_j_min(shape))
 
-function is_outbounds(image::AbstractMatrix, shape::AbstractShape)
+function is_outbounds(image, shape)
     i_min_shape, i_max_shape = get_i_extrema(shape)
     i_min_image, i_max_image = get_i_extrema(image)
 
@@ -240,7 +240,7 @@ function is_outbounds(image::AbstractMatrix, shape::AbstractShape)
     return i_max_shape < i_min_image || i_min_shape > i_max_image || j_max_shape < j_min_image || j_min_shape > j_max_image
 end
 
-function is_inbounds(image::AbstractMatrix, shape::AbstractShape)
+function is_inbounds(image, shape)
     i_min_shape, i_max_shape = get_i_extrema(shape)
     i_min_image, i_max_image = get_i_extrema(image)
 
@@ -285,7 +285,7 @@ Line{Int64}(Point{Int64}(9, 8), Point{Int64}(24, 31))
 function move_j end
 
 """
-    move(shape::AbstractShape, i, j)
+    move(shape, i, j)
 
 Return the shape obtained by translating `shape` by `i` pixels along the i-axis (vertical-axis) and `j` pixels along the j-axis (horizontal-axis).
 
@@ -297,13 +297,13 @@ julia> move(Line(Point(9, 5), Point(24, 28)), 2, 3)
 Line{Int64}(Point{Int64}(11, 8), Point{Int64}(26, 31))
 ```
 """
-move(shape::AbstractShape, i, j) = move_j(move_i(shape, i), j)
+move(shape, i, j) = move_j(move_i(shape, i), j)
 
 #####
 ##### drawing a single pixel on the image
 #####
 
-function put_pixel!(image::AbstractMatrix, i, j, color)
+function put_pixel!(image, i, j, color)
     if checkbounds(Bool, image, i, j)
         put_pixel_inbounds!(image, i, j, color)
     end
@@ -311,7 +311,7 @@ function put_pixel!(image::AbstractMatrix, i, j, color)
     return nothing
 end
 
-function put_pixel_inbounds!(image::AbstractMatrix, i, j, color)
+function put_pixel_inbounds!(image, i, j, color)
     @inbounds image[i, j] = color
     return nothing
 end
@@ -343,7 +343,7 @@ abstract type DrawingOptimizationStyle end
 
 get_drawing_optimization_style(shape) = PUT_PIXEL
 
-draw!(image::AbstractMatrix, shape::AbstractShape, color) = draw!(get_drawing_optimization_style(shape), image, shape, color)
+draw!(image, shape, color) = draw!(get_drawing_optimization_style(shape), image, shape, color)
 
 #####
 ##### PutPixel (least optimized)
@@ -352,7 +352,7 @@ draw!(image::AbstractMatrix, shape::AbstractShape, color) = draw!(get_drawing_op
 struct PutPixel <: DrawingOptimizationStyle end
 const PUT_PIXEL = PutPixel()
 
-draw!(::PutPixel, image::AbstractMatrix, shape::AbstractShape, color) = draw!(put_pixel!, image, shape, color)
+draw!(::PutPixel, image, shape, color) = draw!(put_pixel!, image, shape, color)
 
 #####
 ##### CheckBounds (checks outbounds and inbounds conditions and dispatches accordingly)
@@ -361,7 +361,7 @@ draw!(::PutPixel, image::AbstractMatrix, shape::AbstractShape, color) = draw!(pu
 struct CheckBounds <: DrawingOptimizationStyle end
 const CHECK_BOUNDS = CheckBounds()
 
-function draw!(::CheckBounds, image::AbstractMatrix, shape::AbstractShape, color)
+function draw!(::CheckBounds, image, shape, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_outbounds(image, shape)
@@ -384,7 +384,7 @@ end
 struct Clip <: DrawingOptimizationStyle end
 const CLIP = Clip()
 
-function draw!(::Clip, image::AbstractMatrix, shape::AbstractShape, color)
+function draw!(::Clip, image, shape, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_outbounds(image, shape)
@@ -403,4 +403,4 @@ end
 struct PutPixelInbounds <: DrawingOptimizationStyle end
 const PUT_PIXEL_INBOUNDS = PutPixelInbounds()
 
-draw!(::PutPixelInbounds, image::AbstractMatrix, shape::AbstractShape, color) = draw!(put_pixel_inbounds!, image, shape, color)
+draw!(::PutPixelInbounds, image, shape, color) = draw!(put_pixel_inbounds!, image, shape, color)

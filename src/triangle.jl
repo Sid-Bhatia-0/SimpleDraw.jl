@@ -74,7 +74,7 @@ get_j_max(shape::VerticalBaseFilledTriangle) = max(shape.vertical_line.j, shape.
 
 get_drawing_optimization_style(::VerticalBaseFilledTriangle) = CHECK_BOUNDS
 
-function draw!(f::F, image::AbstractMatrix, shape::VerticalBaseFilledTriangle, color) where {F <: Function}
+function draw!(f::F, image, shape::VerticalBaseFilledTriangle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     i1 = shape.vertical_line.i_min
@@ -202,7 +202,7 @@ function vertical_line_intersection(point1, point2, j)
     return i
 end
 
-function draw!(f::F, image::AbstractMatrix, shape::FilledTriangle, color) where {F <: Function}
+function draw!(f::F, image, shape::FilledTriangle, color) where {F <: Function}
     point1, point2, point3 = sort_horizontal(shape.point1, shape.point2, shape.point3)
 
     i1 = point1.i

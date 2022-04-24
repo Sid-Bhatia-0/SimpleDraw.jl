@@ -56,7 +56,7 @@ get_j_max(shape::Background) = error("j_max for $(shape) depends upon the type o
 move_i(shape::Background, i) = shape
 move_j(shape::Background, j) = shape
 
-function draw!(f::F, image::AbstractMatrix, shape::Background, color) where {F <: Function}
+function draw!(f::F, image, shape::Background, color) where {F <: Function}
     for j in axes(image, 2)
         for i in axes(image, 1)
             f(image, i, j, color)
