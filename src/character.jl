@@ -10,7 +10,40 @@ const FONTS = [
                TERMINUS_16_8,
               ]
 
+"""
+    get_height(font::AbstractFont)
+
+Return the height of a glyph contained in the monospace font `font` along the i-axis (vertical-axis, 1st-axis).
+
+See also [`get_width`](@ref).
+
+# Examples
+```julia-repl
+julia> get_height(TERMINUS_32_16)
+32
+
+julia> get_height(TERMINUS_16_8)
+16
+```
+"""
 get_height(font::Terminus_32_16) = 32
+
+"""
+    get_width(font::AbstractFont)
+
+Return the width of a glyph contained in the monospace font `font` along the j-axis (horizontal-axis, 2nd-axis).
+
+See also [`get_width`](@ref).
+
+# Examples
+```julia-repl
+julia> get_width(TERMINUS_32_16)
+16
+
+julia> get_width(TERMINUS_16_8)
+8
+```
+"""
 get_width(font::Terminus_32_16) = 16
 
 get_height(font::Terminus_16_8) = 16
