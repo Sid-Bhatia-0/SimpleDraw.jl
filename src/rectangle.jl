@@ -229,7 +229,7 @@ end
 move_i(shape::FilledRectangle, i) = FilledRectangle(move_i(shape.position, i), shape.height, shape.width)
 move_j(shape::FilledRectangle, j) = FilledRectangle(move_j(shape.position, j), shape.height, shape.width)
 
-function clip(image::AbstractMatrix, shape::FilledRectangle)
+function clip(image, shape::FilledRectangle)
     i_min_shape, i_max_shape = get_i_extrema(shape)
     i_min_image, i_max_image = get_i_extrema(image)
 
