@@ -285,7 +285,7 @@ Line{Int64}(Point{Int64}(9, 8), Point{Int64}(24, 31))
 function move_j end
 
 """
-    move(shape::AbstractShape, i, j)
+    move(shape, i, j)
 
 Return the shape obtained by translating `shape` by `i` pixels along the i-axis (vertical-axis) and `j` pixels along the j-axis (horizontal-axis).
 
@@ -297,7 +297,7 @@ julia> move(Line(Point(9, 5), Point(24, 28)), 2, 3)
 Line{Int64}(Point{Int64}(11, 8), Point{Int64}(26, 31))
 ```
 """
-move(shape::AbstractShape, i, j) = move_j(move_i(shape, i), j)
+move(shape, i, j) = move_j(move_i(shape, i), j)
 
 #####
 ##### drawing a single pixel on the image
