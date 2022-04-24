@@ -303,7 +303,7 @@ move(shape, i, j) = move_j(move_i(shape, i), j)
 ##### drawing a single pixel on the image
 #####
 
-function put_pixel!(image::AbstractMatrix, i, j, color)
+function put_pixel!(image, i, j, color)
     if checkbounds(Bool, image, i, j)
         put_pixel_inbounds!(image, i, j, color)
     end
@@ -311,7 +311,7 @@ function put_pixel!(image::AbstractMatrix, i, j, color)
     return nothing
 end
 
-function put_pixel_inbounds!(image::AbstractMatrix, i, j, color)
+function put_pixel_inbounds!(image, i, j, color)
     @inbounds image[i, j] = color
     return nothing
 end
