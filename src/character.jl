@@ -128,7 +128,7 @@ get_j_max(shape::Character) = isprint(shape.character) ? shape.position.j + get_
 move_i(shape::Character, i) = Character(move_i(shape.position, i), shape.character, shape.font)
 move_j(shape::Character, j) = Character(move_j(shape.position, j), shape.character, shape.font)
 
-function draw!(image, shape::Character{I, C, <:AbstractASCIIFont} where {I, C}, color)
+function draw!(image, shape::Character, color)
     position = shape.position
     character = shape.character
     font = shape.font
@@ -154,7 +154,7 @@ function draw!(image, shape::Character{I, C, <:AbstractASCIIFont} where {I, C}, 
     return nothing
 end
 
-function draw!(f::F, image, shape::Character{I, C, <:AbstractASCIIFont} where {I, C}, color) where {F <: Function}
+function draw!(f::F, image, shape::Character, color) where {F <: Function}
     position = shape.position
     character = shape.character
     font = shape.font
