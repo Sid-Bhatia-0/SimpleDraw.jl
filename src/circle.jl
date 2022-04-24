@@ -29,6 +29,11 @@ end
         diameter::I
     end
 
+The advantage of using `position` and `diameter` instead of center and radius is that the same type can handle both odd and even values of diameter. An instance of this type is considered valid only if the following conditions hold true:
+1. `diameter > 0`
+
+See also [`FilledCircle`](@ref), [`ThickCircle`](@ref).
+
 # Examples
 ```julia-repl
 julia> image = falses(32, 32); shape = Circle(Point(2, 2), 30); color = true;
@@ -91,6 +96,11 @@ end
         position::Point{I}
         diameter::I
     end
+
+The advantage of using `position` and `diameter` instead of center and radius is that the same type can handle both odd and even values of diameter. An instance of this type is considered valid only if the following conditions hold true:
+1. `diameter > 0`
+
+See also [`Circle`](@ref), [`ThickCircle`](@ref).
 
 # Examples
 ```julia-repl
@@ -157,6 +167,14 @@ end
         diameter::I
         thickness::I
     end
+
+The advantage of using `position` and `diameter` instead of center and radius is that the same type can handle both odd and even values of diameter. An instance of this type is considered valid only if the following conditions hold true:
+1. `diameter > 0`
+2. `thickness > 0`
+3. if `diameter` is odd, then `2 * thickness <= diameter + 1`
+4. if `diameter` is even, then `2 * thickness <= diameter`
+
+See also [`Circle`](@ref), [`FilledCircle`](@ref).
 
 # Examples
 ```julia-repl

@@ -5,6 +5,10 @@
         font::F
     end
 
+There are two monospace fonts available at this point - `TERMINUS_32_16` (height 32 pixels, width 16 pixels) and `TERMINUS_16_8` (height 16 pixels, width 8 pixels). Only glyphs for ASCII characters are available as of now.
+
+See also [`Character`](@ref).
+
 # Examples
 ```julia-repl
 julia> image = falses(32, 64); shape = TextLine(Point(1, 1), "Text", TERMINUS_32_16); color = true;

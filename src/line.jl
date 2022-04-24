@@ -18,6 +18,10 @@ end
         point2::Point{I}
     end
 
+The present line drawing algorithm is not symmetric in general. Reversing the order of points may produce different outcomes.
+
+See also [`ThickLine`](@ref).
+
 # Examples
 ```julia-repl
 julia> image = falses(32, 32); shape = Line(Point(9, 5), Point(24, 28)); color = true;
@@ -71,6 +75,11 @@ end
         point2::Point{I}
         thickness::I
     end
+
+The present line drawing algorithm is not symmetric in general. Reversing the order of points may produce different outcomes. An instance of this type is considered valid only if the following conditions hold true:
+1. `thickness > 0`
+
+See also [`Line`](@ref).
 
 # Examples
 ```julia-repl

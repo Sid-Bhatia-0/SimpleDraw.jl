@@ -7,6 +7,12 @@ abstract type AbstractRectangle <: AbstractShape end
         width::I
     end
 
+An instance of this type is considered valid only if the following conditions hold true:
+1. `height > 0`
+2. `width > 0`
+
+See also [`FilledRectangle`](@ref), [`ThickRectangle`](@ref).
+
 # Examples
 ```julia-repl
 julia> image = falses(32, 32); shape = Rectangle(Point(9, 5), 16, 24); color = true;
@@ -61,6 +67,12 @@ end
         height::I
         width::I
     end
+
+An instance of this type is considered valid only if the following conditions hold true:
+1. `height > 0`
+2. `width > 0`
+
+See also [`Rectangle`](@ref), [`ThickRectangle`](@ref).
 
 # Examples
 ```julia-repl
@@ -117,6 +129,14 @@ end
         width::I
         thickness::I
     end
+
+An instance of this type is considered valid only if the following conditions hold true:
+1. `height > 0`
+2. `width > 0`
+3. `thickness > 0`
+4. `thickness <= min(height, width)`
+
+See also [`Rectangle`](@ref), [`FilledRectangle`](@ref).
 
 # Examples
 ```julia-repl

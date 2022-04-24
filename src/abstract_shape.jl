@@ -29,6 +29,8 @@ is_valid(::AbstractShape) = true
 
 Return the minimum index of the bounding box of `shape` along the i-axis (vertical-axis, 1st-axis).
 
+See also [`get_i_max`](@ref), [`get_j_min`](@ref), [`get_j_max`](@ref).
+
 # Examples
 ```julia-repl
 julia> get_i_min(Line(Point(9, 5), Point(24, 28)))
@@ -41,6 +43,8 @@ function get_i_min end
     get_i_max(shape)
 
 Return the maximum index of the bounding box of `shape` along the i-axis (vertical-axis, 1st-axis).
+
+See also [`get_i_min`](@ref), [`get_j_min`](@ref), [`get_j_max`](@ref).
 
 # Examples
 ```julia-repl
@@ -55,6 +59,8 @@ function get_i_max end
 
 Return the minimum index of the bounding box of `shape` along the j-axis (horizontal-axis, 2nd-axis).
 
+See also [`get_j_max`](@ref), [`get_i_min`](@ref), [`get_i_max`](@ref).
+
 # Examples
 ```julia-repl
 julia> get_j_min(Line(Point(9, 5), Point(24, 28)))
@@ -67,6 +73,8 @@ function get_j_min end
     get_j_max(shape)
 
 Return the maximum index of the bounding box of `shape` along the j-axis (horizontal-axis, 2nd-axis).
+
+See also [`get_j_min`](@ref), [`get_i_min`](@ref), [`get_i_max`](@ref).
 
 # Examples
 ```julia-repl
@@ -133,6 +141,8 @@ get_j_max(image::AbstractMatrix) = lastindex(image, 2)
 
 Return the minimum and maximum index of `x` (a shape or an image) along the i-axis (vertical-axis, 1st-axis).
 
+See also [`get_j_extrema`](@ref).
+
 # Examples
 ```julia-repl
 julia> get_i_extrema(Line(Point(9, 5), Point(24, 28)))
@@ -149,6 +159,8 @@ get_i_extrema(x) = (get_i_min(x), get_i_max(x))
 
 Return the minimum and maximum index of `x` (a shape or an image) along the j-axis (horizontal-axis, 2nd-axis).
 
+See also [`get_i_extrema`](@ref).
+
 # Examples
 ```julia-repl
 julia> get_j_extrema(Line(Point(9, 5), Point(24, 28)))
@@ -164,6 +176,8 @@ get_j_extrema(x) = (get_j_min(x), get_j_max(x))
     get_height(x)
 
 Return the height of `x` (a shape or an image) along the i-axis (vertical-axis, 1st-axis).
+
+See also [`get_width`](@ref).
 
 # Examples
 ```julia-repl
@@ -183,6 +197,8 @@ end
     get_width(x)
 
 Return the width of `x` (a shape or an image) along the j-axis (horizontal-axis, 2nd-axis).
+
+See also [`get_height`](@ref).
 
 # Examples
 ```julia-repl
@@ -243,6 +259,8 @@ end
 
 Return the shape obtained by translating `shape` by `i` pixels along the i-axis (vertical-axis).
 
+See also [`move_j`](@ref), [`move`](@ref).
+
 # Examples
 ```julia-repl
 julia> move_i(Line(Point(9, 5), Point(24, 28)), 2)
@@ -256,6 +274,8 @@ function move_i end
 
 Return the shape obtained by translating `shape` by `j` pixels along the j-axis (horizontal-axis).
 
+See also [`move_i`](@ref), [`move`](@ref).
+
 # Examples
 ```julia-repl
 julia> move_j(Line(Point(9, 5), Point(24, 28)), 3)
@@ -268,6 +288,8 @@ function move_j end
     move(shape::AbstractShape, i, j)
 
 Return the shape obtained by translating `shape` by `i` pixels along the i-axis (vertical-axis) and `j` pixels along the j-axis (horizontal-axis).
+
+See also [`move_i`](@ref), [`move_j`](@ref).
 
 # Examples
 ```julia-repl
