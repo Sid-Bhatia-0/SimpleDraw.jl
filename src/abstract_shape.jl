@@ -18,7 +18,7 @@ julia> is_valid(Rectangle(Point(9, 5), -16, 24))
 false
 ```
 """
-is_valid(::AbstractShape) = true
+is_valid(shape) = true
 
 #####
 ##### position related functions
