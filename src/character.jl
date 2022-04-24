@@ -108,6 +108,8 @@ struct Character{I <: Integer, C <: AbstractChar, F <: AbstractFont} <: Abstract
     font::F
 end
 
+has_char(font::AbstractASCIIFont, character) = isascii(character) && isprint(character)
+
 function get_bitmap(font, character)
     bitmap = font.bitmap
 
