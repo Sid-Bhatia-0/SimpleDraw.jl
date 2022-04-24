@@ -343,7 +343,7 @@ abstract type DrawingOptimizationStyle end
 
 get_drawing_optimization_style(shape) = PUT_PIXEL
 
-draw!(image::AbstractMatrix, shape::AbstractShape, color) = draw!(get_drawing_optimization_style(shape), image, shape, color)
+draw!(image, shape, color) = draw!(get_drawing_optimization_style(shape), image, shape, color)
 
 #####
 ##### PutPixel (least optimized)
@@ -352,7 +352,7 @@ draw!(image::AbstractMatrix, shape::AbstractShape, color) = draw!(get_drawing_op
 struct PutPixel <: DrawingOptimizationStyle end
 const PUT_PIXEL = PutPixel()
 
-draw!(::PutPixel, image::AbstractMatrix, shape::AbstractShape, color) = draw!(put_pixel!, image, shape, color)
+draw!(::PutPixel, image, shape, color) = draw!(put_pixel!, image, shape, color)
 
 #####
 ##### CheckBounds (checks outbounds and inbounds conditions and dispatches accordingly)
@@ -361,7 +361,7 @@ draw!(::PutPixel, image::AbstractMatrix, shape::AbstractShape, color) = draw!(pu
 struct CheckBounds <: DrawingOptimizationStyle end
 const CHECK_BOUNDS = CheckBounds()
 
-function draw!(::CheckBounds, image::AbstractMatrix, shape::AbstractShape, color)
+function draw!(::CheckBounds, image, shape, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_outbounds(image, shape)
@@ -384,7 +384,7 @@ end
 struct Clip <: DrawingOptimizationStyle end
 const CLIP = Clip()
 
-function draw!(::Clip, image::AbstractMatrix, shape::AbstractShape, color)
+function draw!(::Clip, image, shape, color)
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     if is_outbounds(image, shape)
@@ -403,4 +403,4 @@ end
 struct PutPixelInbounds <: DrawingOptimizationStyle end
 const PUT_PIXEL_INBOUNDS = PutPixelInbounds()
 
-draw!(::PutPixelInbounds, image::AbstractMatrix, shape::AbstractShape, color) = draw!(put_pixel_inbounds!, image, shape, color)
+draw!(::PutPixelInbounds, image, shape, color) = draw!(put_pixel_inbounds!, image, shape, color)
