@@ -98,7 +98,7 @@ end
 move_i(shape::TextLine, i) = TextLine(move_i(shape.position, i), shape.text, shape.font)
 move_j(shape::TextLine, j) = TextLine(move_j(shape.position, j), shape.text, shape.font)
 
-function draw!(f::F, image::AbstractMatrix, shape::TextLine, color) where {F <: Function}
+function draw!(f::F, image, shape::TextLine, color) where {F <: Function}
     position = shape.position
     text = shape.text
     font = shape.font
