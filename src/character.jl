@@ -108,7 +108,7 @@ struct Character{I <: Integer, C <: AbstractChar, F <: AbstractFont} <: Abstract
     font::F
 end
 
-function get_bitmap(font::AbstractASCIIFont, character)
+function get_bitmap(font, character)
     bitmap = font.bitmap
 
     codepoint_begin = codepoint(' ')
