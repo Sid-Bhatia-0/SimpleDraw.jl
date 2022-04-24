@@ -47,6 +47,12 @@ export FilledTriangle
 export Character
 export TextLine
 
+# export font types and constants
+export Terminus_32_16
+export TERMINUS_32_16
+export Terminus_16_8
+export TERMINUS_16_8
+
 # export shape validation methods
 export is_valid
 

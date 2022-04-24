@@ -56,7 +56,12 @@ SD.visualize(image)
 
 ### API
 
-All the types in [List of shapes](#list-of-shapes), the abstract type `AbstractShape`, and the following functions are a part of the API:
+The following types are part of the API.
+1. All types in [List of shapes](#list-of-shapes)
+1. The abstract type `AbstractShape`
+1. The font types `Terminus_32_16`, `Terminus_16_8`, and their corresponding constants `TERMINUS_32_16`, `TERMINUS_16_8`.
+
+The following functions are part of the API:
 1. `draw!`
 1. `is_valid`
 1. `get_i_min`
