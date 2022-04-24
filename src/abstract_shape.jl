@@ -230,7 +230,7 @@ Point{Int64}(1, 1)
 """
 get_position(shape) = Point(get_i_min(shape), get_j_min(shape))
 
-function is_outbounds(image::AbstractMatrix, shape::AbstractShape)
+function is_outbounds(image, shape)
     i_min_shape, i_max_shape = get_i_extrema(shape)
     i_min_image, i_max_image = get_i_extrema(image)
 
@@ -240,7 +240,7 @@ function is_outbounds(image::AbstractMatrix, shape::AbstractShape)
     return i_max_shape < i_min_image || i_min_shape > i_max_image || j_max_shape < j_min_image || j_min_shape > j_max_image
 end
 
-function is_inbounds(image::AbstractMatrix, shape::AbstractShape)
+function is_inbounds(image, shape)
     i_min_shape, i_max_shape = get_i_extrema(shape)
     i_min_image, i_max_image = get_i_extrema(image)
 
