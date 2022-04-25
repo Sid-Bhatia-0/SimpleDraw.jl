@@ -57,7 +57,7 @@ function get_bitmap(font, character)
     codepoint_begin = codepoint(' ')
     k = codepoint(character) - codepoint_begin + one(codepoint_begin)
 
-    char_bitmap = @view bitmaps[:, :, k]
+    bitmap = @view bitmaps[:, :, k]
 
-    return char_bitmap
+    return bitmap
 end
