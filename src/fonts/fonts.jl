@@ -52,12 +52,12 @@ get_width(font::Terminus_16_8) = 8
 has_char(font::AbstractASCIIFont, character) = isascii(character) && isprint(character)
 
 function get_bitmap(font, character)
-    bitmap = font.bitmap
+    bitmaps = font.bitmaps
 
     codepoint_begin = codepoint(' ')
     k = codepoint(character) - codepoint_begin + one(codepoint_begin)
 
-    char_bitmap = @view bitmap[:, :, k]
+    char_bitmap = @view bitmaps[:, :, k]
 
     return char_bitmap
 end

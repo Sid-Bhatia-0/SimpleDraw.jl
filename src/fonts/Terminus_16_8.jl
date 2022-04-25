@@ -1,6 +1,6 @@
 """
     struct Terminus_16_8 <: AbstractASCIIFont
-        bitmap::BitArray{3}
+        bitmaps::BitArray{3}
     end
 
 A monospace bitmap font with each glyph having a height of 16 pixels and a width of 8 pixels. Only ASCII character glyphs are available for now.
@@ -33,12 +33,12 @@ julia> visualize(image)
 16▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░
 """
 struct Terminus_16_8 <: AbstractASCIIFont
-    bitmap::BitArray{3}
+    bitmaps::BitArray{3}
 end
 
 const TERMINUS_16_8 = Terminus_16_8(falses(16, 8, 95))
 
-TERMINUS_16_8.bitmap[:, :, 1] = [
+TERMINUS_16_8.bitmaps[:, :, 1] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -57,7 +57,7 @@ TERMINUS_16_8.bitmap[:, :, 1] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 2] = [
+TERMINUS_16_8.bitmaps[:, :, 2] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 1 0 0 0 0
@@ -76,7 +76,7 @@ TERMINUS_16_8.bitmap[:, :, 2] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 3] = [
+TERMINUS_16_8.bitmaps[:, :, 3] = [
 0 0 0 0 0 0 0 0
 0 0 1 0 0 1 0 0
 0 0 1 0 0 1 0 0
@@ -95,7 +95,7 @@ TERMINUS_16_8.bitmap[:, :, 3] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 4] = [
+TERMINUS_16_8.bitmaps[:, :, 4] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 0 0 1 0 0
@@ -114,7 +114,7 @@ TERMINUS_16_8.bitmap[:, :, 4] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 5] = [
+TERMINUS_16_8.bitmaps[:, :, 5] = [
 0 0 0 0 0 0 0 0
 0 0 0 1 0 0 0 0
 0 0 0 1 0 0 0 0
@@ -133,7 +133,7 @@ TERMINUS_16_8.bitmap[:, :, 5] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 6] = [
+TERMINUS_16_8.bitmaps[:, :, 6] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 1 0 0 1 0 0
@@ -152,7 +152,7 @@ TERMINUS_16_8.bitmap[:, :, 6] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 7] = [
+TERMINUS_16_8.bitmaps[:, :, 7] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 1 1 0 0 0
@@ -171,7 +171,7 @@ TERMINUS_16_8.bitmap[:, :, 7] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 8] = [
+TERMINUS_16_8.bitmaps[:, :, 8] = [
 0 0 0 0 0 0 0 0
 0 0 0 1 0 0 0 0
 0 0 0 1 0 0 0 0
@@ -190,7 +190,7 @@ TERMINUS_16_8.bitmap[:, :, 8] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 9] = [
+TERMINUS_16_8.bitmaps[:, :, 9] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 1 0 0 0
@@ -209,7 +209,7 @@ TERMINUS_16_8.bitmap[:, :, 9] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 10] = [
+TERMINUS_16_8.bitmaps[:, :, 10] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 0 0 0 0 0
@@ -228,7 +228,7 @@ TERMINUS_16_8.bitmap[:, :, 10] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 11] = [
+TERMINUS_16_8.bitmaps[:, :, 11] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -247,7 +247,7 @@ TERMINUS_16_8.bitmap[:, :, 11] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 12] = [
+TERMINUS_16_8.bitmaps[:, :, 12] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -266,7 +266,7 @@ TERMINUS_16_8.bitmap[:, :, 12] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 13] = [
+TERMINUS_16_8.bitmaps[:, :, 13] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -285,7 +285,7 @@ TERMINUS_16_8.bitmap[:, :, 13] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 14] = [
+TERMINUS_16_8.bitmaps[:, :, 14] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -304,7 +304,7 @@ TERMINUS_16_8.bitmap[:, :, 14] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 15] = [
+TERMINUS_16_8.bitmaps[:, :, 15] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -323,7 +323,7 @@ TERMINUS_16_8.bitmap[:, :, 15] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 16] = [
+TERMINUS_16_8.bitmaps[:, :, 16] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 1 0 0
@@ -342,7 +342,7 @@ TERMINUS_16_8.bitmap[:, :, 16] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 17] = [
+TERMINUS_16_8.bitmaps[:, :, 17] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 1 1 1 0 0
@@ -361,7 +361,7 @@ TERMINUS_16_8.bitmap[:, :, 17] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 18] = [
+TERMINUS_16_8.bitmaps[:, :, 18] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 1 0 0 0
@@ -380,7 +380,7 @@ TERMINUS_16_8.bitmap[:, :, 18] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 19] = [
+TERMINUS_16_8.bitmaps[:, :, 19] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 1 1 1 0 0
@@ -399,7 +399,7 @@ TERMINUS_16_8.bitmap[:, :, 19] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 20] = [
+TERMINUS_16_8.bitmaps[:, :, 20] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 1 1 1 0 0
@@ -418,7 +418,7 @@ TERMINUS_16_8.bitmap[:, :, 20] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 21] = [
+TERMINUS_16_8.bitmaps[:, :, 21] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 1 0
@@ -437,7 +437,7 @@ TERMINUS_16_8.bitmap[:, :, 21] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 22] = [
+TERMINUS_16_8.bitmaps[:, :, 22] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 1 1 1 1 1 0
@@ -456,7 +456,7 @@ TERMINUS_16_8.bitmap[:, :, 22] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 23] = [
+TERMINUS_16_8.bitmaps[:, :, 23] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 1 1 1 0 0
@@ -475,7 +475,7 @@ TERMINUS_16_8.bitmap[:, :, 23] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 24] = [
+TERMINUS_16_8.bitmaps[:, :, 24] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 1 1 1 1 1 0
@@ -494,7 +494,7 @@ TERMINUS_16_8.bitmap[:, :, 24] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 25] = [
+TERMINUS_16_8.bitmaps[:, :, 25] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 1 1 1 0 0
@@ -513,7 +513,7 @@ TERMINUS_16_8.bitmap[:, :, 25] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 26] = [
+TERMINUS_16_8.bitmaps[:, :, 26] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 1 1 1 0 0
@@ -532,7 +532,7 @@ TERMINUS_16_8.bitmap[:, :, 26] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 27] = [
+TERMINUS_16_8.bitmaps[:, :, 27] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -551,7 +551,7 @@ TERMINUS_16_8.bitmap[:, :, 27] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 28] = [
+TERMINUS_16_8.bitmaps[:, :, 28] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -570,7 +570,7 @@ TERMINUS_16_8.bitmap[:, :, 28] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 29] = [
+TERMINUS_16_8.bitmaps[:, :, 29] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -589,7 +589,7 @@ TERMINUS_16_8.bitmap[:, :, 29] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 30] = [
+TERMINUS_16_8.bitmaps[:, :, 30] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -608,7 +608,7 @@ TERMINUS_16_8.bitmap[:, :, 30] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 31] = [
+TERMINUS_16_8.bitmaps[:, :, 31] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -627,7 +627,7 @@ TERMINUS_16_8.bitmap[:, :, 31] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 32] = [
+TERMINUS_16_8.bitmaps[:, :, 32] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 1 1 1 0 0
@@ -646,7 +646,7 @@ TERMINUS_16_8.bitmap[:, :, 32] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 33] = [
+TERMINUS_16_8.bitmaps[:, :, 33] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 1 1 1 1 0 0
@@ -665,7 +665,7 @@ TERMINUS_16_8.bitmap[:, :, 33] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 34] = [
+TERMINUS_16_8.bitmaps[:, :, 34] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 1 1 1 0 0
@@ -684,7 +684,7 @@ TERMINUS_16_8.bitmap[:, :, 34] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 35] = [
+TERMINUS_16_8.bitmaps[:, :, 35] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 1 1 1 1 0 0
@@ -703,7 +703,7 @@ TERMINUS_16_8.bitmap[:, :, 35] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 36] = [
+TERMINUS_16_8.bitmaps[:, :, 36] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 1 1 1 0 0
@@ -722,7 +722,7 @@ TERMINUS_16_8.bitmap[:, :, 36] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 37] = [
+TERMINUS_16_8.bitmaps[:, :, 37] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 1 1 1 0 0 0
@@ -741,7 +741,7 @@ TERMINUS_16_8.bitmap[:, :, 37] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 38] = [
+TERMINUS_16_8.bitmaps[:, :, 38] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 1 1 1 1 1 0
@@ -760,7 +760,7 @@ TERMINUS_16_8.bitmap[:, :, 38] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 39] = [
+TERMINUS_16_8.bitmaps[:, :, 39] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 1 1 1 1 1 0
@@ -779,7 +779,7 @@ TERMINUS_16_8.bitmap[:, :, 39] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 40] = [
+TERMINUS_16_8.bitmaps[:, :, 40] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 1 1 1 0 0
@@ -798,7 +798,7 @@ TERMINUS_16_8.bitmap[:, :, 40] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 41] = [
+TERMINUS_16_8.bitmaps[:, :, 41] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 0 0 0 0 1 0
@@ -817,7 +817,7 @@ TERMINUS_16_8.bitmap[:, :, 41] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 42] = [
+TERMINUS_16_8.bitmaps[:, :, 42] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 1 1 0 0 0
@@ -836,7 +836,7 @@ TERMINUS_16_8.bitmap[:, :, 42] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 43] = [
+TERMINUS_16_8.bitmaps[:, :, 43] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 1 1 1 0
@@ -855,7 +855,7 @@ TERMINUS_16_8.bitmap[:, :, 43] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 44] = [
+TERMINUS_16_8.bitmaps[:, :, 44] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 0 0 0 0 1 0
@@ -874,7 +874,7 @@ TERMINUS_16_8.bitmap[:, :, 44] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 45] = [
+TERMINUS_16_8.bitmaps[:, :, 45] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 0 0 0 0 0 0
@@ -893,7 +893,7 @@ TERMINUS_16_8.bitmap[:, :, 45] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 46] = [
+TERMINUS_16_8.bitmaps[:, :, 46] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 1 0 0 0 0 0 1 0
@@ -912,7 +912,7 @@ TERMINUS_16_8.bitmap[:, :, 46] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 47] = [
+TERMINUS_16_8.bitmaps[:, :, 47] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 0 0 0 0 1 0
@@ -931,7 +931,7 @@ TERMINUS_16_8.bitmap[:, :, 47] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 48] = [
+TERMINUS_16_8.bitmaps[:, :, 48] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 1 1 1 0 0
@@ -950,7 +950,7 @@ TERMINUS_16_8.bitmap[:, :, 48] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 49] = [
+TERMINUS_16_8.bitmaps[:, :, 49] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 1 1 1 1 0 0
@@ -969,7 +969,7 @@ TERMINUS_16_8.bitmap[:, :, 49] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 50] = [
+TERMINUS_16_8.bitmaps[:, :, 50] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 1 1 1 0 0
@@ -988,7 +988,7 @@ TERMINUS_16_8.bitmap[:, :, 50] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 51] = [
+TERMINUS_16_8.bitmaps[:, :, 51] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 1 1 1 1 0 0
@@ -1007,7 +1007,7 @@ TERMINUS_16_8.bitmap[:, :, 51] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 52] = [
+TERMINUS_16_8.bitmaps[:, :, 52] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 1 1 1 0 0
@@ -1026,7 +1026,7 @@ TERMINUS_16_8.bitmap[:, :, 52] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 53] = [
+TERMINUS_16_8.bitmaps[:, :, 53] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 1 1 1 1 1 1 1 0
@@ -1045,7 +1045,7 @@ TERMINUS_16_8.bitmap[:, :, 53] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 54] = [
+TERMINUS_16_8.bitmaps[:, :, 54] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 0 0 0 0 1 0
@@ -1064,7 +1064,7 @@ TERMINUS_16_8.bitmap[:, :, 54] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 55] = [
+TERMINUS_16_8.bitmaps[:, :, 55] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 0 0 0 0 1 0
@@ -1083,7 +1083,7 @@ TERMINUS_16_8.bitmap[:, :, 55] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 56] = [
+TERMINUS_16_8.bitmaps[:, :, 56] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 1 0 0 0 0 0 1 0
@@ -1102,7 +1102,7 @@ TERMINUS_16_8.bitmap[:, :, 56] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 57] = [
+TERMINUS_16_8.bitmaps[:, :, 57] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 0 0 0 0 1 0
@@ -1121,7 +1121,7 @@ TERMINUS_16_8.bitmap[:, :, 57] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 58] = [
+TERMINUS_16_8.bitmaps[:, :, 58] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 1 0 0 0 0 0 1 0
@@ -1140,7 +1140,7 @@ TERMINUS_16_8.bitmap[:, :, 58] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 59] = [
+TERMINUS_16_8.bitmaps[:, :, 59] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 1 1 1 1 1 0
@@ -1159,7 +1159,7 @@ TERMINUS_16_8.bitmap[:, :, 59] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 60] = [
+TERMINUS_16_8.bitmaps[:, :, 60] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 1 1 0 0 0
@@ -1178,7 +1178,7 @@ TERMINUS_16_8.bitmap[:, :, 60] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 61] = [
+TERMINUS_16_8.bitmaps[:, :, 61] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 0 0 0 0 0 0
@@ -1197,7 +1197,7 @@ TERMINUS_16_8.bitmap[:, :, 61] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 62] = [
+TERMINUS_16_8.bitmaps[:, :, 62] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 1 1 0 0 0
@@ -1216,7 +1216,7 @@ TERMINUS_16_8.bitmap[:, :, 62] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 63] = [
+TERMINUS_16_8.bitmaps[:, :, 63] = [
 0 0 0 0 0 0 0 0
 0 0 0 1 0 0 0 0
 0 0 1 0 1 0 0 0
@@ -1235,7 +1235,7 @@ TERMINUS_16_8.bitmap[:, :, 63] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 64] = [
+TERMINUS_16_8.bitmaps[:, :, 64] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1254,7 +1254,7 @@ TERMINUS_16_8.bitmap[:, :, 64] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 65] = [
+TERMINUS_16_8.bitmaps[:, :, 65] = [
 0 0 0 1 0 0 0 0
 0 0 0 0 1 0 0 0
 0 0 0 0 0 0 0 0
@@ -1273,7 +1273,7 @@ TERMINUS_16_8.bitmap[:, :, 65] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 66] = [
+TERMINUS_16_8.bitmaps[:, :, 66] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1292,7 +1292,7 @@ TERMINUS_16_8.bitmap[:, :, 66] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 67] = [
+TERMINUS_16_8.bitmaps[:, :, 67] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 0 0 0 0 0 0
@@ -1311,7 +1311,7 @@ TERMINUS_16_8.bitmap[:, :, 67] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 68] = [
+TERMINUS_16_8.bitmaps[:, :, 68] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1330,7 +1330,7 @@ TERMINUS_16_8.bitmap[:, :, 68] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 69] = [
+TERMINUS_16_8.bitmaps[:, :, 69] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 1 0
@@ -1349,7 +1349,7 @@ TERMINUS_16_8.bitmap[:, :, 69] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 70] = [
+TERMINUS_16_8.bitmaps[:, :, 70] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1368,7 +1368,7 @@ TERMINUS_16_8.bitmap[:, :, 70] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 71] = [
+TERMINUS_16_8.bitmaps[:, :, 71] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 1 1 1 0
@@ -1387,7 +1387,7 @@ TERMINUS_16_8.bitmap[:, :, 71] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 72] = [
+TERMINUS_16_8.bitmaps[:, :, 72] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1406,7 +1406,7 @@ TERMINUS_16_8.bitmap[:, :, 72] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 73] = [
+TERMINUS_16_8.bitmaps[:, :, 73] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 0 0 0 0 0 0
@@ -1425,7 +1425,7 @@ TERMINUS_16_8.bitmap[:, :, 73] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 74] = [
+TERMINUS_16_8.bitmaps[:, :, 74] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 1 0 0 0 0
@@ -1444,7 +1444,7 @@ TERMINUS_16_8.bitmap[:, :, 74] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 75] = [
+TERMINUS_16_8.bitmaps[:, :, 75] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 1 0 0
@@ -1463,7 +1463,7 @@ TERMINUS_16_8.bitmap[:, :, 75] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 76] = [
+TERMINUS_16_8.bitmaps[:, :, 76] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 1 0 0 0 0 0 0
@@ -1482,7 +1482,7 @@ TERMINUS_16_8.bitmap[:, :, 76] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 77] = [
+TERMINUS_16_8.bitmaps[:, :, 77] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 1 0 0 0 0
@@ -1501,7 +1501,7 @@ TERMINUS_16_8.bitmap[:, :, 77] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 78] = [
+TERMINUS_16_8.bitmaps[:, :, 78] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1520,7 +1520,7 @@ TERMINUS_16_8.bitmap[:, :, 78] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 79] = [
+TERMINUS_16_8.bitmaps[:, :, 79] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1539,7 +1539,7 @@ TERMINUS_16_8.bitmap[:, :, 79] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 80] = [
+TERMINUS_16_8.bitmaps[:, :, 80] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1558,7 +1558,7 @@ TERMINUS_16_8.bitmap[:, :, 80] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 81] = [
+TERMINUS_16_8.bitmaps[:, :, 81] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1577,7 +1577,7 @@ TERMINUS_16_8.bitmap[:, :, 81] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 82] = [
+TERMINUS_16_8.bitmaps[:, :, 82] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1596,7 +1596,7 @@ TERMINUS_16_8.bitmap[:, :, 82] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 83] = [
+TERMINUS_16_8.bitmaps[:, :, 83] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1615,7 +1615,7 @@ TERMINUS_16_8.bitmap[:, :, 83] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 84] = [
+TERMINUS_16_8.bitmaps[:, :, 84] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1634,7 +1634,7 @@ TERMINUS_16_8.bitmap[:, :, 84] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 85] = [
+TERMINUS_16_8.bitmaps[:, :, 85] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 1 0 0 0 0
@@ -1653,7 +1653,7 @@ TERMINUS_16_8.bitmap[:, :, 85] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 86] = [
+TERMINUS_16_8.bitmaps[:, :, 86] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1672,7 +1672,7 @@ TERMINUS_16_8.bitmap[:, :, 86] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 87] = [
+TERMINUS_16_8.bitmaps[:, :, 87] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1691,7 +1691,7 @@ TERMINUS_16_8.bitmap[:, :, 87] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 88] = [
+TERMINUS_16_8.bitmaps[:, :, 88] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1710,7 +1710,7 @@ TERMINUS_16_8.bitmap[:, :, 88] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 89] = [
+TERMINUS_16_8.bitmaps[:, :, 89] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1729,7 +1729,7 @@ TERMINUS_16_8.bitmap[:, :, 89] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 90] = [
+TERMINUS_16_8.bitmaps[:, :, 90] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1748,7 +1748,7 @@ TERMINUS_16_8.bitmap[:, :, 90] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 91] = [
+TERMINUS_16_8.bitmaps[:, :, 91] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
@@ -1767,7 +1767,7 @@ TERMINUS_16_8.bitmap[:, :, 91] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 92] = [
+TERMINUS_16_8.bitmaps[:, :, 92] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 1 1 0 0
@@ -1786,7 +1786,7 @@ TERMINUS_16_8.bitmap[:, :, 92] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 93] = [
+TERMINUS_16_8.bitmaps[:, :, 93] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 1 0 0 0 0
@@ -1805,7 +1805,7 @@ TERMINUS_16_8.bitmap[:, :, 93] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 94] = [
+TERMINUS_16_8.bitmaps[:, :, 94] = [
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 1 1 0 0 0 0
@@ -1824,7 +1824,7 @@ TERMINUS_16_8.bitmap[:, :, 94] = [
 0 0 0 0 0 0 0 0
 ]
 
-TERMINUS_16_8.bitmap[:, :, 95] = [
+TERMINUS_16_8.bitmaps[:, :, 95] = [
 0 0 0 0 0 0 0 0
 0 1 1 0 0 0 1 0
 1 0 0 1 0 0 1 0

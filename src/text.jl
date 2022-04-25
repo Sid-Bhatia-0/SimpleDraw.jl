@@ -103,10 +103,10 @@ function draw!(f::F, image, shape::TextLine, color) where {F <: Function}
     text = shape.text
     font = shape.font
 
-    bitmap = font.bitmap
+    bitmaps = font.bitmaps
 
-    height = size(bitmap, 1)
-    width = size(bitmap, 2)
+    height = size(bitmaps, 1)
+    width = size(bitmaps, 2)
 
     char_position = position
 
