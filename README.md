@@ -122,50 +122,65 @@ It uses Unicode block characters to represent a pixel. This works well for low r
 
 ### Benchmarks
 
-Below are the benchmarks for `v0.3.0` of this package using julia `v1.7.1`.
+Below are the benchmarks for `v0.4.0` of this package on a single CPU core using the following `versioninfo()`:
 
-Timestamp: 2022_01_05_19_10_52 (yyyy_mm_dd_HH_MM_SS)
+```
+julia> versioninfo()
+Julia Version 1.7.2
+Commit bf53498635 (2022-02-06 15:21 UTC)
+Platform Info:
+  OS: Linux (x86_64-pc-linux-gnu)
+  CPU: Intel(R) Core(TM) i7-6500U CPU @ 2.50GHz
+  WORD_SIZE: 64
+  LIBM: libopenlibm
+  LLVM: libLLVM-12.0.1 (ORCJIT, skylake)
+```
+
+Timestamp: 2022_04_26_19_54_49 (yyyy_mm_dd_HH_MM_SS)
 
 Shapes are drawn on an image of type `Matrix{UInt32}` with a color of type `UInt32`
 
 |shape type|image height|image width|median time|memory|shape|
 :---|:---|:---|:---|:---|:---|
-|Point|64|64|3.463 ns|0 bytes|SimpleDraw.Point{Int64}(33, 33)|
-|Point|256|256|3.454 ns|0 bytes|SimpleDraw.Point{Int64}(129, 129)|
-|Point|1024|1024|3.464 ns|0 bytes|SimpleDraw.Point{Int64}(513, 513)|
-|Background|64|64|174.279 ns|0 bytes|SimpleDraw.Background()|
-|Background|256|256|5.619 μs|0 bytes|SimpleDraw.Background()|
-|Background|1024|1024|158.790 μs|0 bytes|SimpleDraw.Background()|
-|Line|64|64|122.932 ns|0 bytes|SimpleDraw.Line{Int64}(SimpleDraw.Point{Int64}(9, 2), SimpleDraw.Point{Int64}(56, 63))|
-|Line|256|256|488.272 ns|0 bytes|SimpleDraw.Line{Int64}(SimpleDraw.Point{Int64}(33, 2), SimpleDraw.Point{Int64}(224, 255))|
-|Line|1024|1024|2.403 μs|0 bytes|SimpleDraw.Line{Int64}(SimpleDraw.Point{Int64}(129, 2), SimpleDraw.Point{Int64}(896, 1023))|
-|ThickLine|64|64|1.485 μs|0 bytes|SimpleDraw.ThickLine{Int64}(SimpleDraw.Point{Int64}(9, 9), SimpleDraw.Point{Int64}(56, 56), 7)|
-|ThickLine|256|256|74.086 μs|0 bytes|SimpleDraw.ThickLine{Int64}(SimpleDraw.Point{Int64}(33, 33), SimpleDraw.Point{Int64}(224, 224), 31)|
-|ThickLine|1024|1024|2.424 ms|0 bytes|SimpleDraw.ThickLine{Int64}(SimpleDraw.Point{Int64}(129, 129), SimpleDraw.Point{Int64}(896, 896), 127)|
-|Circle|64|64|149.877 ns|0 bytes|SimpleDraw.Circle{Int64}(SimpleDraw.Point{Int64}(2, 2), 62)|
-|Circle|256|256|1.348 μs|0 bytes|SimpleDraw.Circle{Int64}(SimpleDraw.Point{Int64}(2, 2), 254)|
-|Circle|1024|1024|8.180 μs|0 bytes|SimpleDraw.Circle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1022)|
-|FilledCircle|64|64|1.469 μs|0 bytes|SimpleDraw.FilledCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 62)|
-|FilledCircle|256|256|11.294 μs|0 bytes|SimpleDraw.FilledCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 254)|
-|FilledCircle|1024|1024|146.581 μs|0 bytes|SimpleDraw.FilledCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1022)|
-|ThickCircle|64|64|2.227 μs|0 bytes|SimpleDraw.ThickCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 62, 16)|
-|ThickCircle|256|256|71.456 μs|0 bytes|SimpleDraw.ThickCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 254, 64)|
-|ThickCircle|1024|1024|1.175 ms|0 bytes|SimpleDraw.ThickCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1022, 256)|
-|Rectangle|64|64|136.071 ns|0 bytes|SimpleDraw.Rectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 63, 63)|
-|Rectangle|256|256|1.668 μs|0 bytes|SimpleDraw.Rectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 255, 255)|
-|Rectangle|1024|1024|8.552 μs|0 bytes|SimpleDraw.Rectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1023, 1023)|
-|FilledRectangle|64|64|783.196 ns|0 bytes|SimpleDraw.FilledRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 63, 63)|
-|FilledRectangle|256|256|9.221 μs|0 bytes|SimpleDraw.FilledRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 255, 255)|
-|FilledRectangle|1024|1024|172.170 μs|0 bytes|SimpleDraw.FilledRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1023, 1023)|
-|ThickRectangle|64|64|1.263 μs|0 bytes|SimpleDraw.ThickRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 63, 63, 16)|
-|ThickRectangle|256|256|7.531 μs|0 bytes|SimpleDraw.ThickRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 255, 255, 64)|
-|ThickRectangle|1024|1024|187.453 μs|0 bytes|SimpleDraw.ThickRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1023, 1023, 256)|
-|Character|64|64|1.518 μs|0 bytes|SimpleDraw.Character{Int64, Char, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(2, 2), 'A', SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
-|Character|256|256|1.473 μs|0 bytes|SimpleDraw.Character{Int64, Char, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(2, 2), 'A', SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
-|Character|1024|1024|1.478 μs|0 bytes|SimpleDraw.Character{Int64, Char, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(2, 2), 'A', SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
-|TextLine|64|64|5.556 μs|0 bytes|SimpleDraw.TextLine{Int64, String, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(1, 1), "OMVJ", SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
-|TextLine|256|256|22.815 μs|0 bytes|SimpleDraw.TextLine{Int64, String, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(1, 1), "XVFYWDHWRMXBZDTT", SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
-|TextLine|1024|1024|93.881 μs|0 bytes|SimpleDraw.TextLine{Int64, String, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(1, 1), "ABIFZIJMRNFMIPNOMGPICUKEESMIRENGUKLTQIGJAGJAMLUGPKIMPYMQSNHOGXRQ", SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
+|Point|64|64|4.876 ns|0 bytes|SimpleDraw.Point{Int64}(33, 33)|
+|Point|256|256|5.323 ns|0 bytes|SimpleDraw.Point{Int64}(129, 129)|
+|Point|1024|1024|4.893 ns|0 bytes|SimpleDraw.Point{Int64}(513, 513)|
+|Background|64|64|208.221 ns|0 bytes|SimpleDraw.Background()|
+|Background|256|256|6.966 μs|0 bytes|SimpleDraw.Background()|
+|Background|1024|1024|186.605 μs|0 bytes|SimpleDraw.Background()|
+|Line|64|64|146.553 ns|0 bytes|SimpleDraw.Line{Int64}(SimpleDraw.Point{Int64}(9, 2), SimpleDraw.Point{Int64}(56, 63))|
+|Line|256|256|585.260 ns|0 bytes|SimpleDraw.Line{Int64}(SimpleDraw.Point{Int64}(33, 2), SimpleDraw.Point{Int64}(224, 255))|
+|Line|1024|1024|2.937 μs|0 bytes|SimpleDraw.Line{Int64}(SimpleDraw.Point{Int64}(129, 2), SimpleDraw.Point{Int64}(896, 1023))|
+|ThickLine|64|64|2.233 μs|0 bytes|SimpleDraw.ThickLine{Int64}(SimpleDraw.Point{Int64}(9, 9), SimpleDraw.Point{Int64}(56, 56), 7)|
+|ThickLine|256|256|96.407 μs|0 bytes|SimpleDraw.ThickLine{Int64}(SimpleDraw.Point{Int64}(33, 33), SimpleDraw.Point{Int64}(224, 224), 31)|
+|ThickLine|1024|1024|2.837 ms|0 bytes|SimpleDraw.ThickLine{Int64}(SimpleDraw.Point{Int64}(129, 129), SimpleDraw.Point{Int64}(896, 896), 127)|
+|Circle|64|64|175.703 ns|0 bytes|SimpleDraw.Circle{Int64}(SimpleDraw.Point{Int64}(2, 2), 62)|
+|Circle|256|256|1.381 μs|0 bytes|SimpleDraw.Circle{Int64}(SimpleDraw.Point{Int64}(2, 2), 254)|
+|Circle|1024|1024|10.729 μs|0 bytes|SimpleDraw.Circle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1022)|
+|FilledCircle|64|64|1.843 μs|0 bytes|SimpleDraw.FilledCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 62)|
+|FilledCircle|256|256|13.175 μs|0 bytes|SimpleDraw.FilledCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 254)|
+|FilledCircle|1024|1024|178.987 μs|0 bytes|SimpleDraw.FilledCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1022)|
+|ThickCircle|64|64|2.652 μs|0 bytes|SimpleDraw.ThickCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 62, 16)|
+|ThickCircle|256|256|74.406 μs|0 bytes|SimpleDraw.ThickCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 254, 64)|
+|ThickCircle|1024|1024|1.407 ms|0 bytes|SimpleDraw.ThickCircle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1022, 256)|
+|Rectangle|64|64|121.121 ns|0 bytes|SimpleDraw.Rectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 63, 63)|
+|Rectangle|256|256|1.950 μs|0 bytes|SimpleDraw.Rectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 255, 255)|
+|Rectangle|1024|1024|11.081 μs|0 bytes|SimpleDraw.Rectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1023, 1023)|
+|FilledRectangle|64|64|1.147 μs|0 bytes|SimpleDraw.FilledRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 63, 63)|
+|FilledRectangle|256|256|10.747 μs|0 bytes|SimpleDraw.FilledRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 255, 255)|
+|FilledRectangle|1024|1024|194.078 μs|0 bytes|SimpleDraw.FilledRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1023, 1023)|
+|ThickRectangle|64|64|1.809 μs|0 bytes|SimpleDraw.ThickRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 63, 63, 16)|
+|ThickRectangle|256|256|10.167 μs|0 bytes|SimpleDraw.ThickRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 255, 255, 64)|
+|ThickRectangle|1024|1024|211.408 μs|0 bytes|SimpleDraw.ThickRectangle{Int64}(SimpleDraw.Point{Int64}(2, 2), 1023, 1023, 256)|
+|FilledTriangle|64|64|1.452 μs|0 bytes|SimpleDraw.FilledTriangle{Int64}(SimpleDraw.Point{Int64}(2, 2), SimpleDraw.Point{Int64}(63, 32), SimpleDraw.Point{Int64}(32, 63))|
+|FilledTriangle|256|256|8.507 μs|0 bytes|SimpleDraw.FilledTriangle{Int64}(SimpleDraw.Point{Int64}(2, 2), SimpleDraw.Point{Int64}(255, 128), SimpleDraw.Point{Int64}(128, 255))|
+|FilledTriangle|1024|1024|88.216 μs|0 bytes|SimpleDraw.FilledTriangle{Int64}(SimpleDraw.Point{Int64}(2, 2), SimpleDraw.Point{Int64}(1023, 512), SimpleDraw.Point{Int64}(512, 1023))|
+|Character|64|64|2.550 μs|0 bytes|SimpleDraw.Character{Int64, Char, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(2, 2), 'A', SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
+|Character|256|256|2.550 μs|0 bytes|SimpleDraw.Character{Int64, Char, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(2, 2), 'A', SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
+|Character|1024|1024|2.552 μs|0 bytes|SimpleDraw.Character{Int64, Char, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(2, 2), 'A', SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
+|TextLine|64|64|7.386 μs|0 bytes|SimpleDraw.TextLine{Int64, String, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(1, 1), "LPDW", SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
+|TextLine|256|256|30.133 μs|0 bytes|SimpleDraw.TextLine{Int64, String, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(1, 1), "BDNMZIMCRQRSRHOG", SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
+|TextLine|1024|1024|121.349 μs|0 bytes|SimpleDraw.TextLine{Int64, String, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(1, 1), "EFXHBRDIFHLLIIBXJIDEXYSRJUDELCIMZIMXWOCHCFLHXSBLLMLMSZFVKSBEZTVA", SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
 
 Follow these steps to reproduce similar benchmarks:
 
