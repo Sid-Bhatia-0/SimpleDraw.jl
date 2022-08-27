@@ -2,12 +2,20 @@ abstract type AbstractFont end
 
 abstract type AbstractASCIIFont <: AbstractFont end
 
-include("Terminus_32_16.jl")
 include("Terminus_16_8.jl")
+include("TerminusBold_16_8.jl")
+include("Terminus_24_12.jl")
+include("TerminusBold_24_12.jl")
+include("Terminus_32_16.jl")
+include("TerminusBold_32_16.jl")
 
 const FONTS = [
-               TERMINUS_32_16,
                TERMINUS_16_8,
+               TERMINUS_BOLD_16_8,
+               TERMINUS_24_12,
+               TERMINUS_BOLD_24_12,
+               TERMINUS_32_16,
+               TERMINUS_BOLD_32_16,
               ]
 
 """
@@ -26,7 +34,7 @@ julia> get_height(TERMINUS_16_8)
 16
 ```
 """
-get_height(font::Terminus_32_16) = 32
+get_height(font::Terminus_16_8) = 16
 
 """
     get_width(font::AbstractFont)
@@ -44,10 +52,22 @@ julia> get_width(TERMINUS_16_8)
 8
 ```
 """
+get_width(font::Terminus_16_8) = 8
+
+get_height(font::TerminusBold_16_8) = 16
+get_width(font::TerminusBold_16_8) = 8
+
+get_height(font::Terminus_24_12) = 24
+get_width(font::Terminus_24_12) = 12
+
+get_height(font::TerminusBold_24_12) = 24
+get_width(font::TerminusBold_24_12) = 12
+
+get_height(font::Terminus_32_16) = 32
 get_width(font::Terminus_32_16) = 16
 
-get_height(font::Terminus_16_8) = 16
-get_width(font::Terminus_16_8) = 8
+get_height(font::TerminusBold_32_16) = 32
+get_width(font::TerminusBold_32_16) = 16
 
 has_char(font::AbstractASCIIFont, character) = isascii(character) && isprint(character)
 
