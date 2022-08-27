@@ -74,15 +74,15 @@ function generate_julia_font_file(font_info)
     file = open(font_type_name * ".jl", "w")
 
     println(file, """
-    struct $(font_type_name) <: AbstractFont
-        bitmap::BitArray{3}
+    struct $(font_type_name) <: AbstractASCIIFont
+        bitmaps::BitArray{3}
     end
 
     const $(font_instance_name) = $(font_type_name)(falses($(height), $(width), $(num_encodings)))
     """)
 
     for k in 1:num_encodings
-        println(file, "$(font_instance_name).bitmap[:, :, $(k)] = [")
+        println(file, "$(font_instance_name).bitmaps[:, :, $(k)] = [")
 
         for i in 1:height
             for j in 1:width
@@ -101,7 +101,9 @@ function generate_julia_font_file(font_info)
         end
 
         println(file, "]")
-        println(file)
+        if k != num_encodings
+            println(file)
+        end
     end
 
     close(file)

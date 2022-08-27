@@ -5,7 +5,7 @@
 
 A monospace bitmap font with each glyph having a height of 16 pixels and a width of 8 pixels. Only ASCII character glyphs are available for now.
 
-See also [`Terminus_32_16`](@ref).
+See also [`TerminusBold_16_8`](@ref), [`Terminus_24_12`](@ref), [`TerminusBold_24_12`](@ref), [`Terminus_32_16`](@ref), [`TerminusBold_32_16`](@ref).
 
 # Examples
 ```julia-repl
