@@ -4550,8 +4550,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_j_min(shape) == 1
         Test.@test SD.get_j_max(shape) == 16
         Test.@test SD.move(shape, 2, 3) == SD.Image(SD.Point(1 + 2, 1 + 3), shape_image)
-        color = true
-        SD.draw!(image, shape, color)
+        SD.draw!(image, shape)
         Test.@test image == BitArray([
                                         0 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
@@ -4598,8 +4597,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_j_min(shape) == 1
         Test.@test SD.get_j_max(shape) == 1
         Test.@test SD.is_valid(shape)
-        color = true
-        SD.draw!(image, shape, color)
+        SD.draw!(image, shape)
         Test.@test image == falses(height, width)
 
         height = 32
@@ -4629,8 +4627,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 24 + 16
         Test.@test SD.get_j_min(shape) == 24 + 1
         Test.@test SD.get_j_max(shape) == 24 + 16
-        color = true
-        SD.draw!(image, shape, color)
+        SD.draw!(image, shape)
         Test.@test image == BitArray([
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                         0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
@@ -4693,8 +4690,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 100 + 24 + 16
         Test.@test SD.get_j_min(shape) == 100 + 24 + 1
         Test.@test SD.get_j_max(shape) == 100 + 24 + 16
-        color = true
-        SD.draw!(image, shape, color)
+        SD.draw!(image, shape)
         Test.@test image == falses(height, width)
 
         height = 32
@@ -4724,8 +4720,7 @@ Test.@testset "SimpleDraw.jl" begin
         Test.@test SD.get_i_max(shape) == 16 - 2
         Test.@test SD.get_j_min(shape) == -1
         Test.@test SD.get_j_max(shape) == 16 - 2
-        color = true
-        SD.draw!(image, shape, color)
+        SD.draw!(image, shape)
         Test.@test image == BitArray([
                                          0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
                                          0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
