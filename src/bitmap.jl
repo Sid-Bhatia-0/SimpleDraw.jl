@@ -17,8 +17,10 @@ function clip(image, shape::Bitmap)
     bitmap = shape.bitmap
 
     if isempty(bitmap)
-        return Bitmap(position, bitmap)
+        return shape
     end
+
+    # assuming shape is not outbounds, !isempty(shape.image), and it has an overlap region with the image
 
     i_min_shape, i_max_shape = get_i_extrema(shape)
     i_min_image, i_max_image = get_i_extrema(image)
@@ -28,12 +30,39 @@ function clip(image, shape::Bitmap)
     j_min_shape, j_max_shape = get_j_extrema(shape)
     j_min_image, j_max_image = get_j_extrema(image)
 
-    clipped_height = min(i_max_shape, i_max_image) - max(i_min_shape, i_min_image) + one(I)
-    clipped_width = min(j_max_shape, j_max_image) - max(j_min_shape, j_min_image) + one(I)
+    delta_i_min = i_min_image - i_min_shape
+    if delta_i_min > zero(delta_i_min)
+        i_new_position = i_min_image
+        i_begin = firstindex(bitmap, 1) + delta_i_min
+    else
+        i_new_position = position.i
+        i_begin = firstindex(bitmap, 1)
+    end
 
-    clipped_bitmap = @view bitmap[begin:clipped_height, begin:clipped_width]
+    delta_i_max = i_max_shape - i_max_image
+    if delta_i_max > zero(delta_i_max)
+        i_end = lastindex(bitmap, 1) - delta_i_max
+    else
+        i_end = lastindex(bitmap, 1)
+    end
 
-    return Bitmap(position, clipped_bitmap)
+    delta_j_min = j_min_image - j_min_shape
+    if delta_j_min > zero(delta_j_min)
+        j_new_position = j_min_image
+        j_begin = firstindex(bitmap, 2) + delta_j_min
+    else
+        j_new_position = position.j
+        j_begin = firstindex(bitmap, 2)
+    end
+
+    delta_j_max = j_max_shape - j_max_image
+    if delta_j_max > zero(delta_j_max)
+        j_end = lastindex(bitmap, 2) - delta_j_max
+    else
+        j_end = lastindex(bitmap, 2)
+    end
+
+    return Bitmap(Point(i_new_position, j_new_position), @view bitmap[i_begin:i_end, j_begin:j_end])
 end
 
 get_drawing_optimization_style(::Bitmap) = CLIP
