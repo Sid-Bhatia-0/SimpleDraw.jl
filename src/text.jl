@@ -70,14 +70,14 @@ julia> SimpleDraw.get_num_printable_characters("hello █\n")
 7
 ```
 """
-get_num_printable(text) = count(isprint, text)
+get_num_printable_characters(text) = count(isprint, text)
 
-get_num_printable(shape::TextLine) = get_num_printable(shape.text)
+get_num_printable_characters(shape::TextLine) = get_num_printable_characters(shape.text)
 
 get_i_min(shape::TextLine) = shape.position.i
 
 function get_i_max(shape::TextLine)
-    num_printable = get_num_printable(shape)
+    num_printable = get_num_printable_characters(shape)
 
     if num_printable > zero(num_printable)
         return shape.position.i + get_height(shape.font) - one(shape.position.i)
@@ -89,7 +89,7 @@ end
 get_j_min(shape::TextLine) = shape.position.j
 
 function get_j_max(shape::TextLine)
-    num_printable = get_num_printable(shape)
+    num_printable = get_num_printable_characters(shape)
 
     if num_printable > zero(num_printable)
         return shape.position.j + num_printable * get_width(shape.font) - one(shape.position.j)
