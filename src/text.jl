@@ -59,17 +59,20 @@ end
 
 get_drawing_optimization_style(::TextLine) = PUT_PIXEL
 
-function get_num_printable(shape::TextLine)
-    num_printable = 0
+"""
+    get_num_printable_characters(text)
 
-    for character in shape.text
-        if isprint(character)
-            num_printable += 1
-        end
-    end
+Return the number of printable characters in text.
 
-    return num_printable
-end
+# Examples
+```julia-repl
+julia> SimpleDraw.get_num_printable_characters("hello █\n")
+7
+```
+"""
+get_num_printable(text) = count(isprint, text)
+
+get_num_printable(shape::TextLine) = get_num_printable(shape.text)
 
 get_i_min(shape::TextLine) = shape.position.i
 
