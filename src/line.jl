@@ -146,8 +146,6 @@ clip(image, shape::VerticalLine) = VerticalLine(max(get_i_min(shape), get_i_min(
 get_drawing_optimization_style(::VerticalLine) = CLIP
 
 function _draw!(f::F, image, shape::VerticalLine, color) where {F <: Function}
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
     i_min = shape.i_min
     i_max = shape.i_max
     j = shape.j
@@ -176,8 +174,6 @@ clip(image, shape::HorizontalLine) = HorizontalLine(shape.i, max(get_j_min(shape
 get_drawing_optimization_style(::HorizontalLine) = CLIP
 
 function _draw!(f::F, image, shape::HorizontalLine, color) where {F <: Function}
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
     i = shape.i
     j_min = shape.j_min
     j_max = shape.j_max
@@ -290,8 +286,6 @@ move_j(shape::ThickLine, j) = ThickLine(move_j(shape.point1, j), move_j(shape.po
 get_drawing_optimization_style(::ThickLine) = CHECK_BOUNDS
 
 function _draw!(f::F, image, shape::ThickLine, color) where {F <: Function}
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
     point1 = shape.point1
     point2 = shape.point2
     thickness = shape.thickness
