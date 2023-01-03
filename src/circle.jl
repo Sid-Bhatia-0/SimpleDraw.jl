@@ -485,21 +485,6 @@ end
 move_i(shape::FilledCircle, i) = FilledCircle(move_i(shape.position, i), shape.diameter)
 move_j(shape::FilledCircle, j) = FilledCircle(move_j(shape.position, j), shape.diameter)
 
-function draw!(image, shape::FilledCircle, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    position = shape.position
-    diameter = shape.diameter
-
-    if iseven(diameter)
-        draw!(image, EvenFilledCircle(position, diameter), color)
-    else
-        draw!(image, OddFilledCircle(position, diameter), color)
-    end
-
-    return nothing
-end
-
 function _draw!(f::F, image, shape::FilledCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
