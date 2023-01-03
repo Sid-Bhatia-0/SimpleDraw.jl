@@ -145,7 +145,7 @@ clip(image, shape::VerticalLine) = VerticalLine(max(get_i_min(shape), get_i_min(
 
 get_drawing_optimization_style(::VerticalLine) = CLIP
 
-function draw!(f::F, image, shape::VerticalLine, color) where {F <: Function}
+function _draw!(f::F, image, shape::VerticalLine, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     i_min = shape.i_min
@@ -175,7 +175,7 @@ clip(image, shape::HorizontalLine) = HorizontalLine(shape.i, max(get_j_min(shape
 
 get_drawing_optimization_style(::HorizontalLine) = CLIP
 
-function draw!(f::F, image, shape::HorizontalLine, color) where {F <: Function}
+function _draw!(f::F, image, shape::HorizontalLine, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     i = shape.i
@@ -206,7 +206,7 @@ move_j(shape::Line, j) = Line(move_j(shape.point1, j), move_j(shape.point2, j))
 
 get_drawing_optimization_style(::Line) = CHECK_BOUNDS
 
-function draw!(f::F, image, shape::Line, color) where {F <: Function}
+function _draw!(f::F, image, shape::Line, color) where {F <: Function}
     point1 = shape.point1
     point2 = shape.point2
 
@@ -289,7 +289,7 @@ move_j(shape::ThickLine, j) = ThickLine(move_j(shape.point1, j), move_j(shape.po
 
 get_drawing_optimization_style(::ThickLine) = CHECK_BOUNDS
 
-function draw!(f::F, image, shape::ThickLine, color) where {F <: Function}
+function _draw!(f::F, image, shape::ThickLine, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     point1 = shape.point1
@@ -305,8 +305,8 @@ function draw!(f::F, image, shape::ThickLine, color) where {F <: Function}
 
     half_thickness = thickness ÷ convert(I, 2)
 
-    draw!(image, Line(point1, point2), color) do image, i, j, color
-        draw!(f, image, FilledRectangle(Point(i - half_thickness, j - half_thickness), thickness, thickness), color)
+    _draw!(image, Line(point1, point2), color) do image, i, j, color
+        _draw!(f, image, FilledRectangle(Point(i - half_thickness, j - half_thickness), thickness, thickness), color)
     end
 
     return nothing
