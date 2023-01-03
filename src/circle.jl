@@ -573,22 +573,6 @@ end
 move_i(shape::ThickCircle, i) = ThickCircle(move_i(shape.position, i), shape.diameter, shape.thickness)
 move_j(shape::ThickCircle, j) = ThickCircle(move_j(shape.position, j), shape.diameter, shape.thickness)
 
-function draw!(image, shape::ThickCircle, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    position = shape.position
-    diameter = shape.diameter
-    thickness = shape.thickness
-
-    if iseven(diameter)
-        draw!(image, EvenThickCircle(position, diameter, thickness), color)
-    else
-        draw!(image, OddThickCircle(position, diameter, thickness), color)
-    end
-
-    return nothing
-end
-
 function _draw!(f::F, image, shape::ThickCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
