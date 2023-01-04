@@ -119,11 +119,11 @@ end
 
 get_drawing_optimization_style(::Image) = CLIP
 
-draw!(f::F, image, shape::Image, color) where {F <: Function} = draw!(f, image, shape)
+_draw!(f::F, image, shape::Image, color) where {F <: Function} = _draw!(f, image, shape)
 
 draw!(image, shape::Image) = draw!(image, shape, nothing)
 
-function draw!(f::F, image, shape::Image) where {F <: Function}
+function _draw!(f::F, image, shape::Image) where {F <: Function}
     position = shape.position
     shape_image = shape.image
 
