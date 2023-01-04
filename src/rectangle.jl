@@ -208,16 +208,16 @@ get_drawing_optimization_style(::AbstractRectangle) = CHECK_BOUNDS
 move_i(shape::Rectangle, i) = Rectangle(move_i(shape.position, i), shape.height, shape.width)
 move_j(shape::Rectangle, j) = Rectangle(move_j(shape.position, j), shape.height, shape.width)
 
-function draw!(f::F, image, shape::Rectangle, color) where {F <: Function}
+function _draw!(f::F, image, shape::Rectangle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     i_min, i_max = get_i_extrema(shape)
     j_min, j_max = get_j_extrema(shape)
 
-    draw!(f, image, VerticalLine(i_min, i_max, j_min), color)
-    draw!(f, image, HorizontalLine(i_min, j_min, j_max), color)
-    draw!(f, image, HorizontalLine(i_max, j_min, j_max), color)
-    draw!(f, image, VerticalLine(i_min, i_max, j_max), color)
+    _draw!(f, image, VerticalLine(i_min, i_max, j_min), color)
+    _draw!(f, image, HorizontalLine(i_min, j_min, j_max), color)
+    _draw!(f, image, HorizontalLine(i_max, j_min, j_max), color)
+    _draw!(f, image, VerticalLine(i_min, i_max, j_max), color)
 
     return nothing
 end
@@ -249,7 +249,7 @@ end
 
 get_drawing_optimization_style(::FilledRectangle) = CLIP
 
-function draw!(f::F, image, shape::FilledRectangle, color) where {F <: Function}
+function _draw!(f::F, image, shape::FilledRectangle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     i_min, i_max = get_i_extrema(shape)
@@ -281,7 +281,7 @@ function is_valid(shape::ThickRectangle)
     return height > zero(I) && width > zero(I) && thickness > zero(I) && thickness <= min(height, width)
 end
 
-function draw!(f::F, image, shape::ThickRectangle, color) where {F <: Function}
+function _draw!(f::F, image, shape::ThickRectangle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position
@@ -292,10 +292,10 @@ function draw!(f::F, image, shape::ThickRectangle, color) where {F <: Function}
     i_min = position.i
     j_min = position.j
 
-    draw!(f, image, FilledRectangle(position, height, thickness), color)
-    draw!(f, image, FilledRectangle(position, thickness, width), color)
-    draw!(f, image, FilledRectangle(Point(i_min + height - thickness, j_min), thickness, width), color)
-    draw!(f, image, FilledRectangle(Point(i_min, j_min + width - thickness), height, thickness), color)
+    _draw!(f, image, FilledRectangle(position, height, thickness), color)
+    _draw!(f, image, FilledRectangle(position, thickness, width), color)
+    _draw!(f, image, FilledRectangle(Point(i_min + height - thickness, j_min), thickness, width), color)
+    _draw!(f, image, FilledRectangle(Point(i_min, j_min + width - thickness), height, thickness), color)
 
     return nothing
 end
