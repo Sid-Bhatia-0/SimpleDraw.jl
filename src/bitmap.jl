@@ -67,7 +67,7 @@ end
 
 get_drawing_optimization_style(::Bitmap) = CLIP
 
-function draw!(f::F, image, shape::Bitmap, color) where {F <: Function}
+function _draw!(f::F, image, shape::Bitmap, color) where {F <: Function}
     position = shape.position
     bitmap = shape.bitmap
 
