@@ -72,7 +72,7 @@ get_i_max(shape::VerticalBaseFilledTriangle) = max(shape.vertical_line.i_max, sh
 get_j_min(shape::VerticalBaseFilledTriangle) = min(shape.vertical_line.j, shape.point.j)
 get_j_max(shape::VerticalBaseFilledTriangle) = max(shape.vertical_line.j, shape.point.j)
 
-function draw!(f::F, image, shape::VerticalBaseFilledTriangle, color) where {F <: Function}
+function _draw!(f::F, image, shape::VerticalBaseFilledTriangle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     i1 = shape.vertical_line.i_min
@@ -102,7 +102,7 @@ function draw!(f::F, image, shape::VerticalBaseFilledTriangle, color) where {F <
     should_increment_j3 = false
 
     while true
-        draw!(f, image, VerticalLine(i1, i3, j), color)
+        _draw!(f, image, VerticalLine(i1, i3, j), color)
 
         while true
             if (i1 == i2 && j == j2)
@@ -153,7 +153,7 @@ function draw!(f::F, image, shape::VerticalBaseFilledTriangle, color) where {F <
         end
     end
 
-    draw!(f, image, Line(point3, point2), color)
+    _draw!(f, image, Line(point3, point2), color)
 
     return nothing
 end
@@ -200,7 +200,7 @@ function vertical_line_intersection(point1, point2, j)
     return i
 end
 
-function draw!(f::F, image, shape::FilledTriangle, color) where {F <: Function}
+function _draw!(f::F, image, shape::FilledTriangle, color) where {F <: Function}
     point1, point2, point3 = sort_horizontal(shape.point1, shape.point2, shape.point3)
 
     i1 = point1.i
@@ -211,14 +211,14 @@ function draw!(f::F, image, shape::FilledTriangle, color) where {F <: Function}
     j3 = point3.j
 
     if point1.j == point3.j
-        draw!(f, image, VerticalLine(min(i1, i2, i3), max(i1, i2, i3), j1), color)
+        _draw!(f, image, VerticalLine(min(i1, i2, i3), max(i1, i2, i3), j1), color)
     else
         i = vertical_line_intersection(point1, point3, j2)
         vertical_line = VerticalLine(minmax(i, i2)..., j2)
         left_triangle = VerticalBaseFilledTriangle(vertical_line, point1)
         right_triangle = VerticalBaseFilledTriangle(vertical_line, point3)
-        draw!(f, image, left_triangle, color)
-        draw!(f, image, right_triangle, color)
+        _draw!(f, image, left_triangle, color)
+        _draw!(f, image, right_triangle, color)
     end
 
     return nothing
