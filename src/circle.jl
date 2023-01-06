@@ -242,7 +242,7 @@ get_drawing_optimization_style(::AbstractCircleOctant) = CHECK_BOUNDS
 ##### CircleOctant
 #####
 
-function draw!(f::F, image, shape::CircleOctant, color) where {F <: Function}
+function _draw!(f::F, image, shape::CircleOctant, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     center = shape.center
@@ -281,9 +281,7 @@ end
 
 is_valid(shape::ThickCircleOctant) = (shape.radius >= zero(shape.radius)) && (shape.thickness > zero(shape.thickness) && (shape.thickness <= shape.radius + one(shape.radius)))
 
-function draw!(image, shape::ThickCircleOctant, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
+function _draw!(::CheckBounds, image, shape::ThickCircleOctant, color)
     center = shape.center
     radius = shape.radius
     thickness = shape.thickness
@@ -293,19 +291,19 @@ function draw!(image, shape::ThickCircleOctant, color)
     end
 
     if is_inbounds(image, shape)
-        draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
-            draw!(put_pixel_inbounds!, image, VerticalLine(i1, i2, j1), color)
+        _draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
+            _draw!(put_pixel_inbounds!, image, VerticalLine(i1, i2, j1), color)
         end
     else
-        draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
-            draw!(put_pixel!, image, VerticalLine(i1, i2, j1), color)
+        _draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
+            _draw!(put_pixel!, image, VerticalLine(i1, i2, j1), color)
         end
     end
 
     return nothing
 end
 
-function draw!(f::F, image, shape::ThickCircleOctant, color) where {F <: Function}
+function _draw!(f::F, image, shape::ThickCircleOctant, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     center = shape.center
@@ -400,13 +398,13 @@ get_drawing_optimization_style(::AbstractCircle) = CHECK_BOUNDS
 
 is_valid(shape::OddCircle) = isodd(shape.diameter) && shape.diameter > zero(shape.diameter)
 
-function draw!(f::F, image, shape::OddCircle, color) where {F <: Function}
+function _draw!(f::F, image, shape::OddCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     center, radius = get_center_radius(shape)
 
-    draw!(image, CircleOctant(center, radius), color) do image, i, j, color
-        draw!(f, image, OddOctantSymmetricShape(center, Point(i, j)), color)
+    _draw!(image, CircleOctant(center, radius), color) do image, i, j, color
+        _draw!(f, image, OddOctantSymmetricShape(center, Point(i, j)), color)
     end
 
     return nothing
@@ -418,13 +416,13 @@ end
 
 is_valid(shape::EvenCircle) = iseven(shape.diameter) && shape.diameter > zero(shape.diameter)
 
-function draw!(f::F, image, shape::EvenCircle, color) where {F <: Function}
+function _draw!(f::F, image, shape::EvenCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     center, radius = get_center_radius(shape)
 
-    draw!(image, CircleOctant(center, radius), color) do image, i, j, color
-        draw!(f, image, EvenOctantSymmetricShape(center, Point(i, j)), color)
+    _draw!(image, CircleOctant(center, radius), color) do image, i, j, color
+        _draw!(f, image, EvenOctantSymmetricShape(center, Point(i, j)), color)
     end
 
     return nothing
@@ -437,31 +435,16 @@ end
 move_i(shape::Circle, i) = Circle(move_i(shape.position, i), shape.diameter)
 move_j(shape::Circle, j) = Circle(move_j(shape.position, j), shape.diameter)
 
-function draw!(image, shape::Circle, color)
+function _draw!(f::F, image, shape::Circle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position
     diameter = shape.diameter
 
     if iseven(diameter)
-        draw!(image, EvenCircle(position, diameter), color)
+        _draw!(f, image, EvenCircle(position, diameter), color)
     else
-        draw!(image, OddCircle(position, diameter), color)
-    end
-
-    return nothing
-end
-
-function draw!(f::F, image, shape::Circle, color) where {F <: Function}
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    position = shape.position
-    diameter = shape.diameter
-
-    if iseven(diameter)
-        draw!(f, image, EvenCircle(position, diameter), color)
-    else
-        draw!(f, image, OddCircle(position, diameter), color)
+        _draw!(f, image, OddCircle(position, diameter), color)
     end
 
     return nothing
@@ -473,13 +456,13 @@ end
 
 is_valid(shape::OddFilledCircle) = is_valid(OddCircle(shape.position, shape.diameter))
 
-function draw!(f::F, image, shape::OddFilledCircle, color) where {F <: Function}
+function _draw!(f::F, image, shape::OddFilledCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     center, radius = get_center_radius(shape)
 
-    draw!(image, CircleOctant(center, radius), color) do image, i, j, color
-        draw!(f, image, OddSymmetricVerticalLines4(center, Point(i, j)), color)
+    _draw!(image, CircleOctant(center, radius), color) do image, i, j, color
+        _draw!(f, image, OddSymmetricVerticalLines4(center, Point(i, j)), color)
     end
 
     return nothing
@@ -491,7 +474,7 @@ end
 
 is_valid(shape::EvenFilledCircle) = is_valid(EvenCircle(shape.position, shape.diameter))
 
-function draw!(f::F, image, shape::EvenFilledCircle, color) where {F <: Function}
+function _draw!(f::F, image, shape::EvenFilledCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position
@@ -505,12 +488,12 @@ function draw!(f::F, image, shape::EvenFilledCircle, color) where {F <: Function
     center, radius = get_center_radius(shape)
 
     if diameter == convert(I, 2)
-        draw!(f, image, FilledRectangle(position, convert(I, 2), convert(I, 2)), color)
+        _draw!(f, image, FilledRectangle(position, convert(I, 2), convert(I, 2)), color)
     end
 
-    draw!(image, CircleOctant(center, radius), color) do image, i, j, color
+    _draw!(image, CircleOctant(center, radius), color) do image, i, j, color
         if i > center.i && j > center.j
-            draw!(f, image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
+            _draw!(f, image, EvenSymmetricVerticalLines4(center, Point(i, j)), color)
         else
             return nothing
         end
@@ -526,31 +509,16 @@ end
 move_i(shape::FilledCircle, i) = FilledCircle(move_i(shape.position, i), shape.diameter)
 move_j(shape::FilledCircle, j) = FilledCircle(move_j(shape.position, j), shape.diameter)
 
-function draw!(image, shape::FilledCircle, color)
+function _draw!(f::F, image, shape::FilledCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position
     diameter = shape.diameter
 
     if iseven(diameter)
-        draw!(image, EvenFilledCircle(position, diameter), color)
+        _draw!(f, image, EvenFilledCircle(position, diameter), color)
     else
-        draw!(image, OddFilledCircle(position, diameter), color)
-    end
-
-    return nothing
-end
-
-function draw!(f::F, image, shape::FilledCircle, color) where {F <: Function}
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    position = shape.position
-    diameter = shape.diameter
-
-    if iseven(diameter)
-        draw!(f, image, EvenFilledCircle(position, diameter), color)
-    else
-        draw!(f, image, OddFilledCircle(position, diameter), color)
+        _draw!(f, image, OddFilledCircle(position, diameter), color)
     end
 
     return nothing
@@ -569,15 +537,15 @@ function is_valid(shape::OddThickCircle)
     return isodd(diameter) && diameter > zero(I) && thickness > zero(I) && convert(I, 2) * thickness <= diameter + one(I)
 end
 
-function draw!(f::F, image, shape::OddThickCircle, color) where {F <: Function}
+function _draw!(f::F, image, shape::OddThickCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     thickness = shape.thickness
 
     center, radius = get_center_radius(shape)
 
-    draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
-        draw!(f, image, OddOctantSymmetricShape(center, VerticalLine(i1, i2, j1)), color)
+    _draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
+        _draw!(f, image, OddOctantSymmetricShape(center, VerticalLine(i1, i2, j1)), color)
     end
 
     return nothing
@@ -596,15 +564,15 @@ function is_valid(shape::EvenThickCircle)
     return iseven(diameter) && diameter > zero(I) && thickness > zero(I) && convert(I, 2) * thickness <= diameter
 end
 
-function draw!(f::F, image, shape::EvenThickCircle, color) where {F <: Function}
+function _draw!(f::F, image, shape::EvenThickCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     thickness = shape.thickness
 
     center, radius = get_center_radius(shape)
 
-    draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
-        draw!(f, image, EvenOctantSymmetricShape(center, VerticalLine(i1, i2, j1)), color)
+    _draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
+        _draw!(f, image, EvenOctantSymmetricShape(center, VerticalLine(i1, i2, j1)), color)
     end
 
     return nothing
@@ -629,7 +597,7 @@ end
 move_i(shape::ThickCircle, i) = ThickCircle(move_i(shape.position, i), shape.diameter, shape.thickness)
 move_j(shape::ThickCircle, j) = ThickCircle(move_j(shape.position, j), shape.diameter, shape.thickness)
 
-function draw!(image, shape::ThickCircle, color)
+function _draw!(f::F, image, shape::ThickCircle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position
@@ -637,25 +605,9 @@ function draw!(image, shape::ThickCircle, color)
     thickness = shape.thickness
 
     if iseven(diameter)
-        draw!(image, EvenThickCircle(position, diameter, thickness), color)
+        _draw!(f, image, EvenThickCircle(position, diameter, thickness), color)
     else
-        draw!(image, OddThickCircle(position, diameter, thickness), color)
-    end
-
-    return nothing
-end
-
-function draw!(f::F, image, shape::ThickCircle, color) where {F <: Function}
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
-    position = shape.position
-    diameter = shape.diameter
-    thickness = shape.thickness
-
-    if iseven(diameter)
-        draw!(f, image, EvenThickCircle(position, diameter, thickness), color)
-    else
-        draw!(f, image, OddThickCircle(position, diameter, thickness), color)
+        _draw!(f, image, OddThickCircle(position, diameter, thickness), color)
     end
 
     return nothing

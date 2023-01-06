@@ -367,7 +367,15 @@ julia> visualize(image)
 32▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░▒▒░░
 ```
 """
-function draw! end
+function draw!(image, shape, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
+    _draw!(get_drawing_optimization_style(shape), image, shape, color)
+
+    return nothing
+end
+
+draw!(image, shape) = draw!(image, shape, nothing)
 
 #####
 ##### DrawingOptimizationStyle to define generic draw! methods with different levels of optimization for drawing shapes
@@ -377,8 +385,6 @@ abstract type DrawingOptimizationStyle end
 
 get_drawing_optimization_style(shape) = PUT_PIXEL
 
-draw!(image, shape, color) = draw!(get_drawing_optimization_style(shape), image, shape, color)
-
 #####
 ##### PutPixel (least optimized)
 #####
@@ -386,7 +392,7 @@ draw!(image, shape, color) = draw!(get_drawing_optimization_style(shape), image,
 struct PutPixel <: DrawingOptimizationStyle end
 const PUT_PIXEL = PutPixel()
 
-draw!(::PutPixel, image, shape, color) = draw!(put_pixel!, image, shape, color)
+_draw!(::PutPixel, image, shape, color) = _draw!(put_pixel!, image, shape, color)
 
 #####
 ##### CheckBounds (checks outbounds and inbounds conditions and dispatches accordingly)
@@ -395,17 +401,15 @@ draw!(::PutPixel, image, shape, color) = draw!(put_pixel!, image, shape, color)
 struct CheckBounds <: DrawingOptimizationStyle end
 const CHECK_BOUNDS = CheckBounds()
 
-function draw!(::CheckBounds, image, shape, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
+function _draw!(::CheckBounds, image, shape, color)
     if is_outbounds(image, shape)
         return nothing
     end
 
     if is_inbounds(image, shape)
-        draw!(put_pixel_inbounds!, image, shape, color)
+        _draw!(put_pixel_inbounds!, image, shape, color)
     else
-        draw!(put_pixel!, image, shape, color)
+        _draw!(put_pixel!, image, shape, color)
     end
 
     return nothing
@@ -418,14 +422,12 @@ end
 struct Clip <: DrawingOptimizationStyle end
 const CLIP = Clip()
 
-function draw!(::Clip, image, shape, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
-
+function _draw!(::Clip, image, shape, color)
     if is_outbounds(image, shape)
         return nothing
     end
 
-    draw!(put_pixel_inbounds!, image, clip(image, shape), color)
+    _draw!(put_pixel_inbounds!, image, clip(image, shape), color)
 
     return nothing
 end
@@ -437,4 +439,4 @@ end
 struct PutPixelInbounds <: DrawingOptimizationStyle end
 const PUT_PIXEL_INBOUNDS = PutPixelInbounds()
 
-draw!(::PutPixelInbounds, image, shape, color) = draw!(put_pixel_inbounds!, image, shape, color)
+_draw!(::PutPixelInbounds, image, shape, color) = _draw!(put_pixel_inbounds!, image, shape, color)

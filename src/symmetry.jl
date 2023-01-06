@@ -103,7 +103,7 @@ function get_j_extrema(shape::OddOctantSymmetricShape)
     return (min(get_j_min(generator), get_j_min(generator_reflected)), max(get_j_max(generator), get_j_max(generator_reflected)))
 end
 
-function draw!(f::F, image, shape::OddOctantSymmetricShape{I, Point{I}}, color) where {F <: Function, I}
+function _draw!(f::F, image, shape::OddOctantSymmetricShape{I, Point{I}}, color) where {F <: Function, I}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     origin = shape.origin
@@ -129,7 +129,7 @@ function draw!(f::F, image, shape::OddOctantSymmetricShape{I, Point{I}}, color) 
     return nothing
 end
 
-function draw!(f::F, image, shape::OddOctantSymmetricShape{I, VerticalLine{I}}, color) where {F <: Function, I}
+function _draw!(f::F, image, shape::OddOctantSymmetricShape{I, VerticalLine{I}}, color) where {F <: Function, I}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     origin = shape.origin
@@ -146,14 +146,14 @@ function draw!(f::F, image, shape::OddOctantSymmetricShape{I, VerticalLine{I}}, 
     i_outer_relative = i_max_line - i_origin
     j_relative = j_line - j_origin
 
-    draw!(f, image, HorizontalLine(i_origin - j_relative, j_origin - i_outer_relative, j_origin - i_inner_relative), color)
-    draw!(f, image, HorizontalLine(i_origin + j_relative, j_origin - i_outer_relative, j_origin - i_inner_relative), color)
-    draw!(f, image, VerticalLine(i_origin - i_outer_relative, i_origin - i_inner_relative, j_origin - j_relative), color)
-    draw!(f, image, VerticalLine(i_origin + i_inner_relative, i_origin + i_outer_relative, j_origin - j_relative), color)
-    draw!(f, image, VerticalLine(i_origin - i_outer_relative, i_origin - i_inner_relative, j_origin + j_relative), color)
-    draw!(f, image, VerticalLine(i_origin + i_inner_relative, i_origin + i_outer_relative, j_origin + j_relative), color)
-    draw!(f, image, HorizontalLine(i_origin - j_relative, j_origin + i_inner_relative, j_origin + i_outer_relative), color)
-    draw!(f, image, HorizontalLine(i_origin + j_relative, j_origin + i_inner_relative, j_origin + i_outer_relative), color)
+    _draw!(f, image, HorizontalLine(i_origin - j_relative, j_origin - i_outer_relative, j_origin - i_inner_relative), color)
+    _draw!(f, image, HorizontalLine(i_origin + j_relative, j_origin - i_outer_relative, j_origin - i_inner_relative), color)
+    _draw!(f, image, VerticalLine(i_origin - i_outer_relative, i_origin - i_inner_relative, j_origin - j_relative), color)
+    _draw!(f, image, VerticalLine(i_origin + i_inner_relative, i_origin + i_outer_relative, j_origin - j_relative), color)
+    _draw!(f, image, VerticalLine(i_origin - i_outer_relative, i_origin - i_inner_relative, j_origin + j_relative), color)
+    _draw!(f, image, VerticalLine(i_origin + i_inner_relative, i_origin + i_outer_relative, j_origin + j_relative), color)
+    _draw!(f, image, HorizontalLine(i_origin - j_relative, j_origin + i_inner_relative, j_origin + i_outer_relative), color)
+    _draw!(f, image, HorizontalLine(i_origin + j_relative, j_origin + i_inner_relative, j_origin + i_outer_relative), color)
 
     return nothing
 end
@@ -204,7 +204,7 @@ function get_j_extrema(shape::EvenOctantSymmetricShape)
     return (min(get_j_min(generator), get_j_min(generator_reflected)), max(get_j_max(generator), get_j_max(generator_reflected)))
 end
 
-function draw!(f::F, image, shape::EvenOctantSymmetricShape{I, Point{I}}, color) where {F <: Function, I}
+function _draw!(f::F, image, shape::EvenOctantSymmetricShape{I, Point{I}}, color) where {F <: Function, I}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     origin = shape.origin
@@ -230,7 +230,7 @@ function draw!(f::F, image, shape::EvenOctantSymmetricShape{I, Point{I}}, color)
     return nothing
 end
 
-function draw!(f::F, image, shape::EvenOctantSymmetricShape{I, VerticalLine{I}}, color) where {F <: Function, I}
+function _draw!(f::F, image, shape::EvenOctantSymmetricShape{I, VerticalLine{I}}, color) where {F <: Function, I}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     origin = shape.origin
@@ -247,14 +247,14 @@ function draw!(f::F, image, shape::EvenOctantSymmetricShape{I, VerticalLine{I}},
     i_outer_relative = i_max_line - i_origin
     j_relative = j_line - j_origin
 
-    draw!(f, image, HorizontalLine(i_origin - j_relative, j_origin - i_outer_relative, j_origin - i_inner_relative), color)
-    draw!(f, image, HorizontalLine(i_origin + j_relative - one(I), j_origin - i_outer_relative, j_origin - i_inner_relative), color)
-    draw!(f, image, VerticalLine(i_origin - i_outer_relative, i_origin - i_inner_relative, j_origin - j_relative), color)
-    draw!(f, image, VerticalLine(i_origin + i_inner_relative - one(I), i_origin + i_outer_relative - one(I), j_origin - j_relative), color)
-    draw!(f, image, VerticalLine(i_origin - i_outer_relative, i_origin - i_inner_relative, j_origin + j_relative - one(I)), color)
-    draw!(f, image, VerticalLine(i_origin + i_inner_relative - one(I), i_origin + i_outer_relative - one(I), j_origin + j_relative - one(I)), color)
-    draw!(f, image, HorizontalLine(i_origin - j_relative, j_origin + i_inner_relative - one(I), j_origin + i_outer_relative - one(I)), color)
-    draw!(f, image, HorizontalLine(i_origin + j_relative - one(I), j_origin + i_inner_relative - one(I), j_origin + i_outer_relative - one(I)), color)
+    _draw!(f, image, HorizontalLine(i_origin - j_relative, j_origin - i_outer_relative, j_origin - i_inner_relative), color)
+    _draw!(f, image, HorizontalLine(i_origin + j_relative - one(I), j_origin - i_outer_relative, j_origin - i_inner_relative), color)
+    _draw!(f, image, VerticalLine(i_origin - i_outer_relative, i_origin - i_inner_relative, j_origin - j_relative), color)
+    _draw!(f, image, VerticalLine(i_origin + i_inner_relative - one(I), i_origin + i_outer_relative - one(I), j_origin - j_relative), color)
+    _draw!(f, image, VerticalLine(i_origin - i_outer_relative, i_origin - i_inner_relative, j_origin + j_relative - one(I)), color)
+    _draw!(f, image, VerticalLine(i_origin + i_inner_relative - one(I), i_origin + i_outer_relative - one(I), j_origin + j_relative - one(I)), color)
+    _draw!(f, image, HorizontalLine(i_origin - j_relative, j_origin + i_inner_relative - one(I), j_origin + i_outer_relative - one(I)), color)
+    _draw!(f, image, HorizontalLine(i_origin + j_relative - one(I), j_origin + i_inner_relative - one(I), j_origin + i_outer_relative - one(I)), color)
 
     return nothing
 end
@@ -291,7 +291,7 @@ function get_j_extrema(shape::OddSymmetricVerticalLines4)
     return (get_odd_reflection_vertical_line(diagonally_reflected_point, shape.origin.j).j, diagonally_reflected_point.j)
 end
 
-function draw!(f::F, image, shape::OddSymmetricVerticalLines4, color) where {F <: Function}
+function _draw!(f::F, image, shape::OddSymmetricVerticalLines4, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     origin = shape.origin
@@ -305,10 +305,10 @@ function draw!(f::F, image, shape::OddSymmetricVerticalLines4, color) where {F <
     i_diff = i - i_origin
     j_diff = j - j_origin
 
-    draw!(f, image, VerticalLine(i_origin - j_diff, i_origin + j_diff, j_origin - i_diff), color)
-    draw!(f, image, VerticalLine(i_origin - i_diff, i_origin + i_diff, j_origin - j_diff), color)
-    draw!(f, image, VerticalLine(i_origin - i_diff, i_origin + i_diff, j_origin + j_diff), color)
-    draw!(f, image, VerticalLine(i_origin - j_diff, i_origin + j_diff, j_origin + i_diff), color)
+    _draw!(f, image, VerticalLine(i_origin - j_diff, i_origin + j_diff, j_origin - i_diff), color)
+    _draw!(f, image, VerticalLine(i_origin - i_diff, i_origin + i_diff, j_origin - j_diff), color)
+    _draw!(f, image, VerticalLine(i_origin - i_diff, i_origin + i_diff, j_origin + j_diff), color)
+    _draw!(f, image, VerticalLine(i_origin - j_diff, i_origin + j_diff, j_origin + i_diff), color)
 
     return nothing
 end
@@ -345,7 +345,7 @@ function get_j_extrema(shape::EvenSymmetricVerticalLines4)
     return (get_even_reflection_vertical_line(diagonally_reflected_point, shape.origin.j).j, diagonally_reflected_point.j)
 end
 
-function draw!(f::F, image, shape::EvenSymmetricVerticalLines4, color) where {F <: Function}
+function _draw!(f::F, image, shape::EvenSymmetricVerticalLines4, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     origin = shape.origin
@@ -361,10 +361,10 @@ function draw!(f::F, image, shape::EvenSymmetricVerticalLines4, color) where {F 
     i_diff = i - i_origin
     j_diff = j - j_origin
 
-    draw!(f, image, VerticalLine(i_origin - j_diff, i_origin + j_diff - one(I), j_origin - i_diff), color)
-    draw!(f, image, VerticalLine(i_origin - i_diff, i_origin + i_diff - one(I), j_origin - j_diff), color)
-    draw!(f, image, VerticalLine(i_origin - i_diff, i_origin + i_diff - one(I), j_origin + j_diff - one(I)), color)
-    draw!(f, image, VerticalLine(i_origin - j_diff, i_origin + j_diff - one(I), j_origin + i_diff - one(I)), color)
+    _draw!(f, image, VerticalLine(i_origin - j_diff, i_origin + j_diff - one(I), j_origin - i_diff), color)
+    _draw!(f, image, VerticalLine(i_origin - i_diff, i_origin + i_diff - one(I), j_origin - j_diff), color)
+    _draw!(f, image, VerticalLine(i_origin - i_diff, i_origin + i_diff - one(I), j_origin + j_diff - one(I)), color)
+    _draw!(f, image, VerticalLine(i_origin - j_diff, i_origin + j_diff - one(I), j_origin + i_diff - one(I)), color)
 
     return nothing
 end

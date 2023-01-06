@@ -67,6 +67,8 @@ move_i(shape::Character, i) = Character(move_i(shape.position, i), shape.charact
 move_j(shape::Character, j) = Character(move_j(shape.position, j), shape.character, shape.font)
 
 function draw!(image, shape::Character, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     character = shape.character
     font = shape.font
@@ -81,33 +83,11 @@ function draw!(image, shape::Character, color)
                 return nothing
             else
                 bitmap_shape = Bitmap(position, get_bitmap(font, character))
-                draw!(put_pixel_inbounds!, image, bitmap_shape, color)
+                _draw!(put_pixel_inbounds!, image, clip(image, bitmap_shape), color)
             end
         else
             filled_rectangle = FilledRectangle(position, get_height(font), get_width(font))
-            draw!(image, filled_rectangle, color)
-        end
-    end
-
-    return nothing
-end
-
-function draw!(f::F, image, shape::Character, color) where {F <: Function}
-    position = shape.position
-    character = shape.character
-    font = shape.font
-
-    if isprint(character)
-        if isascii(character)
-            if character == ' '
-                return nothing
-            else
-                bitmap_shape = Bitmap(position, get_bitmap(font, character))
-                draw!(f, image, bitmap_shape, color)
-            end
-        else
-            filled_rectangle = FilledRectangle(position, get_height(font), get_width(font))
-            draw!(f, image, filled_rectangle, color)
+            _draw!(put_pixel_inbounds!, image, clip(image, filled_rectangle), color)
         end
     end
 
