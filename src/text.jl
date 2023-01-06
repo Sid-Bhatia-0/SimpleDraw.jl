@@ -96,7 +96,7 @@ end
 move_i(shape::TextLine, i) = TextLine(move_i(shape.position, i), shape.text, shape.font)
 move_j(shape::TextLine, j) = TextLine(move_j(shape.position, j), shape.text, shape.font)
 
-function draw!(f::F, image, shape::TextLine, color) where {F <: Function}
+function draw!(image, shape::TextLine, color)
     position = shape.position
     text = shape.text
     font = shape.font
@@ -109,7 +109,7 @@ function draw!(f::F, image, shape::TextLine, color) where {F <: Function}
     char_position = position
 
     for character in text
-        draw!(f, image, Character(char_position, character, font), color)
+        draw!(image, Character(char_position, character, font), color)
         if isprint(character)
             char_position = Point(char_position.i, char_position.j + width)
         end
