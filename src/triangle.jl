@@ -203,6 +203,8 @@ function vertical_line_intersection(point1, point2, j)
 end
 
 function _draw!(f::F, image, shape::FilledTriangle, color) where {F <: Function}
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     point1, point2, point3 = sort_horizontal(shape.point1, shape.point2, shape.point3)
 
     i1 = point1.i

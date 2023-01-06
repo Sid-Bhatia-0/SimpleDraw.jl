@@ -68,6 +68,8 @@ end
 get_drawing_optimization_style(::Bitmap) = CLIP
 
 function _draw!(f::F, image, shape::Bitmap, color) where {F <: Function}
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     bitmap = shape.bitmap
 

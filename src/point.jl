@@ -61,6 +61,8 @@ move_i(shape::Point, i) = Point(shape.i + i, shape.j)
 move_j(shape::Point, j) = Point(shape.i, shape.j + j)
 
 function _draw!(f::F, image, shape::Point, color) where {F <: Function}
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     f(image, shape.i, shape.j, color)
     return nothing
 end

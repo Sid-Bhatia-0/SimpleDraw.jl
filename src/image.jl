@@ -122,6 +122,8 @@ get_drawing_optimization_style(::Image) = CLIP
 _draw!(f::F, image, shape::Image, color) where {F <: Function} = _draw!(f, image, shape)
 
 function _draw!(f::F, image, shape::Image) where {F <: Function}
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     shape_image = shape.image
 
