@@ -97,6 +97,8 @@ move_i(shape::TextLine, i) = TextLine(move_i(shape.position, i), shape.text, sha
 move_j(shape::TextLine, j) = TextLine(move_j(shape.position, j), shape.text, shape.font)
 
 function draw!(image, shape::TextLine, color)
+    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+
     position = shape.position
     text = shape.text
     font = shape.font
