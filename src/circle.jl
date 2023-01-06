@@ -281,6 +281,28 @@ end
 
 is_valid(shape::ThickCircleOctant) = (shape.radius >= zero(shape.radius)) && (shape.thickness > zero(shape.thickness) && (shape.thickness <= shape.radius + one(shape.radius)))
 
+function _draw!(::CheckBounds, image, shape::ThickCircleOctant, color)
+    center = shape.center
+    radius = shape.radius
+    thickness = shape.thickness
+
+    if is_outbounds(image, shape)
+        return nothing
+    end
+
+    if is_inbounds(image, shape)
+        _draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
+            _draw!(put_pixel_inbounds!, image, VerticalLine(i1, i2, j1), color)
+        end
+    else
+        _draw!(image, ThickCircleOctant(center, radius, thickness), color) do image, i1, j1, i2, j2, color
+            _draw!(put_pixel!, image, VerticalLine(i1, i2, j1), color)
+        end
+    end
+
+    return nothing
+end
+
 function _draw!(f::F, image, shape::ThickCircleOctant, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
