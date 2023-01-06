@@ -57,8 +57,6 @@ struct TextLine{I <: Integer, S, F <: AbstractFont} <: AbstractShape
     font::F
 end
 
-get_drawing_optimization_style(::TextLine) = PUT_PIXEL
-
 function get_num_printable(shape::TextLine)
     num_printable = 0
 
