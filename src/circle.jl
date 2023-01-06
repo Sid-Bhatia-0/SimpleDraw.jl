@@ -236,6 +236,8 @@ get_i_max(shape::AbstractCircleOctant) = shape.center.i + shape.radius
 get_j_min(shape::AbstractCircleOctant) = shape.center.j
 get_j_max(shape::AbstractCircleOctant) = shape.center.j + shape.radius
 
+get_drawing_optimization_style(::AbstractCircleOctant) = CHECK_BOUNDS
+
 #####
 ##### CircleOctant
 #####

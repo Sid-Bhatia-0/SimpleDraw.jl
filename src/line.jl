@@ -141,6 +141,8 @@ get_i_max(shape::VerticalLine) = shape.i_max
 get_j_min(shape::VerticalLine) = shape.j
 get_j_max(shape::VerticalLine) = shape.j
 
+get_drawing_optimization_style(::VerticalLine) = CLIP
+
 clip(image, shape::VerticalLine) = VerticalLine(max(get_i_min(shape), get_i_min(image)), min(get_i_max(shape), get_i_max(image)), shape.j)
 
 function _draw!(f::F, image, shape::VerticalLine, color) where {F <: Function}
@@ -166,6 +168,8 @@ get_i_max(shape::HorizontalLine) = shape.i
 
 get_j_min(shape::HorizontalLine) = shape.j_min
 get_j_max(shape::HorizontalLine) = shape.j_max
+
+get_drawing_optimization_style(::HorizontalLine) = CLIP
 
 clip(image, shape::HorizontalLine) = HorizontalLine(shape.i, max(get_j_min(shape), get_j_min(image)), min(get_j_max(shape), get_j_max(image)))
 

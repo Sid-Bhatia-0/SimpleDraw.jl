@@ -72,6 +72,8 @@ get_i_max(shape::VerticalBaseFilledTriangle) = max(shape.vertical_line.i_max, sh
 get_j_min(shape::VerticalBaseFilledTriangle) = min(shape.vertical_line.j, shape.point.j)
 get_j_max(shape::VerticalBaseFilledTriangle) = max(shape.vertical_line.j, shape.point.j)
 
+get_drawing_optimization_style(::VerticalBaseFilledTriangle) = CHECK_BOUNDS
+
 function _draw!(f::F, image, shape::VerticalBaseFilledTriangle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
