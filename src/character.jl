@@ -83,11 +83,11 @@ function draw!(image, shape::Character, color)
                 return nothing
             else
                 bitmap_shape = Bitmap(position, get_bitmap(font, character))
-                draw!(put_pixel_inbounds!, image, bitmap_shape, color)
+                _draw!(put_pixel_inbounds!, image, clip(image, bitmap_shape), color)
             end
         else
             filled_rectangle = FilledRectangle(position, get_height(font), get_width(font))
-            draw!(image, filled_rectangle, color)
+            _draw!(put_pixel_inbounds!, image, clip(image, filled_rectangle), color)
         end
     end
 
