@@ -383,7 +383,7 @@ draw!(image, shape) = draw!(image, shape, nothing)
 
 abstract type DrawingOptimizationStyle end
 
-get_drawing_optimization_style(shape) = PUT_PIXEL
+get_drawing_optimization_style(shape) = CHECK_BOUNDS
 
 #####
 ##### PutPixel (least optimized)
