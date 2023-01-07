@@ -5,7 +5,15 @@
         font::F
     end
 
-There are two monospace fonts available at this point - `TERMINUS_32_16` (height 32 pixels, width 16 pixels) and `TERMINUS_16_8` (height 16 pixels, width 8 pixels). Only glyphs for ASCII characters are available as of now.
+There are 6 monospace ASCII fonts are available at this point:
+1. `TERMINUS_16_8` (height 16 pixels, width 8 pixels)
+2. `TERMINUS_BOLD_16_8` (height 16 pixels, width 8 pixels)
+3. `TERMINUS_24_12` (height 24 pixels, width 12 pixels)
+4. `TERMINUS_BOLD_24_12` (height 24 pixels, width 12 pixels)
+5. `TERMINUS_32_16` (height 32 pixels, width 16 pixels)
+6. `TERMINUS_BOLD_32_16` (height 32 pixels, width 16 pixels)
+
+Only glyphs for ASCII characters are available as of now.
 
 See also [`TextLine`](@ref).
 
