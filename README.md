@@ -59,7 +59,7 @@ SD.visualize(image)
 The following types are part of the API.
 1. All types in [List of shapes](#list-of-shapes)
 1. The abstract type `AbstractShape`
-1. The font types `Terminus_32_16`, `Terminus_16_8`, and their corresponding constants `TERMINUS_32_16`, `TERMINUS_16_8`.
+1. The font constants `TERMINUS_16_8`, `TERMINUS_BOLD_16_8`, `TERMINUS_24_12`, `TERMINUS_BOLD_24_12`, `TERMINUS_32_16`, `TERMINUS_BOLD_32_16`.
 
 The following functions are part of the API:
 1. `draw!`
@@ -378,7 +378,15 @@ This will print a bunch of outputs and produce a markdown file named with a time
     end
     ```
 
-    There are two monospace fonts available at this point - `TERMINUS_32_16` (height 32 pixels, width 16 pixels) and `TERMINUS_16_8` (height 16 pixels, width 8 pixels). Only glyphs for ASCII characters are available as of now.
+    There are 6 monospace ASCII fonts are available at this point:
+    1. `TERMINUS_16_8` (height 16 pixels, width 8 pixels)
+    2. `TERMINUS_BOLD_16_8` (height 16 pixels, width 8 pixels)
+    3. `TERMINUS_24_12` (height 24 pixels, width 12 pixels)
+    4. `TERMINUS_BOLD_24_12` (height 24 pixels, width 12 pixels)
+    5. `TERMINUS_32_16` (height 32 pixels, width 16 pixels)
+    6. `TERMINUS_BOLD_32_16` (height 32 pixels, width 16 pixels)
+
+    Only glyphs for ASCII characters are available as of now.
 
     <img src="https://user-images.githubusercontent.com/32610387/147944083-56f45efc-1c7f-4f19-ae53-e17d5f8e51b6.png">
 
@@ -392,7 +400,15 @@ This will print a bunch of outputs and produce a markdown file named with a time
     end
     ```
 
-    There are two monospace fonts available at this point - `TERMINUS_32_16` (height 32 pixels, width 16 pixels) and `TERMINUS_16_8` (height 16 pixels, width 8 pixels). Only glyphs for ASCII characters are available as of now.
+    There are 6 monospace ASCII fonts are available at this point:
+    1. `TERMINUS_16_8` (height 16 pixels, width 8 pixels)
+    2. `TERMINUS_BOLD_16_8` (height 16 pixels, width 8 pixels)
+    3. `TERMINUS_24_12` (height 24 pixels, width 12 pixels)
+    4. `TERMINUS_BOLD_24_12` (height 24 pixels, width 12 pixels)
+    5. `TERMINUS_32_16` (height 32 pixels, width 16 pixels)
+    6. `TERMINUS_BOLD_32_16` (height 32 pixels, width 16 pixels)
+
+    Only glyphs for ASCII characters are available as of now.
 
     <img src="https://user-images.githubusercontent.com/32610387/147944102-2480436c-d9b8-47bb-9134-5537b4014791.png">
 
