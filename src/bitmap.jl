@@ -14,54 +14,58 @@ get_j_max(shape::Bitmap) = shape.position.j + size(shape.bitmap, 2) - one(shape.
 move_i(shape::Bitmap, i) = Bitmap(move_i(shape.position, i), shape.bitmap)
 move_j(shape::Bitmap, j) = Bitmap(move_j(shape.position, j), shape.bitmap)
 
-function clip(image, shape::Bitmap)
-    position = shape.position
-    bitmap = shape.bitmap
-
+function clip_array(image, position, array)
     # assuming shape is not outbounds, !isempty(shape.image), and it has an overlap region with the image
 
-    i_min_shape, i_max_shape = get_i_extrema(shape)
+    I = typeof(position.i)
+
+    i_min_shape = position.i
+    i_max_shape = position.i + size(array, 1) - one(I)
     i_min_image, i_max_image = get_i_extrema(image)
 
-    I = typeof(i_min_shape)
-
-    j_min_shape, j_max_shape = get_j_extrema(shape)
+    j_min_shape = position.j
+    j_max_shape = position.j + size(array, 2) - one(I)
     j_min_image, j_max_image = get_j_extrema(image)
 
     delta_i_min = i_min_image - i_min_shape
     if delta_i_min > zero(delta_i_min)
         i_new_position = i_min_image
-        i_begin = firstindex(bitmap, 1) + delta_i_min
+        i_begin = firstindex(array, 1) + delta_i_min
     else
         i_new_position = position.i
-        i_begin = firstindex(bitmap, 1)
+        i_begin = firstindex(array, 1)
     end
 
     delta_i_max = i_max_shape - i_max_image
     if delta_i_max > zero(delta_i_max)
-        i_end = lastindex(bitmap, 1) - delta_i_max
+        i_end = lastindex(array, 1) - delta_i_max
     else
-        i_end = lastindex(bitmap, 1)
+        i_end = lastindex(array, 1)
     end
 
     delta_j_min = j_min_image - j_min_shape
     if delta_j_min > zero(delta_j_min)
         j_new_position = j_min_image
-        j_begin = firstindex(bitmap, 2) + delta_j_min
+        j_begin = firstindex(array, 2) + delta_j_min
     else
         j_new_position = position.j
-        j_begin = firstindex(bitmap, 2)
+        j_begin = firstindex(array, 2)
     end
 
     delta_j_max = j_max_shape - j_max_image
     if delta_j_max > zero(delta_j_max)
-        j_end = lastindex(bitmap, 2) - delta_j_max
+        j_end = lastindex(array, 2) - delta_j_max
     else
-        j_end = lastindex(bitmap, 2)
+        j_end = lastindex(array, 2)
     end
 
-    return Bitmap(Point(i_new_position, j_new_position), @view bitmap[i_begin:i_end, j_begin:j_end])
+    new_position = Point(i_new_position, j_new_position)
+    new_array = @view array[i_begin:i_end, j_begin:j_end]
+
+    return new_position, new_array
 end
+
+clip(image, shape::Bitmap) = Bitmap(clip_array(image, shape.position, shape.bitmap)...)
 
 get_drawing_optimization_style(::Bitmap) = CLIP
 
