@@ -6,10 +6,10 @@ end
 is_valid(shape::Bitmap) = !isempty(shape.bitmap)
 
 get_i_min(shape::Bitmap) = shape.position.i
-get_i_max(shape::Bitmap) = isempty(shape.bitmap) ? shape.position.i : shape.position.i + size(shape.bitmap, 1) - one(shape.position.i)
+get_i_max(shape::Bitmap) = shape.position.i + size(shape.bitmap, 1) - one(shape.position.i)
 
 get_j_min(shape::Bitmap) = shape.position.j
-get_j_max(shape::Bitmap) = isempty(shape.bitmap) ? shape.position.j : shape.position.j + size(shape.bitmap, 2) - one(shape.position.j)
+get_j_max(shape::Bitmap) = shape.position.j + size(shape.bitmap, 2) - one(shape.position.j)
 
 move_i(shape::Bitmap, i) = Bitmap(move_i(shape.position, i), shape.bitmap)
 move_j(shape::Bitmap, j) = Bitmap(move_j(shape.position, j), shape.bitmap)
