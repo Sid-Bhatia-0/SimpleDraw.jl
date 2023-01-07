@@ -3,11 +3,13 @@ struct Bitmap{I <: Integer, B <: AbstractMatrix{Bool}} <: AbstractShape
     bitmap::B
 end
 
+is_valid(shape::Bitmap) = !isempty(shape.bitmap)
+
 get_i_min(shape::Bitmap) = shape.position.i
-get_i_max(shape::Bitmap) = isempty(shape.bitmap) ? shape.position.i : shape.position.i + size(shape.bitmap, 1) - one(shape.position.i)
+get_i_max(shape::Bitmap) = shape.position.i + size(shape.bitmap, 1) - one(shape.position.i)
 
 get_j_min(shape::Bitmap) = shape.position.j
-get_j_max(shape::Bitmap) = isempty(shape.bitmap) ? shape.position.j : shape.position.j + size(shape.bitmap, 2) - one(shape.position.j)
+get_j_max(shape::Bitmap) = shape.position.j + size(shape.bitmap, 2) - one(shape.position.j)
 
 move_i(shape::Bitmap, i) = Bitmap(move_i(shape.position, i), shape.bitmap)
 move_j(shape::Bitmap, j) = Bitmap(move_j(shape.position, j), shape.bitmap)
@@ -15,10 +17,6 @@ move_j(shape::Bitmap, j) = Bitmap(move_j(shape.position, j), shape.bitmap)
 function clip(image, shape::Bitmap)
     position = shape.position
     bitmap = shape.bitmap
-
-    if isempty(bitmap)
-        return shape
-    end
 
     # assuming shape is not outbounds, !isempty(shape.image), and it has an overlap region with the image
 
@@ -72,10 +70,6 @@ function _draw!(f::F, image, shape::Bitmap, color) where {F <: Function}
 
     position = shape.position
     bitmap = shape.bitmap
-
-    if isempty(bitmap)
-        return nothing
-    end
 
     i_position = position.i
     j_position = position.j

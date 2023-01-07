@@ -4353,13 +4353,10 @@ Test.@testset "SimpleDraw.jl" begin
         fill!(bitmap, true)
         shape = SD.Bitmap(SD.Point(1, 1), bitmap)
         Test.@test SD.get_i_min(shape) == 1
-        Test.@test SD.get_i_max(shape) == 1
+        Test.@test SD.get_i_max(shape) == 0
         Test.@test SD.get_j_min(shape) == 1
-        Test.@test SD.get_j_max(shape) == 1
-        Test.@test SD.is_valid(shape)
-        color = true
-        SD.draw!(image, shape, color)
-        Test.@test image == falses(height, width)
+        Test.@test SD.get_j_max(shape) == 0
+        Test.@test !SD.is_valid(shape)
 
         height = 32
         width = 32
