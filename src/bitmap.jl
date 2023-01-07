@@ -3,6 +3,8 @@ struct Bitmap{I <: Integer, B <: AbstractMatrix{Bool}} <: AbstractShape
     bitmap::B
 end
 
+is_valid(shape::Bitmap) = !isempty(shape.bitmap)
+
 get_i_min(shape::Bitmap) = shape.position.i
 get_i_max(shape::Bitmap) = isempty(shape.bitmap) ? shape.position.i : shape.position.i + size(shape.bitmap, 1) - one(shape.position.i)
 
