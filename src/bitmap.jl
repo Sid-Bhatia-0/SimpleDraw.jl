@@ -18,10 +18,6 @@ function clip(image, shape::Bitmap)
     position = shape.position
     bitmap = shape.bitmap
 
-    if isempty(bitmap)
-        return shape
-    end
-
     # assuming shape is not outbounds, !isempty(shape.image), and it has an overlap region with the image
 
     i_min_shape, i_max_shape = get_i_extrema(shape)
@@ -74,10 +70,6 @@ function _draw!(f::F, image, shape::Bitmap, color) where {F <: Function}
 
     position = shape.position
     bitmap = shape.bitmap
-
-    if isempty(bitmap)
-        return nothing
-    end
 
     i_position = position.i
     j_position = position.j
