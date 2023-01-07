@@ -3,7 +3,6 @@ struct FontInfo
     width::Int
     encodings
     font_file_name::String
-    font_type_name::String
     font_instance_name::String
 end
 
@@ -68,21 +67,15 @@ end
 function generate_julia_font_file(font_info)
     bitmap = get_bitmap(font_info)
     height, width, num_encodings = size(bitmap)
-    font_type_name = font_info.font_type_name
     font_instance_name = font_info.font_instance_name
 
-    file = open(font_type_name * ".jl", "w")
+    file = open("GLYPHS_" * font_instance_name * ".jl", "w")
 
-    println(file, """
-    struct $(font_type_name) <: AbstractASCIIFont
-        bitmaps::BitArray{3}
-    end
-
-    const $(font_instance_name) = $(font_type_name)(falses($(height), $(width), $(num_encodings)))
-    """)
+    println(file, "const GLYPHS_$(font_instance_name) = falses($(height), $(width), $(num_encodings))")
+    println(file)
 
     for k in 1:num_encodings
-        println(file, "$(font_instance_name).bitmaps[:, :, $(k)] = [")
+        println(file, "GLYPHS_$(font_instance_name)[:, :, $(k)] = [")
 
         for i in 1:height
             for j in 1:width
