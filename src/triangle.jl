@@ -25,7 +25,7 @@ get_drawing_optimization_style(::AbstractTriangle) = CHECK_BOUNDS
 ##### FilledTriangle
 #####
 
-function sort_triangle_points(point1, point2, point3)
+function sort_points_horizontal_vertical(point1, point2, point3)
     point1, point2 = sort_points_horizontal_vertical(point1, point2)
     point1, point3 = sort_points_horizontal_vertical(point1, point3)
     point2, point3 = sort_points_horizontal_vertical(point2, point3)
@@ -36,7 +36,7 @@ end
 function _draw!(f::F, image, shape::FilledTriangle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
-    point1, point2, point3 = sort_triangle_points(shape.point1, shape.point2, shape.point3)
+    point1, point2, point3 = sort_points_horizontal_vertical(shape.point1, shape.point2, shape.point3)
 
     i1 = point1.i
     j1 = point1.j
