@@ -206,7 +206,7 @@ move_j(shape::Line, j) = Line(move_j(shape.point1, j), move_j(shape.point2, j))
 
 get_drawing_optimization_style(::Line) = CHECK_BOUNDS
 
-function sort_points_horizontal_vertical(point1::Point, point2::Point)
+function sort_points_horizontal_vertical(point1, point2)
     if point1.j < point2.j
         point_less = point1
         point_more = point2
