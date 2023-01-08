@@ -1,6 +1,6 @@
 abstract type AbstractTriangle <: AbstractShape end
 
-struct ConsistentFilledTriangle{I <: Integer} <: AbstractTriangle
+struct FilledTriangle{I <: Integer} <: AbstractTriangle
     point1::Point{I}
     point2::Point{I}
     point3::Point{I}
@@ -22,7 +22,7 @@ move_j(shape::AbstractTriangle, j) = typeof(shape)(move_j(shape.point1, j), move
 get_drawing_optimization_style(::AbstractTriangle) = CHECK_BOUNDS
 
 #####
-##### ConsistentFilledTriangle
+##### FilledTriangle
 #####
 
 function sort_triangle_points(point1, point2, point3)
@@ -33,7 +33,7 @@ function sort_triangle_points(point1, point2, point3)
     return point1, point2, point3
 end
 
-function _draw!(f::F, image, shape::ConsistentFilledTriangle, color) where {F <: Function}
+function _draw!(f::F, image, shape::FilledTriangle, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     point1, point2, point3 = sort_triangle_points(shape.point1, shape.point2, shape.point3)
