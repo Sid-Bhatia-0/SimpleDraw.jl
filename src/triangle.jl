@@ -74,26 +74,6 @@ get_drawing_optimization_style(::AbstractTriangle) = CHECK_BOUNDS
 ##### FilledTriangle
 #####
 
-function sort_points_horizontal_vertical(point1, point2)
-    if point1.j < point2.j
-        point_less = point1
-        point_more = point2
-    elseif point1.j == point2.j
-        if point1.i <= point2.i
-            point_less = point1
-            point_more = point2
-        else
-            point_less = point2
-            point_more = point1
-        end
-    else
-        point_less = point2
-        point_more = point1
-    end
-
-    return point_less, point_more
-end
-
 function sort_points_horizontal_vertical(point1, point2, point3)
     point1, point2 = sort_points_horizontal_vertical(point1, point2)
     point1, point3 = sort_points_horizontal_vertical(point1, point3)

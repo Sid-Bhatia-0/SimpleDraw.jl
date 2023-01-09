@@ -206,12 +206,12 @@ move_j(shape::Line, j) = Line(move_j(shape.point1, j), move_j(shape.point2, j))
 
 get_drawing_optimization_style(::Line) = CHECK_BOUNDS
 
-function sort_points(point1::Point, point2::Point)
-    if point1.i < point2.i
+function sort_points_horizontal_vertical(point1, point2)
+    if point1.j < point2.j
         point_less = point1
         point_more = point2
-    elseif point1.i == point2.i
-        if point1.j <= point2.j
+    elseif point1.j == point2.j
+        if point1.i <= point2.i
             point_less = point1
             point_more = point2
         else
@@ -229,7 +229,7 @@ end
 function _draw!(f::F, image, shape::Line, color) where {F <: Function}
     @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
-    point1, point2 = sort_points(shape.point1, shape.point2)
+    point1, point2 = sort_points_horizontal_vertical(shape.point1, shape.point2)
 
     i1 = point1.i
     j1 = point1.j
