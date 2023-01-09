@@ -45,6 +45,7 @@ export ThickCircle
 export Rectangle
 export FilledRectangle
 export ThickRectangle
+export Triangle
 export FilledTriangle
 export Character
 export TextLine
