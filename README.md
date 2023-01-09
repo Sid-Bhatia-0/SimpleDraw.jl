@@ -407,7 +407,7 @@ This will print a bunch of outputs and produce a markdown file named with a time
     end
     ```
 
-    Can be used to draw an existing image on top of an image at some position.
+    Can be used to draw an existing image on top of an image at some position. No need to pass color explicitly, the sub-image should already be colored. Whereas in `Bitmap`, one needs to pass color explicitly and it can only be of a single color.
 
     <img src="https://user-images.githubusercontent.com/32610387/211422416-98c188a0-205a-49dc-8a4f-08cab3407af4.png">
 
