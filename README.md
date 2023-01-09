@@ -379,7 +379,7 @@ This will print a bunch of outputs and produce a markdown file named with a time
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/162975187-2eb6e57f-b693-4c9b-99f3-961c7b3aff18.png">
+    <img src="https://user-images.githubusercontent.com/32610387/211234382-54eed8ca-f1a9-404a-ba85-2934acbb7da8.png">
 
 1. ### `Character`
 
