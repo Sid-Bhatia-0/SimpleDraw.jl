@@ -27,6 +27,7 @@ This is a lightweight self-contained package that attempts to provide efficient 
 1. [`ThickRectangle`](#thickrectangle)
 1. [`Triangle`](#triangle)
 1. [`FilledTriangle`](#filledtriangle)
+1. [`Bitmap`](#bitmap)
 1. [`Character`](#character)
 1. [`TextLine`](#textline)
 
@@ -380,6 +381,21 @@ This will print a bunch of outputs and produce a markdown file named with a time
     ```
 
     <img src="https://user-images.githubusercontent.com/32610387/211234382-54eed8ca-f1a9-404a-ba85-2934acbb7da8.png">
+
+1. ### `Bitmap`
+
+    ```julia
+    struct Bitmap{I <: Integer, B <: AbstractMatrix{Bool}} <: AbstractShape
+        position::Point{I}
+        bitmap::B
+    end
+    ```
+
+    Can be used to draw a 1-bit image using some color on an image. For example, it is used for drawing character glyphs in `Character` or `TextLine`.
+
+    <img src="https://user-images.githubusercontent.com/32610387/211419295-6d734b0e-5438-4d23-918f-f09db144f047.png">
+
+    <img src="https://user-images.githubusercontent.com/32610387/211419311-80caada5-5c68-44d5-8ba0-3d8a23cc6c8e.png">
 
 1. ### `Character`
 
