@@ -25,6 +25,7 @@ This is a lightweight self-contained package that attempts to provide efficient 
 1. [`Rectangle`](#rectangle)
 1. [`FilledRectangle`](#filledrectangle)
 1. [`ThickRectangle`](#thickrectangle)
+1. [`Triangle`](#triangle)
 1. [`FilledTriangle`](#filledtriangle)
 1. [`Character`](#character)
 1. [`TextLine`](#textline)
@@ -355,6 +356,18 @@ This will print a bunch of outputs and produce a markdown file named with a time
     * `thickness <= min(height, width)`
 
     <img src="https://user-images.githubusercontent.com/32610387/147943890-badcce13-f1fd-4295-9ea3-37561b9821aa.png">
+
+1. ### `Triangle`
+
+    ```julia
+    struct Triangle{I <: Integer} <: AbstractTriangle
+        point1::Point{I}
+        point2::Point{I}
+        point3::Point{I}
+    end
+    ```
+
+    <img src="https://user-images.githubusercontent.com/32610387/211233788-899be8c0-ba0b-4fe7-b217-0818025a458a.png">
 
 1. ### `FilledTriangle`
 
