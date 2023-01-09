@@ -28,6 +28,7 @@ This is a lightweight self-contained package that attempts to provide efficient 
 1. [`Triangle`](#triangle)
 1. [`FilledTriangle`](#filledtriangle)
 1. [`Bitmap`](#bitmap)
+1. [`Image`](#image)
 1. [`Character`](#character)
 1. [`TextLine`](#textline)
 
@@ -396,6 +397,21 @@ This will print a bunch of outputs and produce a markdown file named with a time
     <img src="https://user-images.githubusercontent.com/32610387/211419295-6d734b0e-5438-4d23-918f-f09db144f047.png">
 
     <img src="https://user-images.githubusercontent.com/32610387/211419311-80caada5-5c68-44d5-8ba0-3d8a23cc6c8e.png">
+
+1. ### `Image`
+
+    ```julia
+    struct Image{I <: Integer, A} <: AbstractShape
+        position::Point{I}
+        image::A
+    end
+    ```
+
+    Can be used to draw an existing image on top of an image at some position. No need to pass color explicitly, the sub-image should already be colored. Whereas in `Bitmap`, one needs to pass color explicitly and it can only be of a single color.
+
+    <img src="https://user-images.githubusercontent.com/32610387/211422416-98c188a0-205a-49dc-8a4f-08cab3407af4.png">
+
+    <img src="https://user-images.githubusercontent.com/32610387/211422426-2e2260b6-7588-45c5-8bc3-c151c4da1002.png">
 
 1. ### `Character`
 

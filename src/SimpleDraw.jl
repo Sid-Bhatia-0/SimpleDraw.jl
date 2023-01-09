@@ -48,6 +48,7 @@ export ThickRectangle
 export Triangle
 export FilledTriangle
 export Bitmap
+export Image
 export Character
 export TextLine
 
