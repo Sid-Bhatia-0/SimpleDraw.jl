@@ -15,22 +15,6 @@ include("character.jl")
 include("text.jl")
 include("visualize.jl")
 
-const SHAPE_TYPES = [
-Point,
-Background,
-Line,
-ThickLine,
-Circle,
-FilledCircle,
-ThickCircle,
-Rectangle,
-FilledRectangle,
-ThickRectangle,
-FilledTriangle,
-Character,
-TextLine,
-]
-
 # export abstract shape types
 export AbstractShape
 
