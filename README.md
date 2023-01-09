@@ -39,7 +39,7 @@ import SimpleDraw as SD
 image = falses(32, 32) # (height, width)
 
 # create the shape
-shape = SD.Line(SD.Point(9, 5), SD.Point(24, 28))
+shape = SD.Line(SD.Point(9, 5), SD.Point(14, 19))
 
 # we will draw on the boolean image with the "color" true
 color = true
@@ -51,7 +51,7 @@ SD.draw!(image, shape, color)
 SD.visualize(image)
 ```
 
-<img src="https://user-images.githubusercontent.com/32610387/147943649-0c332388-589a-49db-984b-41dac44390a8.png">
+<img src="https://user-images.githubusercontent.com/32610387/211235212-3ac45d97-8dde-45cf-9865-dbf322dda741.png">
 
 ## Notes
 
@@ -241,9 +241,9 @@ This will print a bunch of outputs and produce a markdown file named with a time
     end
     ```
 
-    The line is not symmetric in general. Reversing the order of points may produce different outcomes.
+    `Line(point1, point2)` will draw the same thing as `Line(point2, point1)` as they are always sorted internally. But note that the visual representation of the line may not symmetric with respect to the end points in general.
 
-    <img src="https://user-images.githubusercontent.com/32610387/147943649-0c332388-589a-49db-984b-41dac44390a8.png">
+    <img src="https://user-images.githubusercontent.com/32610387/211235212-3ac45d97-8dde-45cf-9865-dbf322dda741.png">
 
 1. ### `ThickLine`
 
