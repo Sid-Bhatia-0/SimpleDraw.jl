@@ -16,6 +16,7 @@ const SHAPE_TYPES = [
                      SD.FilledCircle,
                      SD.ThickCircle,
                      SD.Bitmap,
+                     SD.Image,
                      SD.Character,
                      SD.TextLine,
                     ]
@@ -47,6 +48,20 @@ function get_shape(::Type{SD.Bitmap}, n)
     return SD.Bitmap(position, bitmap)
 end
 
+function get_shape(::Type{SD.Image}, n, color_type)
+    position = SD.Point(2, 2)
+    image2 = zeros(color_type, n - 2, n - 2)
+    for j in 1:size(image2, 2)
+        for i in 1:size(image2, 1)
+            if iseven(i + j)
+                image2[i, j] = one(color_type)
+            end
+        end
+    end
+
+    return SD.Image(position, image2)
+end
+
 get_shape(::Type{SD.Character}, n) = SD.Character(SD.Point(2, 2), 'A', SD.TERMINUS_32_16)
 
 function get_shape(::Type{SD.TextLine}, n)
@@ -66,7 +81,11 @@ function get_benchmarks(shape_types, sizes)
         image = zeros(typeof(color), n, n)
         for ShapeType in shape_types
             shape_name = nameof(ShapeType)
-            shape = get_shape(ShapeType, n)
+            if ShapeType == SD.Image
+                shape = get_shape(ShapeType, n, typeof(color))
+            else
+                shape = get_shape(ShapeType, n)
+            end
             benchmark = BT.@benchmark SD.draw!($(Ref(image))[], $(Ref(shape))[], $(Ref(color))[])
             memory, median_time = get_summary(benchmark)
             benchmarks[(shape_name, n)] = (shape, memory, median_time)
