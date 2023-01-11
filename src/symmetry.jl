@@ -104,7 +104,7 @@ function get_j_extrema(shape::OddOctantSymmetricShape)
 end
 
 function _draw!(f::F, image, shape::OddOctantSymmetricShape{I, Point{I}}, color) where {F <: Function, I}
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+    # @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     origin = shape.origin
     point = shape.shape
@@ -130,7 +130,7 @@ function _draw!(f::F, image, shape::OddOctantSymmetricShape{I, Point{I}}, color)
 end
 
 function _draw!(f::F, image, shape::OddOctantSymmetricShape{I, VerticalLine{I}}, color) where {F <: Function, I}
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+    # @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     origin = shape.origin
     line = shape.shape
@@ -205,7 +205,7 @@ function get_j_extrema(shape::EvenOctantSymmetricShape)
 end
 
 function _draw!(f::F, image, shape::EvenOctantSymmetricShape{I, Point{I}}, color) where {F <: Function, I}
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+    # @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     origin = shape.origin
     point = shape.shape
@@ -231,7 +231,7 @@ function _draw!(f::F, image, shape::EvenOctantSymmetricShape{I, Point{I}}, color
 end
 
 function _draw!(f::F, image, shape::EvenOctantSymmetricShape{I, VerticalLine{I}}, color) where {F <: Function, I}
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+    # @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     origin = shape.origin
     line = shape.shape
@@ -292,7 +292,7 @@ function get_j_extrema(shape::OddSymmetricVerticalLines4)
 end
 
 function _draw!(f::F, image, shape::OddSymmetricVerticalLines4, color) where {F <: Function}
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+    # @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     origin = shape.origin
     point = shape.point
@@ -346,7 +346,7 @@ function get_j_extrema(shape::EvenSymmetricVerticalLines4)
 end
 
 function _draw!(f::F, image, shape::EvenSymmetricVerticalLines4, color) where {F <: Function}
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+    # @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     origin = shape.origin
     point = shape.point

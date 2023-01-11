@@ -144,7 +144,7 @@ clip(image, shape::Bitmap) = Bitmap(clip_array(image, shape.position, shape.bitm
 get_drawing_optimization_style(::Bitmap) = CLIP
 
 function _draw!(f::F, image, shape::Bitmap, color) where {F <: Function}
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+    # @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position
     bitmap = shape.bitmap
