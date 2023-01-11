@@ -15,6 +15,7 @@ const SHAPE_TYPES = [
                      SD.Circle,
                      SD.FilledCircle,
                      SD.ThickCircle,
+                     SD.Bitmap,
                      SD.Character,
                      SD.TextLine,
                     ]
@@ -33,6 +34,19 @@ get_shape(::Type{SD.ThickRectangle}, n) = SD.ThickRectangle(SD.Point(2, 2), n - 
 get_shape(::Type{SD.Circle}, n) = SD.Circle(SD.Point(2, 2), n - 2)
 get_shape(::Type{SD.FilledCircle}, n) = SD.FilledCircle(SD.Point(2, 2), n - 2)
 get_shape(::Type{SD.ThickCircle}, n) = SD.ThickCircle(SD.Point(2, 2), n - 2, n ÷ 4)
+
+function get_shape(::Type{SD.Bitmap}, n)
+    position = SD.Point(2, 2)
+    bitmap = falses(n - 2, n - 2)
+    for j in 1:size(bitmap, 2)
+        for i in 1:size(bitmap, 1)
+            bitmap[i, j] = iseven(i + j)
+        end
+    end
+
+    return SD.Bitmap(position, bitmap)
+end
+
 get_shape(::Type{SD.Character}, n) = SD.Character(SD.Point(2, 2), 'A', SD.TERMINUS_32_16)
 
 function get_shape(::Type{SD.TextLine}, n)
