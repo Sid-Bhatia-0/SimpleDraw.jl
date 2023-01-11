@@ -152,7 +152,7 @@ end
 #####
 
 function _draw!(f::F, image, shape::FilledTriangle, color) where {F <: Function}
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+    # @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     point1, point2, point3 = sort_points_horizontal_vertical(shape.point1, shape.point2, shape.point3)
 

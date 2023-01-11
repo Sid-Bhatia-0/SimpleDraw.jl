@@ -75,7 +75,7 @@ move_i(shape::Character, i) = Character(move_i(shape.position, i), shape.charact
 move_j(shape::Character, j) = Character(move_j(shape.position, j), shape.character, shape.font)
 
 function draw!(image, shape::Character, color)
-    @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
+    # @assert is_valid(shape) "Cannot draw invalid shape $(shape)"
 
     position = shape.position
     character = shape.character
