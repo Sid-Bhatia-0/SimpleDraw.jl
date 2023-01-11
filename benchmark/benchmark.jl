@@ -13,6 +13,7 @@ const SHAPE_TYPES = [
                      SD.Rectangle,
                      SD.FilledRectangle,
                      SD.ThickRectangle,
+                     SD.Triangle,
                      SD.FilledTriangle,
                      SD.Character,
                      SD.TextLine,
@@ -29,6 +30,7 @@ get_shape(::Type{SD.FilledCircle}, n) = SD.FilledCircle(SD.Point(2, 2), n - 2)
 get_shape(::Type{SD.ThickCircle}, n) = SD.ThickCircle(SD.Point(2, 2), n - 2, n ÷ 4)
 get_shape(::Type{SD.Rectangle}, n) = SD.Rectangle(SD.Point(2, 2), n - 1, n - 1)
 get_shape(::Type{SD.FilledRectangle}, n) = SD.FilledRectangle(SD.Point(2, 2), n - 1, n - 1)
+get_shape(::Type{SD.Triangle}, n) = SD.Triangle(SD.Point(2, 2), SD.Point(n - 1, n ÷ 2), SD.Point(n ÷ 2, n -1))
 get_shape(::Type{SD.FilledTriangle}, n) = SD.FilledTriangle(SD.Point(2, 2), SD.Point(n - 1, n ÷ 2), SD.Point(n ÷ 2, n -1))
 get_shape(::Type{SD.ThickRectangle}, n) = SD.ThickRectangle(SD.Point(2, 2), n - 1, n - 1, n ÷ 4)
 get_shape(::Type{SD.Character}, n) = SD.Character(SD.Point(2, 2), 'A', SD.TERMINUS_32_16)
