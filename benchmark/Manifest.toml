@@ -72,11 +72,9 @@ version = "0.7.0"
 uuid = "9e88b42a-f829-5b0c-bbe9-9e923198166b"
 
 [[deps.SimpleDraw]]
-git-tree-sha1 = "9207a3da2bf4f3c14d116d3849043b2d583cae67"
-repo-rev = "39515c19759cca39ba590924b4c739854525cc4b"
-repo-url = "https://github.com/Sid-Bhatia-0/SimpleDraw.jl.git"
+git-tree-sha1 = "77b562e61b71987d9e72ddf45c22dab25579e0b9"
 uuid = "d1acf6f4-8553-480e-80ae-3c883f0a995a"
-version = "0.4.0"
+version = "0.5.0"
 
 [[deps.SnoopPrecompile]]
 git-tree-sha1 = "f604441450a3c0569830946e5b33b78c928e1a85"
