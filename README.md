@@ -15,18 +15,18 @@ This is a lightweight self-contained package that attempts to provide efficient 
 
 [List of shapes](#list-of-shapes):
 
-1. [`Point`](#point)
 1. [`Background`](#background)
+1. [`Point`](#point)
 1. [`Line`](#line)
 1. [`ThickLine`](#thickline)
-1. [`Circle`](#circle)
-1. [`FilledCircle`](#filledcircle)
-1. [`ThickCircle`](#thickcircle)
+1. [`Triangle`](#triangle)
+1. [`FilledTriangle`](#filledtriangle)
 1. [`Rectangle`](#rectangle)
 1. [`FilledRectangle`](#filledrectangle)
 1. [`ThickRectangle`](#thickrectangle)
-1. [`Triangle`](#triangle)
-1. [`FilledTriangle`](#filledtriangle)
+1. [`Circle`](#circle)
+1. [`FilledCircle`](#filledcircle)
+1. [`ThickCircle`](#thickcircle)
 1. [`Bitmap`](#bitmap)
 1. [`Image`](#image)
 1. [`Character`](#character)
@@ -215,6 +215,14 @@ This will print a bunch of outputs and produce a markdown file named with a time
 
 ## List of shapes
 
+1. ### `Background`
+
+    ```julia
+    struct Background <: AbstractShape end
+    ```
+
+    <img src="https://user-images.githubusercontent.com/32610387/147943624-244cbe86-1aac-4ad1-9285-4f35d38009c6.png">
+
 1. ### `Point`
 
     ```julia
@@ -225,14 +233,6 @@ This will print a bunch of outputs and produce a markdown file named with a time
     ```
 
     <img src="https://user-images.githubusercontent.com/32610387/147943555-5e6c4560-a02b-48b8-9638-c7c568936147.png">
-
-1. ### `Background`
-
-    ```julia
-    struct Background <: AbstractShape end
-    ```
-
-    <img src="https://user-images.githubusercontent.com/32610387/147943624-244cbe86-1aac-4ad1-9285-4f35d38009c6.png">
 
 1. ### `Line`
 
@@ -262,51 +262,29 @@ This will print a bunch of outputs and produce a markdown file named with a time
 
     <img src="https://user-images.githubusercontent.com/32610387/148082257-79ded105-a737-4286-8d58-a5c821a41f14.png">
 
-1. ### `Circle`
+1. ### `Triangle`
 
     ```julia
-    struct Circle{I <: Integer} <: AbstractCircle
-        position::Point{I}
-        diameter::I
+    struct Triangle{I <: Integer} <: AbstractTriangle
+        point1::Point{I}
+        point2::Point{I}
+        point3::Point{I}
     end
     ```
 
-    An instance of `Circle` is considered valid only if the following conditions hold true:
-    * `diameter > 0`
+    <img src="https://user-images.githubusercontent.com/32610387/211233788-899be8c0-ba0b-4fe7-b217-0818025a458a.png">
 
-    <img src="https://user-images.githubusercontent.com/32610387/147943714-72fa3f0a-daca-47ee-ae54-a92bfaf0d962.png">
-
-1. ### `FilledCircle`
+1. ### `FilledTriangle`
 
     ```julia
-    struct FilledCircle{I <: Integer} <: AbstractCircle
-        position::Point{I}
-        diameter::I
+    struct FilledTriangle{I <: Integer} <: AbstractTriangle
+        point1::Point{I}
+        point2::Point{I}
+        point3::Point{I}
     end
     ```
 
-    An instance of `FilledCircle` is considered valid only if the following conditions hold true:
-    * `diameter > 0`
-
-    <img src="https://user-images.githubusercontent.com/32610387/147943755-2a4ebfb0-cb7d-4a19-83cb-925dbf259022.png">
-
-1. ### `ThickCircle`
-
-    ```julia
-    struct ThickCircle{I <: Integer} <: AbstractCircle
-        position::Point{I}
-        diameter::I
-        thickness::I
-    end
-    ```
-
-    An instance of `ThickCircle` is considered valid only if the following conditions hold true:
-    * `diameter > 0`
-    * `thickness > 0`
-    * if `diameter` is odd, then `2 * thickness <= diameter + 1`
-    * if `diameter` is even, then `2 * thickness <= diameter`
-
-    <img src="https://user-images.githubusercontent.com/32610387/147943783-883609bb-2f16-422b-a5c8-150878135c97.png">
+    <img src="https://user-images.githubusercontent.com/32610387/211234382-54eed8ca-f1a9-404a-ba85-2934acbb7da8.png">
 
 1. ### `Rectangle`
 
@@ -359,29 +337,51 @@ This will print a bunch of outputs and produce a markdown file named with a time
 
     <img src="https://user-images.githubusercontent.com/32610387/147943890-badcce13-f1fd-4295-9ea3-37561b9821aa.png">
 
-1. ### `Triangle`
+1. ### `Circle`
 
     ```julia
-    struct Triangle{I <: Integer} <: AbstractTriangle
-        point1::Point{I}
-        point2::Point{I}
-        point3::Point{I}
+    struct Circle{I <: Integer} <: AbstractCircle
+        position::Point{I}
+        diameter::I
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/211233788-899be8c0-ba0b-4fe7-b217-0818025a458a.png">
+    An instance of `Circle` is considered valid only if the following conditions hold true:
+    * `diameter > 0`
 
-1. ### `FilledTriangle`
+    <img src="https://user-images.githubusercontent.com/32610387/147943714-72fa3f0a-daca-47ee-ae54-a92bfaf0d962.png">
+
+1. ### `FilledCircle`
 
     ```julia
-    struct FilledTriangle{I <: Integer} <: AbstractTriangle
-        point1::Point{I}
-        point2::Point{I}
-        point3::Point{I}
+    struct FilledCircle{I <: Integer} <: AbstractCircle
+        position::Point{I}
+        diameter::I
     end
     ```
 
-    <img src="https://user-images.githubusercontent.com/32610387/211234382-54eed8ca-f1a9-404a-ba85-2934acbb7da8.png">
+    An instance of `FilledCircle` is considered valid only if the following conditions hold true:
+    * `diameter > 0`
+
+    <img src="https://user-images.githubusercontent.com/32610387/147943755-2a4ebfb0-cb7d-4a19-83cb-925dbf259022.png">
+
+1. ### `ThickCircle`
+
+    ```julia
+    struct ThickCircle{I <: Integer} <: AbstractCircle
+        position::Point{I}
+        diameter::I
+        thickness::I
+    end
+    ```
+
+    An instance of `ThickCircle` is considered valid only if the following conditions hold true:
+    * `diameter > 0`
+    * `thickness > 0`
+    * if `diameter` is odd, then `2 * thickness <= diameter + 1`
+    * if `diameter` is even, then `2 * thickness <= diameter`
+
+    <img src="https://user-images.githubusercontent.com/32610387/147943783-883609bb-2f16-422b-a5c8-150878135c97.png">
 
 1. ### `Bitmap`
 
