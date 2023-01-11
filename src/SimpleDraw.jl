@@ -1,13 +1,13 @@
 module SimpleDraw
 
 include("abstract_shape.jl")
-include("point.jl")
 include("background.jl")
+include("point.jl")
 include("line.jl")
+include("triangle.jl")
+include("rectangle.jl")
 include("symmetry.jl")
 include("circle.jl")
-include("rectangle.jl")
-include("triangle.jl")
 include("bitmap.jl")
 include("image.jl")
 include("fonts/fonts.jl")
@@ -19,18 +19,18 @@ include("visualize.jl")
 export AbstractShape
 
 # export concrete shape types
-export Point
 export Background
+export Point
 export Line
 export ThickLine
-export Circle
-export FilledCircle
-export ThickCircle
+export Triangle
+export FilledTriangle
 export Rectangle
 export FilledRectangle
 export ThickRectangle
-export Triangle
-export FilledTriangle
+export Circle
+export FilledCircle
+export ThickCircle
 export Bitmap
 export Image
 export Character
