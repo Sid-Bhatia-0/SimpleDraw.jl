@@ -103,7 +103,7 @@ With this in mind, this package provides the `draw!` function, which is commonly
 SD.draw!(image, shape, color)
 ```
 
-Under the hood, it calls other `draw!` methods that automatically take care of some basic optimizations (see [Drawing optimizations](#drawing-optimizations)). Then there are `draw!` methods of the form `SD.draw!(f, image, shape, color)` that are heavily used internally. Here, `f` can roughly be thought of as a drawing function applied to every pixel of the shape. This offers a lot of flexibility with the "brush-stroke" and significantly increases code reuse. At the same time, it does not adversely affect performance. Most users will not need to use these methods directly, but in case you do, please look up the source code as their usage is not very well documented as of now.
+Under the hood, it calls internal `_draw!` methods that automatically take care of some basic optimizations (see [Drawing optimizations](#drawing-optimizations)). Then there are `_draw!` methods of the form `SD._draw!(f, image, shape, color)` that are heavily used internally. Here, `f` can roughly be thought of as a drawing function applied to every pixel of the shape. This offers a lot of flexibility with the "brush-stroke" and significantly decreases code duplication. At the same time, it does not adversely affect performance. Most users will not need to use these methods directly, but in case you do, please look up the source code as their usage is not very well documented as of now.
 
 By default, the `draw!` function is safe, that is, it draws only those pixels of the shape that lie within the bounds of the image. So you don't have to worry about your program breaking even if it tries to draw something outside the bounds of the `image`. That being said, certain basic optimizations are already enabled for drawing most shapes. See [Drawing optimizations](#drawing-optimizations).
 
@@ -113,13 +113,13 @@ By default, the `draw!` function is safe, that is, it draws only those pixels of
 1. `PUT_PIXEL`: Iterate through all the positions needed to draw the shape. For each position, if it lies within the bounds of the image, put a pixel at that position else don't do anything.
 1. `CHECK_BOUNDS`: If the shape lies completely outside the bounds of the image, simply return `nothing`. If it lies completely inside the bounds of the image, then draw each pixel of the shape without any further bounds checking. If it is neither of the previous cases, fall back to the slow but safe method of drawing each pixel of the shape only if it lies within the bounds of the image.
 1. `CLIP`: Some shapes like `VerticalLine`, `HorizontalLine`, `FilledRectangle` can be direcly clipped into shapes that completely lie within the bounds of the image. In such cases, perform the clipping and draw the clipped shape without any further bounds checking.
-1. `PUT_PIXEL_INBOUNDS`: Iterate through all the positions needed to draw the shape. For each position, put a pixel at that position assuming it lies within the bounds of the image.
+1. `PUT_PIXEL_INBOUNDS`: Iterate through all the positions needed to draw the shape. For each position, put a pixel at that position assuming without any bounds checking image.
 
-Use `get_drawing_optimization_style(shape)` to get which style of optimization is being used to draw a shape.
+Use `get_drawing_optimization_style(shape)` to get the default drawing optimization style for a shape. Shapes which do not fall within the above will implement custom `draw!` methods with relevant optimizations.
 
 ### Visualization
 
-The `visualize` function helps in visualizing a boolean image directly inside the terminal. This is a quick and effective tool to verify whether a shape is being drawn as expected. This is particularly handy when you want to know about the exact coordinates of the pixels that are being drawn for a shape.
+The `visualize` function helps in visualizing a boolean image directly inside the terminal. This is a quick and effective tool to verify whether a shape is being drawn as expected. This is extremely handy when you want to know about the exact coordinates of the pixels that are being drawn for a shape.
 
 It uses Unicode block characters to represent a pixel. This works well for low resolution images. To visualize slightly higher resolution images, you can maximize your terminal window and reduce its font size.
 
@@ -185,7 +185,7 @@ Shapes are drawn on an image of type `Matrix{UInt32}` with a color of type `UInt
 |TextLine|256|256|30.133 μs|0 bytes|SimpleDraw.TextLine{Int64, String, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(1, 1), "BDNMZIMCRQRSRHOG", SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
 |TextLine|1024|1024|121.349 μs|0 bytes|SimpleDraw.TextLine{Int64, String, SimpleDraw.Terminus_32_16}(SimpleDraw.Point{Int64}(1, 1), "EFXHBRDIFHLLIIBXJIDEXYSRJUDELCIMZIMXWOCHCFLHXSBLLMLMSZFVKSBEZTVA", SimpleDraw.Terminus_32_16([0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; … ;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0;;; 0 0 … 0 0; 0 0 … 0 0; … ; 0 0 … 0 0; 0 0 … 0 0]))|
 
-Follow these steps to reproduce similar benchmarks:
+Follow these steps to generate benchmarks. Take care to double-check the version of the package you are benchmarking:
 
 1. Clone the project
 
